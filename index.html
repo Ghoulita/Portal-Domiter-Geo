@@ -6,207 +6,237 @@
     <title>Domiter UCV - Portal Académico</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Paleta de colores extraída directamente del logo */
-            --color-oro: #d4af37;        /* El oro pulido de Atlas */
-            --color-bronce: #a58c6d;     /* El bronce del texto principal y grecas */
-            --color-marron-oscuro: #4a3a2a; /* El marrón oscuro de los títulos de los paneles */
-            --color-azul-intenso: #003c7e; /* El azul profundo de los océanos */
-            --color-marmol: #f4f4f4;     /* El fondo de mármol pálido */
-            --color-texto-cuerpo: #222;  /* Texto del cuerpo, más oscuro para lectura */
+            --color-oro: #d4af37;
+            --color-bronce: #a58c6d;
+            --color-marron-oscuro: #2c241b;
+            --color-fondo: #fcfcfc;
         }
         body {
-            background-color: var(--color-marmol);
-            font-family: 'Roboto', sans-serif;
-            color: var(--color-texto-cuerpo);
+            font-family: "Times New Roman", Times, serif;
+            background-color: var(--color-fondo);
+            color: var(--color-marron-oscuro);
             line-height: 1.6;
-            margin: 0;
         }
-        h1, h2, h3, .fuente-titulo {
-            font-family: 'Cinzel', serif; /* La fuente mitológica */
-            font-weight: 700;
+        .minimalist-card {
+            background: white;
+            border: 1px solid #eaeaea;
+            transition: all 0.3s ease;
         }
-        /* Elementos Brutalistas redefinidos con estética de Oro */
-        .panel-domiter {
-            background-color: white;
-            border: 2px solid var(--color-oro); /* Borde de oro pulido */
-            box-shadow: 6px 6px 0px var(--color-bronce); /* Sombra de bronce */
-            transition: 0.3s;
+        .minimalist-card:hover {
+            border-color: var(--color-oro);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transform: translateY(-2px);
         }
-        .panel-domiter:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 10px 10px 0px var(--color-oro); /* Sombra de oro en hover */
+        
+        /* Estilos de la ventana emergente (Modal) del Pensum */
+        #pensum-modal {
+            display: none;
+            backdrop-filter: blur(3px);
         }
-        .greca-pattern {
-            /* Patrón sutil de grecas griegas del logo */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path fill="%23a58c6d" opacity="0.1" d="M15 0L30 15L15 30L0 15Z M15 5L25 15L15 25L5 15Z"/></svg>');
+        #pensum-modal.active {
+            display: flex;
         }
     </style>
 </head>
-<body class="greca-pattern">
-    <header class="bg-white border-b-4 border-gold shadow-md p-6 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
-            <div class="flex items-center gap-4 mb-4 md:mb-0">
-                <img src="https://image-prod.api.mindtrip.ai/images/6f2e8f17-86c2-463e-b87c-37e408544d93/image_1.png" alt="Logo Domiter" class="h-28">
+<body class="antialiased">
+
+    <header class="bg-white border-b border-gray-200 py-8">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center gap-6 mb-4 md:mb-0">
+                <img src="https://image-prod.api.mindtrip.ai/images/6f2e8f17-86c2-463e-b87c-37e408544d93/image_1.png" alt="Logo Domiter" class="h-24">
                 <div>
-                    <h1 class="text-3xl font-black text-brown-oscuro">Portal Informativo Domiter</h1>
-                    <p class="text-sm font-light text-bronce italic fuente-titulo">Dominium Terrae</p>
+                    <h1 class="text-3xl tracking-wide text-gray-900">PORTAL INFORMATIVO DOMITER</h1>
+                    <p class="text-md text-gray-500 italic mt-1">Dominium Terrae</p>
                 </div>
             </div>
-            <nav class="flex gap-6 text-sm font-medium text-brown-oscuro">
-                <a href="#pensum" class="hover:text-blue-intenso">Pensum</a>
-                <a href="#biblioteca" class="hover:text-blue-intenso">Biblioteca</a>
-                <a href="#cartoteca" class="hover:text-blue-intenso">Cartoteca</a>
-                <a href="#trámites" class="hover:text-blue-intenso">Trámites</a>
-                <a href="#actualidad" class="hover:text-blue-intenso">Actualidad</a>
+            <nav class="flex gap-8 text-sm uppercase tracking-widest text-gray-600">
+                <a href="#inicio" class="hover:text-yellow-600 transition">Inicio</a>
+                <a href="#servicios" class="hover:text-yellow-600 transition">Servicios</a>
+                <a href="#tramites" class="hover:text-yellow-600 transition">Trámites</a>
             </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-6 md:p-10 space-y-12">
-        <section class="bg-white p-10 panel-domiter border-l-8 border-gold">
-            <h2 class="text-4xl font-black text-brown-oscuro mb-4">Nodo de Inteligencia Geoespacial</h2>
-            <p class="text-lg text-brown-oscuro">Aquí convergen el conocimiento mitológico de la tierra y la tecnología cartográfica de vanguardia. Un espacio para dominar el territorio.</p>
+    <main class="max-w-6xl mx-auto px-6 py-16 space-y-16">
+        
+        <section id="inicio" class="text-center max-w-3xl mx-auto">
+            <h2 class="text-4xl mb-6 text-gray-900">Nodo de Inteligencia Geoespacial</h2>
+            <p class="text-xl text-gray-600 leading-relaxed">
+                Aquí convergen el conocimiento mitológico de la tierra y la tecnología cartográfica. Un espacio diseñado para estudiantes de la Escuela de Geografía, estructurado para el dominio del territorio.
+            </p>
         </section>
 
-        <section id="pensum" class="bg-white p-8 panel-domiter border-t-4 border-gold mt-12 relative">
-    <div class="text-center mb-10">
-        <i class="fas fa-scroll text-5xl text-gold mb-4"></i>
-        <h2 class="text-3xl font-black text-brown-oscuro">Malla Curricular Interactiva</h2>
-        <p class="text-sm text-bronce mt-2">Pasa el cursor sobre las materias para ver las prelaciones. Plan de Estudios 1984.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        
-        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
-            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre I (18 UC)</h3>
-            <div class="space-y-2">
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition" data-abre="est2">Estadística I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition" data-abre="mat2">Matemáticas I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition" data-abre="carto2">Cartografía I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition">Intro. a la Geografía I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition">Técnicas de Preseminario</div>
-            </div>
-        </div>
-
-        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
-            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre II (21 UC)</h3>
-            <div class="space-y-2">
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="est2">Estadística II</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="mat2" data-abre="mat3">Matemáticas II</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="carto2" data-abre="carto3">Cartografía II</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="geom1">Geografía Física</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Economía I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="ing2">Inglés I</div>
-            </div>
-        </div>
-
-        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
-            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre III (21 UC)</h3>
-            <div class="space-y-2">
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía Humana</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="clim1">Meteorología</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="mat3">Matemáticas III</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="carto3" data-abre="foto">Cartografía III</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="geom1" data-abre="geom2">Geomorfología I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="ing2">Inglés II</div>
-            </div>
-        </div>
-
-        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
-            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre IV (18 UC)</h3>
-            <div class="space-y-2">
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía Económica</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="clim1" data-abre="clim2">Climatología I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="foto">Foto Interpretación</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="edaf2">Edafología I</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="geom2">Geomorfología II</div>
-            </div>
-        </div>
-
-        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
-            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre V (18 UC)</h3>
-            <div class="space-y-2">
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía Urbana</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía de la Población</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="clim2">Climatología II</div>
-                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Bioge
-
-            <div class="bg-white p-8 panel-domiter flex flex-col items-center text-center">
-                <i class="fas fa-book-atlas text-5xl text-gold mb-6"></i>
-                <h3 class="text-2xl font-bold text-brown-oscuro mb-2">📚 Biblioteca 'Terra Nova'</h3>
-                <p class="text-sm text-brown-oscuro mb-6">Accede a tesis, revistas y el repositorio digital de libros geográficos.</p>
-                <button class="bg-azul-intenso text-white px-6 py-3 font-bold uppercase text-xs w-full mt-auto">Entrar al Repositorio</button>
+        <section id="servicios" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="minimalist-card p-10 text-center flex flex-col items-center">
+                <i class="fas fa-scroll text-4xl text-yellow-600 mb-6"></i>
+                <h3 class="text-xl tracking-wide mb-3 uppercase">Malla Curricular</h3>
+                <p class="text-gray-500 mb-8 text-sm">Consulta el plan de estudios, prelaciones y unidades de crédito.</p>
+                <button onclick="abrirModal()" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum Interactivo</button>
             </div>
 
-            <div class="bg-white p-8 panel-domiter flex flex-col items-center text-center">
-                <i class="fas fa-map-marked-alt text-5xl text-gold mb-6"></i>
-                <h3 class="text-2xl font-bold text-brown-oscuro mb-2">🗺️ Cartoteca Digital</h3>
-                <p class="text-sm text-brown-oscuro mb-6">Descarga mapas base, Shapefiles y capas SIG listos para usar.</p>
-                <button class="bg-azul-intenso text-white px-6 py-3 font-bold uppercase text-xs w-full mt-auto">Descargar Mapas</button>
+            <div class="minimalist-card p-10 text-center flex flex-col items-center">
+                <i class="fas fa-book-atlas text-4xl text-yellow-600 mb-6"></i>
+                <h3 class="text-xl tracking-wide mb-3 uppercase">Biblioteca Atlas</h3>
+                <p class="text-gray-500 mb-8 text-sm">Accede al repositorio digital de libros, revistas y trabajos de grado.</p>
+                <button class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Ingresar a la Biblioteca</button>
             </div>
 
-            <div class="bg-white p-8 panel-domiter md:col-span-2 lg:col-span-3">
-                <div class="flex items-center gap-4 mb-6">
-                    <i class="fas fa-globe-americas text-4xl text-blue-intenso"></i>
-                    <h3 class="text-3xl font-bold text-brown-oscuro">🌍 Geoportal Domiter</h3>
-                </div>
-                <div class="bg-blue-100 h-96 border-2 border-bronce brutalista shadow-inner flex items-center justify-center relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1517090504586-fde19ea6066f?q=80&w=1600&auto=format&fit=crop" alt="Mapa Base Simulado" class="absolute inset-0 object-cover opacity-60">
-                    <div class="bg-white p-4 brutalista shadow-lg z-10 text-center">
-                        <i class="fas fa-satellite text-3xl text-gold mb-2"></i>
-                        <p class="font-bold text-xs uppercase text-brown-oscuro">Capas de Noticias</p>
-                        <p class="text-xs text-brown-oscuro">Haz clic para cargar datos</p>
-                    </div>
-                    <div class="absolute bg-red-600 h-4 w-4 rounded-full border-2 border-white top-1/4 left-1/2 cursor-pointer shadow-lg animate-pulse" title="Noticia Geo"></div>
-                    <div class="absolute bg-red-600 h-4 w-4 rounded-full border-2 border-white top-2/3 left-1/3 cursor-pointer shadow-lg" title="Sismo"></div>
-                </div>
-                <div class="mt-6 text-sm text-brown-oscuro space-y-2">
-                    <p class="font-bold text-xs uppercase text-bronce">Últimas Noticias Geo Nacionales:</p>
-                    <p>🗺️ Reporte de cambios en el uso del suelo de la Gran Caracas (IGVSB) - <span class="text-xs italic text-gold">Hace 2 horas</span></p>
-                    <p>⛈️ Alerta climática en la Región Andina (INAMEH) - <span class="text-xs italic text-gold">Hace 6 horas</span></p>
-                </div>
+            <div class="minimalist-card p-10 text-center flex flex-col items-center">
+                <i class="fas fa-map text-4xl text-yellow-600 mb-6"></i>
+                <h3 class="text-xl tracking-wide mb-3 uppercase">Cartoteca Digital</h3>
+                <p class="text-gray-500 mb-8 text-sm">Descarga mapas base y Shapefiles listos para tus proyectos geográficos.</p>
+                <button class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Explorar Mapas</button>
             </div>
 
-            <div class="bg-white p-8 panel-domiter">
-                <div class="flex items-center gap-3 mb-4">
-                    <i class="fas fa-id-card text-3xl text-bronce"></i>
-                    <h3 class="text-xl font-bold text-brown-oscuro">📝 Trámites</h3>
-                </div>
-                <p class="text-sm text-brown-oscuro mb-6">Gestión de inscripciones, horarios, constancias y control de estudios.</p>
-                <div class="space-y-3">
-                    <button class="bg-bronce text-white px-4 py-2 font-bold uppercase text-xs w-full text-left">Cita de Inscripción</button>
-                    <button class="bg-bronce text-white px-4 py-2 font-bold uppercase text-xs w-full text-left">Consultar Horarios</button>
-                    <button class="bg-bronce text-white px-4 py-2 font-bold uppercase text-xs w-full text-left">Constancias Digitales</button>
-                </div>
+        </section>
+
+        <section id="tramites" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <div class="minimalist-card p-10">
+                <h3 class="text-2xl mb-6 flex items-center gap-4"><i class="fas fa-id-card text-gray-400"></i> Gestión Académica</h3>
+                <ul class="space-y-4 text-gray-600">
+                    <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Citas de Inscripción</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                    </li>
+                    <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Consulta de Horarios</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                    </li>
+                    <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Constancias de Estudio</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                    </li>
+                </ul>
             </div>
 
-            <div class="bg-white p-8 panel-domiter">
-                <div class="flex items-center gap-3 mb-4">
-                    <i class="fas fa-calendar-check text-3xl text-bronce"></i>
-                    <h3 class="text-xl font-bold text-brown-oscuro">📅 Ciclo 2026</h3>
-                </div>
-                <div class="text-center">
-                    <p class="text-5xl font-black text-gold">2026</p>
-                    <p class="text-xs font-light text-bronce mt-1">CALENDARIO ACADÉMICO</p>
-                </div>
-                <div class="mt-6 text-sm text-brown-oscuro space-y-2">
-                    <p class="font-bold text-xs uppercase text-bronce">Próximos Hitos:</p>
-                    <p>📝 Inscripciones Semestre A - Mar 2026</p>
-                    <p>🗺️ Jornadas de Investigación Geo - Jun 2026</p>
-                </div>
+            <div class="minimalist-card p-10 flex flex-col justify-center items-center text-center bg-gray-50">
+                <p class="text-6xl text-gray-300 mb-2">2026</p>
+                <p class="tracking-widest uppercase text-sm text-gray-500">Ciclo Académico Actual</p>
             </div>
 
-        </div>
+        </section>
+
     </main>
 
-    <footer class="mt-20 p-10 bg-white text-center border-t-4 border-gold greca-pattern">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-xs text-bronce">
-            <p class="font-mono">DOMITER | Dominium Terrae | Portal Académico © 2026</p>
-            <p>Diseñado para la Escuela de Geografía UCV</p>
+    <footer class="border-t border-gray-200 py-10 mt-10">
+        <div class="max-w-6xl mx-auto px-6 text-center text-gray-400 text-sm">
+            <p>DOMITER | Dominium Terrae © 2026</p>
+            <p class="mt-2">Diseño minimalista para la Escuela de Geografía UCV</p>
         </div>
     </footer>
+
+    <div id="pensum-modal" class="fixed inset-0 bg-black bg-opacity-40 z-50 items-center justify-center p-4">
+        <div class="bg-white max-w-5xl w-full p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]">
+            <button onclick="cerrarModal()" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-2xl">&times;</button>
+            
+            <div class="text-center mb-8 border-b border-gray-200 pb-6">
+                <h2 class="text-3xl text-gray-900 mb-2">Plan de Estudios 1984</h2>
+                <p class="text-gray-500 italic">Pasa el cursor sobre las materias para ver sus prelaciones (180 UC en total)</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. I (18 UC)</h3>
+                    <div class="space-y-2">
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="est2">Estadística I (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="mat2">Matemáticas I (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="carto2">Cartografía I (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Intro. Geografía (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Preseminario (3)</div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. II (21 UC)</h3>
+                    <div class="space-y-2">
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="est2">Estadística II (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="mat2" data-abre="mat3">Matemáticas II (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="carto2" data-abre="carto3">Cartografía II (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="geom1">Geografía Física (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Economía I (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="ing2">Inglés I (3)</div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. III (21 UC)</h3>
+                    <div class="space-y-2">
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geografía Humana (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="clim1">Meteorología (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="mat3">Matemáticas III (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="carto3" data-abre="foto">Cartografía III (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="geom1" data-abre="geom2">Geomorfología I (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="ing2">Inglés II (3)</div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. IV (18 UC)</h3>
+                    <div class="space-y-2">
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geo. Económica (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="clim1" data-abre="clim2">Climatología I (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="foto">Foto Interpretación (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="edaf2">Edafología I (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="geom2">Geomorfología II (4)</div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. V (18 UC)</h3>
+                    <div class="space-y-2">
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geo. Urbana (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geo. Población (3)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="clim2">Climatología II (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Biogeografía (4)</div>
+                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="edaf2">Edafología II (4)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funciones para abrir y cerrar la ventana del pensum
+        function abrirModal() {
+            document.getElementById('pensum-modal').classList.add('active');
+        }
+        function cerrarModal() {
+            document.getElementById('pensum-modal').classList.remove('active');
+        }
+
+        // Lógica interactiva de las materias
+        document.addEventListener('DOMContentLoaded', () => {
+            const materias = document.querySelectorAll('.materia');
+            
+            materias.forEach(materia => {
+                materia.addEventListener('mouseenter', () => {
+                    materia.style.backgroundColor = '#f3f4f6'; // Gris muy suave
+                    materia.style.borderColor = '#d4af37'; // Borde dorado
+                    
+                    const abreId = materia.getAttribute('data-abre');
+                    if (abreId) {
+                        const materiaAbierta = document.getElementById(abreId);
+                        if (materiaAbierta) {
+                            materiaAbierta.style.backgroundColor = '#d4af37'; // Fondo dorado
+                            materiaAbierta.style.color = 'white';
+                            materiaAbierta.style.borderColor = '#d4af37';
+                        }
+                    }
+                });
+
+                materia.addEventListener('mouseleave', () => {
+                    materia.style.backgroundColor = 'white';
+                    materia.style.borderColor = '#e5e7eb'; // Borde original
+                    
+                    const abreId = materia.getAttribute('data-abre');
+                    if (abreId) {
+                        const materiaAbierta = document.getElementById(abreId);
+                        if (materiaAbierta) {
+                            materiaAbierta.style.backgroundColor = 'white';
+                            materiaAbierta.style.color = 'inherit';
+                            materiaAbierta.style.borderColor = '#e5e7eb';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
