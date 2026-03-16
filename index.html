@@ -107,6 +107,7 @@
             color: #666;
             cursor: pointer;
             transition: all 0.3s;
+            white-space: nowrap;
         }
         .tab-btn.active {
             border-bottom-color: var(--color-oro);
@@ -118,70 +119,131 @@
         .tab-content.active {
             display: block;
         }
+
+        /* ── HAMBURGER NAV ── */
+        #mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+        }
+        #mobile-menu.open {
+            max-height: 300px;
+        }
+
+        /* Hamburger icon lines */
+        .hamburger-line {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background-color: #a57c00;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: center;
+        }
+        #hamburger-btn.open .hamburger-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        #hamburger-btn.open .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        #hamburger-btn.open .hamburger-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white border-b border-gray-200 py-6">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
-            <div class="flex items-center gap-6 mb-4 md:mb-0">
-                <div class="flex gap-2">
-                   <div class="w-px h-12 bg-gray-300 hidden md:block mx-2"></div>
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header class="bg-white border-b border-gray-200 py-4 md:py-6">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+            <!-- Top row: logo + title + hamburger -->
+            <div class="flex items-center justify-between">
+
+                <!-- Logo + title -->
+                <div class="flex items-center gap-3 sm:gap-6">
+                    <img src="WhatsApp_Image_2026-02-22_at_1.36.59_PM_1-removebg-preview.png"
+                         alt="Logo Domiter"
+                         class="h-16 sm:h-24 md:h-32">
+                    <div>
+                        <h1 class="text-lg sm:text-2xl md:text-3xl tracking-wide text-[#a57c00] leading-tight">
+                            PORTAL INFORMATIVO DOMITER
+                        </h1>
+                        <p class="text-xs sm:text-sm text-[#997a00] italic mt-1">Dominium Terrae</p>
+                    </div>
                 </div>
-                
-                <img src="WhatsApp_Image_2026-02-22_at_1.36.59_PM__1_-removebg-preview.png" alt="Logo Domiter" class="h-32">
-                <div>
-                    <h1 class="text-3xl tracking-wide text-[#b8860b]">PORTAL INFORMATIVO DOMITER</h1>
-                    <p class="text-md text-[#b8860b] italic mt-1">Dominium Terrae</p>
-                </div>
+
+                <!-- Desktop nav -->
+                <nav class="hidden md:flex gap-8 text-sm uppercase tracking-widest text-[#a57c00]">
+                    <a href="#inicio"    class="hover:opacity-70 transition">Inicio</a>
+                    <a href="#servicios" class="hover:opacity-70 transition">Servicios</a>
+                    <a href="#tramites"  class="hover:opacity-70 transition">Trámites</a>
+                    <a href="#contacto"  class="hover:opacity-70 transition">Contacto</a>
+                </nav>
+
+                <!-- Hamburger button (mobile only) -->
+                <button id="hamburger-btn"
+                        onclick="toggleMenu()"
+                        class="md:hidden flex flex-col gap-[6px] p-2 focus:outline-none"
+                        aria-label="Abrir menú">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
             </div>
-            <nav class="flex gap-8 text-sm uppercase tracking-widest text-gray-600">
-                <a href="#inicio" class="hover:text-yellow-600 transition">Inicio</a>
-                <a href="#servicios" class="hover:text-yellow-600 transition">Servicios</a>
-                <a href="#tramites" class="hover:text-yellow-600 transition">Trámites</a>
-                <a href="#contacto" class="hover:text-yellow-600 transition">Contacto</a>
-            </nav>
+
+            <!-- Mobile menu (collapsed by default) -->
+            <div id="mobile-menu">
+                <nav class="flex flex-col gap-1 pt-4 pb-2 border-t border-gray-100 mt-4
+                            text-sm uppercase tracking-widest text-[#a57c00]">
+                    <a href="#inicio"    onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Inicio</a>
+                    <a href="#servicios" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Servicios</a>
+                    <a href="#tramites"  onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Trámites</a>
+                    <a href="#contacto"  onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Contacto</a>
+                </nav>
+            </div>
+
         </div>
     </header>
+    <!-- ══════════════════════════════════════ -->
 
-    <main class="max-w-6xl mx-auto px-6 py-16 space-y-16">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-12 sm:space-y-16">
         
         <section id="inicio" class="text-center max-w-3xl mx-auto">
-            <h2 class="text-4xl mb-6 text-gray-900">Escuela de Geografía UCV</h2>
-            <p class="text-xl text-gray-600 leading-relaxed">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6 text-[#a57c00]">Escuela de Geografía UCV</h2>
+            <p class="text-base sm:text-lg md:text-xl text-[#3e2723] leading-relaxed">
                 Bienvenido, estudiante de geografía. Este es un espacio diseñado para la comunidad de la Escuela de Geografía, en el que puedes tener acceso a libros, mapas, pensum y trámites académicos en un solo lugar.
             </p>
         </section>
 
-        <section id="servicios" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <section id="servicios" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             
-            <div class="minimalist-card p-10 text-center flex flex-col items-center">
+            <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
                 <i class="fas fa-scroll text-4xl text-yellow-600 mb-6"></i>
-                <h3 class="text-xl tracking-wide mb-3 uppercase">Malla Curricular</h3>
+                <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Malla Curricular</h3>
                 <p class="text-gray-500 mb-8 text-sm">Explora el plan de estudios mediante el mapa interactivo de prelaciones.</p>
                 <button onclick="abrirModal('pensum-modal')" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum</button>
             </div>
 
-            <div class="minimalist-card p-10 text-center flex flex-col items-center">
+            <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
                 <i class="fas fa-book-atlas text-4xl text-yellow-600 mb-6"></i>
-                <h3 class="text-xl tracking-wide mb-3 uppercase">Biblioteca Atlas</h3>
+                <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Biblioteca Atlas</h3>
                 <p class="text-gray-500 mb-8 text-sm">Accede al repositorio digital de libros, revistas y documentos de la escuela.</p>
                 <a href="https://drive.google.com/drive/folders/1Xdd869m_TUKG66KqiBTqDYkv3rmL-iRZ?usp=drive_link" target="_blank" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Ingresar al Drive</a>
             </div>
 
-            <div class="minimalist-card p-10 text-center flex flex-col items-center">
+            <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
                 <i class="fas fa-map text-4xl text-yellow-600 mb-6"></i>
-                <h3 class="text-xl tracking-wide mb-3 uppercase">Cartoteca Digital</h3>
+                <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Cartoteca Digital</h3>
                 <p class="text-gray-500 mb-8 text-sm">Consulta y descarga mapas base para tus proyectos de investigación.</p>
                 <a href="https://drive.google.com/drive/folders/1UmnM1_iSGk-_BeXShhS_EgH6zRzQO6M_?usp=drive_link" target="_blank" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Explorar Mapas</a>
             </div>
 
         </section>
 
-        <section id="tramites" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section id="tramites" class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             
-            <div class="minimalist-card p-10">
-                <h3 class="text-2xl mb-6 flex items-center gap-4"><i class="fas fa-id-card text-gray-300"></i> Gestión Académica</h3>
+            <div class="minimalist-card p-8 sm:p-10">
+                <h3 class="text-xl sm:text-2xl mb-6 flex items-center gap-4"><i class="fas fa-id-card text-[#a57c00]"></i> Gestión Académica</h3>
                 <ul class="space-y-4 text-gray-600">
                     <li onclick="abrirModal('horario-modal')" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
                         <span>Horario de Clases</span> <i class="fas fa-calendar-alt text-xs mt-1"></i>
@@ -195,25 +257,25 @@
                 </ul>
             </div>
 
-            <div class="minimalist-card p-10 flex flex-col justify-center items-center text-center bg-gray-50">
-                <p class="text-6xl text-gray-300 mb-2">2026</p>
+            <div class="minimalist-card p-8 sm:p-10 flex flex-col justify-center items-center text-center bg-gray-50">
+                <p class="text-5xl sm:text-6xl text-gray-300 mb-2">2026</p>
                 <p class="tracking-widest uppercase text-sm text-gray-500">Ciclo Académico Actual</p>
             </div>
 
         </section>
 
-        <section id="contacto" class="minimalist-card p-12 text-center mt-8">
-            <h3 class="text-2xl mb-4 text-gray-900">Únete a nuestra comunidad</h3>
+        <section id="contacto" class="minimalist-card p-8 sm:p-12 text-center mt-8">
+            <h3 class="text-xl sm:text-2xl mb-4 text-gray-900">Únete a nuestra comunidad</h3>
             <p class="text-gray-500 mb-10 max-w-xl mx-auto">Mantente informado sobre las actividades de la Escuela de Geografía, debates académicos y recursos a través de nuestras redes oficiales.</p>
             
-            <div class="flex justify-center gap-10">
-                <a href="https://chat.whatsapp.com/GcpaSFEfCO2GkMioEw1uxG" target="_blank" class="text-5xl text-gray-300 hover:text-[#25D366] transition transform hover:scale-110" title="Grupo de WhatsApp">
+            <div class="flex justify-center gap-8 sm:gap-10">
+                <a href="https://chat.whatsapp.com/GcpaSFEfCO2GkMioEw1uxG" target="_blank" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#25D366] transition transform hover:scale-110" title="Grupo de WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
-                <a href="https://www.instagram.com/domitergeo?igsh=MW80Y21lOTlzcDV0Yg==" target="_blank" class="text-5xl text-gray-300 hover:text-[#E1306C] transition transform hover:scale-110" title="Instagram">
+                <a href="https://www.instagram.com/domitergeo?igsh=MW80Y21lOTlzcDV0Yg==" target="_blank" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#E1306C] transition transform hover:scale-110" title="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="https://www.tiktok.com/@domiter_geo?_r=1&_t=ZS-94jy8nGOc9i" target="_blank" class="text-5xl text-gray-300 hover:text-black transition transform hover:scale-110" title="TikTok">
+                <a href="https://www.tiktok.com/@domiter_geo?_r=1&_t=ZS-94jy8nGOc9i" target="_blank" class="text-4xl sm:text-5xl text-gray-300 hover:text-black transition transform hover:scale-110" title="TikTok">
                     <i class="fab fa-tiktok"></i>
                 </a>
             </div>
@@ -222,50 +284,51 @@
     </main>
 
     <footer class="border-t border-gray-200 py-10 mt-10">
-        <div class="max-w-6xl mx-auto px-6 text-center text-gray-400 text-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center text-gray-400 text-sm">
             <p>Portal Informativo Domiter © 2026</p>
             <p class="mt-2">Diseño para la Escuela de Geografía UCV</p>
         </div>
     </footer>
 
-    <div id="horario-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-4">
-        <div class="bg-white w-full max-w-3xl h-[80vh] p-8 relative shadow-2xl flex flex-col">
+    <!-- ══════ MODAL HORARIO ══════ -->
+    <div id="horario-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4">
+        <div class="bg-white w-full max-w-3xl h-[85vh] sm:h-[80vh] p-5 sm:p-8 relative shadow-2xl flex flex-col">
             <button onclick="cerrarModal('horario-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
-            <div class="mb-6 border-b border-gray-200 pb-4 shrink-0">
-                <h2 class="text-3xl text-gray-900 mb-1">Horario de Clases 2026</h2>
-                <p class="text-gray-500 italic text-sm">Selecciona tu semestre para ver la distribución de asignaturas y profesores.</p>
+            <div class="mb-4 sm:mb-6 border-b border-gray-200 pb-4 shrink-0">
+                <h2 class="text-xl sm:text-3xl text-gray-900 mb-1">Horario de Clases 2026</h2>
+                <p class="text-gray-500 italic text-xs sm:text-sm">Selecciona tu semestre para ver la distribución de asignaturas y profesores.</p>
             </div>
 
-            <div class="flex gap-4 border-b border-gray-200 mb-6 overflow-x-auto shrink-0 pb-1">
-                <div class="tab-btn active text-sm tracking-wide" onclick="cambiarTab(event, 'sem1')">Semestre I</div>
-                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem2')">Semestre II</div>
-                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem3')">Semestre III</div>
-                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem4')">Semestre IV</div>
-                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem5')">Semestre V</div>
-                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'avanzado')">Avanzados</div>
+            <div class="flex gap-2 sm:gap-4 border-b border-gray-200 mb-4 sm:mb-6 overflow-x-auto shrink-0 pb-1">
+                <div class="tab-btn active text-xs sm:text-sm tracking-wide" onclick="cambiarTab(event, 'sem1')">Sem. I</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide" onclick="cambiarTab(event, 'sem2')">Sem. II</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide" onclick="cambiarTab(event, 'sem3')">Sem. III</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide" onclick="cambiarTab(event, 'sem4')">Sem. IV</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide" onclick="cambiarTab(event, 'sem5')">Sem. V</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide" onclick="cambiarTab(event, 'avanzado')">Avanzados</div>
             </div>
 
-            <div class="overflow-auto flex-1 custom-scrollbar pr-2">
+            <div class="overflow-auto flex-1 pr-1 sm:pr-2">
                 
                 <div id="sem1" class="tab-content active">
                     <ul class="space-y-4">
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Técnicas de Preseminario</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Técnicas de Preseminario</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Matemáticas I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Matemáticas I</h4>
                             <p class="text-sm text-gray-500">Prof. Manuel / Prof. Patricia Barrios</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Cartografía I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Cartografía I</h4>
                             <p class="text-sm text-gray-500">Prof. Emanuel Diaz</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Introducción a la Geografía I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Introducción a la Geografía I</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Estadística I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Estadística I</h4>
                             <p class="text-sm text-gray-500">Prof. Jarmy Blanco</p>
                         </li>
                     </ul>
@@ -274,26 +337,26 @@
                 <div id="sem2" class="tab-content">
                     <ul class="space-y-4">
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Economía I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Economía I</h4>
                             <p class="text-sm text-gray-500">Prof. Jordan</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Estadística II</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Estadística II</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Matemáticas II</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Matemáticas II</h4>
                             <p class="text-sm text-gray-500">Prof. José Bandez</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Cartografía II</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Cartografía II</h4>
                             <p class="text-sm text-gray-500">Prof. Gerardo Gamez</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Geografía Física</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Geografía Física</h4>
                             <p class="text-sm text-gray-500">Prof. Daniela Fuentes</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Inglés I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Inglés I</h4>
                             <p class="text-sm text-gray-500">Prof. Yemic Basti</p>
                         </li>
                     </ul>
@@ -302,21 +365,21 @@
                 <div id="sem3" class="tab-content">
                     <ul class="space-y-4">
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Geografía Humana</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Geografía Humana</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Meteorología</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Meteorología</h4>
                             <p class="text-sm text-gray-500">Prof. Eliza</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Matemáticas III</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Matemáticas III</h4>
                             <p class="text-sm text-gray-500">Prof. José Bandez</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Cartografía III</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Cartografía III</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Geomorfología I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Geomorfología I</h4>
                             <p class="text-sm text-gray-500">Prof. Orlando Cabrera</p>
                         </li>
                     </ul>
@@ -325,21 +388,21 @@
                 <div id="sem4" class="tab-content">
                     <ul class="space-y-4">
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Geografía Económica</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Geografía Económica</h4>
                             <p class="text-sm text-gray-500">Prof. Suraya Yanes</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Climatología I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Climatología I</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Foto Interpretación</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Foto Interpretación</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Edafología I</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Edafología I</h4>
                             <p class="text-sm text-gray-500">Prof. Margory Lavy</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Geomorfología II</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Geomorfología II</h4>
                         </li>
                     </ul>
                 </div>
@@ -347,22 +410,22 @@
                 <div id="sem5" class="tab-content">
                     <ul class="space-y-4">
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Geografía Urbana</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Geografía Urbana</h4>
                             <p class="text-sm text-gray-500">Prof. Juan Carlos</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Geografía de la Población</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Geografía de la Población</h4>
                             <p class="text-sm text-gray-500">Prof. Ana Cañizales</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Climatología II</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Climatología II</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Biogeografía</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Biogeografía</h4>
                             <p class="text-sm text-gray-500">Prof. Luzmar</p>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Edafología II</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Edafología II</h4>
                         </li>
                     </ul>
                 </div>
@@ -371,16 +434,16 @@
                     <p class="text-sm text-gray-500 mb-4">Seminarios, Talleres y Proyectos de semestres avanzados.</p>
                     <ul class="space-y-4">
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Seminarios (Geo. Urbana, Inv. Recursos, Metodología)</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Seminarios (Geo. Urbana, Inv. Recursos, Metodología)</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Talleres I, II, III y IV</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Talleres I, II, III y IV</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Teoría Geográfica</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Teoría Geográfica</h4>
                         </li>
                         <li class="border border-gray-100 p-4 shadow-sm">
-                            <h4 class="text-lg text-gray-800">Servicio Comunitario y Tesis</h4>
+                            <h4 class="text-base sm:text-lg text-gray-800">Servicio Comunitario y Tesis</h4>
                         </li>
                     </ul>
                 </div>
@@ -389,23 +452,24 @@
         </div>
     </div>
 
-    <div id="pensum-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-4">
-        <div class="bg-white w-full max-w-[95vw] h-[90vh] p-8 relative shadow-2xl flex flex-col">
+    <!-- ══════ MODAL PENSUM ══════ -->
+    <div id="pensum-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-2 sm:p-4">
+        <div class="bg-white w-full max-w-[95vw] h-[92vh] sm:h-[90vh] p-4 sm:p-8 relative shadow-2xl flex flex-col">
             <button onclick="cerrarModal('pensum-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
-            <div class="mb-6 flex justify-between items-end border-b border-gray-200 pb-4 shrink-0">
+            <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 border-b border-gray-200 pb-4 shrink-0">
                 <div>
-                    <h2 class="text-3xl text-gray-900 mb-1">Prelaciones por Asignaturas</h2>
-                    <p class="text-gray-500 italic text-sm">Haz clic en cualquier materia para ver su cadena de prelaciones. Modificación 1984.</p>
+                    <h2 class="text-xl sm:text-3xl text-gray-900 mb-1">Prelaciones por Asignaturas</h2>
+                    <p class="text-gray-500 italic text-xs sm:text-sm">Haz clic en cualquier materia para ver su cadena de prelaciones. Modificación 1984.</p>
                 </div>
-                <div class="leyenda text-xs text-gray-600 flex gap-4">
+                <div class="leyenda text-xs text-gray-600 flex flex-wrap gap-3 sm:gap-4">
                     <div class="flex items-center"><span style="background:var(--color-oro); border-color:var(--color-oro);"></span> Seleccionada</div>
-                    <div class="flex items-center"><span style="background:#fef0c7; border-color:#f59e0b;"></span> Debes aprobar primero</div>
+                    <div class="flex items-center"><span style="background:#fef0c7; border-color:#f59e0b;"></span> Debes aprobar</div>
                     <div class="flex items-center"><span style="background:#e0f2fe; border-color:#0ea5e9;"></span> Te permite cursar</div>
                 </div>
             </div>
 
-            <div class="overflow-auto flex-1 custom-scrollbar">
+            <div class="overflow-auto flex-1">
                 <div class="pensum-grid" id="grid-container">
                     <div class="semestre-col">
                         <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem I (18)</div>
@@ -489,107 +553,98 @@
     </div>
 
     <script>
-        // Lógica de Modales
+        // ── Hamburger menu ──
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn  = document.getElementById('hamburger-btn');
+            menu.classList.toggle('open');
+            btn.classList.toggle('open');
+        }
+        function closeMenu() {
+            document.getElementById('mobile-menu').classList.remove('open');
+            document.getElementById('hamburger-btn').classList.remove('open');
+        }
+
+        // ── Modales ──
         function abrirModal(modalId) {
             document.getElementById(modalId).classList.add('active');
         }
         function cerrarModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
-            if (modalId === 'pensum-modal') {
-                limpiarSeleccion();
-            }
+            if (modalId === 'pensum-modal') limpiarSeleccion();
         }
 
-        // Lógica Pestañas del Horario
+        // ── Pestañas Horario ──
         function cambiarTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).style.display = 'block';
+            evt.currentTarget.classList.add('active');
         }
 
-        // Lógica de Prelaciones
+        // ── Prelaciones ──
         const prelaciones = {
-            'presem': ['eco1', 'semmetodo'],
-            'est1': ['est2', 'eco1'],
-            'eco1': ['geoeconomica'],
-            'mat1': ['mat2'],
-            'carto1': ['carto2'],
-            'introgeo': ['geohumana', 'geofisica'],
-            'est2': ['meteo'],
-            'mat2': ['mat3', 'meteo'],
-            'carto2': ['carto3'],
-            'geofisica': ['geomorfo1', 'edafo1'],
-            'ing1': ['ing2'],
-            'geohumana': ['geoeconomica', 'geopoblacion'],
-            'meteo': ['clima1'],
-            'mat3': ['clima1'],
-            'carto3': ['foto', 'taller1', 'seminv'],
-            'geomorfo1': ['geomorfo2'],
-            'geoeconomica': ['geourbana'],
-            'clima1': ['clima2', 'biogeo'],
-            'edafo1': ['edafo2'],
-            'geourbana': ['semurbana'],
-            'geopoblacion': ['semregional'],
+            'presem':      ['eco1', 'semmetodo'],
+            'est1':        ['est2', 'eco1'],
+            'eco1':        ['geoeconomica'],
+            'mat1':        ['mat2'],
+            'carto1':      ['carto2'],
+            'introgeo':    ['geohumana', 'geofisica'],
+            'est2':        ['meteo'],
+            'mat2':        ['mat3', 'meteo'],
+            'carto2':      ['carto3'],
+            'geofisica':   ['geomorfo1', 'edafo1'],
+            'ing1':        ['ing2'],
+            'geohumana':   ['geoeconomica', 'geopoblacion'],
+            'meteo':       ['clima1'],
+            'mat3':        ['clima1'],
+            'carto3':      ['foto', 'taller1', 'seminv'],
+            'geomorfo1':   ['geomorfo2'],
+            'geoeconomica':['geourbana'],
+            'clima1':      ['clima2', 'biogeo'],
+            'edafo1':      ['edafo2'],
+            'geourbana':   ['semurbana'],
+            'geopoblacion':['semregional'],
             'semregional': ['semagraria', 'semsub'],
-            'taller1': ['taller2'],
-            'taller2': ['taller3'],
-            'taller3': ['taller4'],
-            'semmetodo': ['tesis'],
-            'taller4': ['tesis']
+            'taller1':     ['taller2'],
+            'taller2':     ['taller3'],
+            'taller3':     ['taller4'],
+            'semmetodo':   ['tesis'],
+            'taller4':     ['tesis']
         };
 
         function obtenerHaciaAdelante(id, lista = []) {
             if (prelaciones[id]) {
                 prelaciones[id].forEach(req => {
-                    if (!lista.includes(req)) {
-                        lista.push(req);
-                        obtenerHaciaAdelante(req, lista);
-                    }
+                    if (!lista.includes(req)) { lista.push(req); obtenerHaciaAdelante(req, lista); }
                 });
             }
             return lista;
         }
-
         function obtenerHaciaAtras(id, lista = []) {
             for (const [key, values] of Object.entries(prelaciones)) {
                 if (values.includes(id) && !lista.includes(key)) {
-                    lista.push(key);
-                    obtenerHaciaAtras(key, lista);
+                    lista.push(key); obtenerHaciaAtras(key, lista);
                 }
             }
             return lista;
         }
-
         function limpiarSeleccion() {
-            document.querySelectorAll('.materia-box').forEach(box => {
-                box.classList.remove('active', 'pre-req', 'post-req');
-            });
+            document.querySelectorAll('.materia-box').forEach(box =>
+                box.classList.remove('active', 'pre-req', 'post-req'));
         }
-
         function seleccionar(id) {
             limpiarSeleccion();
             const elemento = document.getElementById(id);
             if (!elemento) return;
             elemento.classList.add('active');
-
-            const forward = obtenerHaciaAdelante(id);
-            forward.forEach(reqId => {
+            obtenerHaciaAdelante(id).forEach(reqId => {
                 const el = document.getElementById(reqId);
-                if(el) el.classList.add('post-req');
+                if (el) el.classList.add('post-req');
             });
-
-            const backward = obtenerHaciaAtras(id);
-            backward.forEach(reqId => {
+            obtenerHaciaAtras(id).forEach(reqId => {
                 const el = document.getElementById(reqId);
-                if(el) el.classList.add('pre-req');
+                if (el) el.classList.add('pre-req');
             });
         }
     </script>
