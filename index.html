@@ -71,14 +71,68 @@
             <p class="text-lg text-brown-oscuro">Aquí convergen el conocimiento mitológico de la tierra y la tecnología cartográfica de vanguardia. Un espacio para dominar el territorio.</p>
         </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <div class="bg-white p-8 panel-domiter flex flex-col items-center text-center">
-                <i class="fas fa-scroll text-5xl text-gold mb-6"></i>
-                <h3 class="text-2xl font-bold text-brown-oscuro mb-2">📍 Malla Curricular</h3>
-                <p class="text-sm text-brown-oscuro mb-6">El mapa de ruta para tu formación geográfica. Semestre a semestre.</p>
-                <button class="bg-azul-intenso text-white px-6 py-3 font-bold uppercase text-xs w-full mt-auto">Ver Mapa de Ruta</button>
+        <section id="pensum" class="bg-white p-8 panel-domiter border-t-4 border-gold mt-12 relative">
+    <div class="text-center mb-10">
+        <i class="fas fa-scroll text-5xl text-gold mb-4"></i>
+        <h2 class="text-3xl font-black text-brown-oscuro">Malla Curricular Interactiva</h2>
+        <p class="text-sm text-bronce mt-2">Pasa el cursor sobre las materias para ver las prelaciones. Plan de Estudios 1984.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        
+        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
+            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre I (18 UC)</h3>
+            <div class="space-y-2">
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition" data-abre="est2">Estadística I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition" data-abre="mat2">Matemáticas I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition" data-abre="carto2">Cartografía I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition">Intro. a la Geografía I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer hover:border-blue-intenso hover:shadow-md transition">Técnicas de Preseminario</div>
             </div>
+        </div>
+
+        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
+            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre II (21 UC)</h3>
+            <div class="space-y-2">
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="est2">Estadística II</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="mat2" data-abre="mat3">Matemáticas II</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="carto2" data-abre="carto3">Cartografía II</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="geom1">Geografía Física</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Economía I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="ing2">Inglés I</div>
+            </div>
+        </div>
+
+        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
+            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre III (21 UC)</h3>
+            <div class="space-y-2">
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía Humana</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="clim1">Meteorología</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="mat3">Matemáticas III</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="carto3" data-abre="foto">Cartografía III</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="geom1" data-abre="geom2">Geomorfología I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="ing2">Inglés II</div>
+            </div>
+        </div>
+
+        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
+            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre IV (18 UC)</h3>
+            <div class="space-y-2">
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía Económica</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="clim1" data-abre="clim2">Climatología I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="foto">Foto Interpretación</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" data-abre="edaf2">Edafología I</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="geom2">Geomorfología II</div>
+            </div>
+        </div>
+
+        <div class="bg-marmol p-4 border border-bronce rounded shadow-sm">
+            <h3 class="text-center text-brown-oscuro font-bold mb-4 border-b border-gold pb-2">Semestre V (18 UC)</h3>
+            <div class="space-y-2">
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía Urbana</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Geografía de la Población</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition" id="clim2">Climatología II</div>
+                <div class="materia p-2 bg-white border border-gray-300 text-xs text-center cursor-pointer transition">Bioge
 
             <div class="bg-white p-8 panel-domiter flex flex-col items-center text-center">
                 <i class="fas fa-book-atlas text-5xl text-gold mb-6"></i>
