@@ -29,12 +29,12 @@
             transform: translateY(-2px);
         }
         
-        /* Estilos del Modal */
-        #pensum-modal {
+        /* Estilos de los Modales */
+        .modal-overlay {
             display: none;
             backdrop-filter: blur(3px);
         }
-        #pensum-modal.active {
+        .modal-overlay.active {
             display: flex;
         }
 
@@ -99,6 +99,25 @@
             margin-right: 6px;
             border: 1px solid #ccc;
         }
+
+        /* Estilos para pestañas del Horario */
+        .tab-btn {
+            padding: 8px 16px;
+            border-bottom: 2px solid transparent;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            border-bottom-color: var(--color-oro);
+            color: var(--color-marron-oscuro);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -142,7 +161,7 @@
                 <i class="fas fa-scroll text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-xl tracking-wide mb-3 uppercase">Malla Curricular</h3>
                 <p class="text-gray-500 mb-8 text-sm">Explora el plan de estudios mediante el mapa interactivo de prelaciones.</p>
-                <button onclick="abrirModal()" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum</button>
+                <button onclick="abrirModal('pensum-modal')" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum</button>
             </div>
 
             <div class="minimalist-card p-10 text-center flex flex-col items-center">
@@ -166,28 +185,28 @@
             <div class="minimalist-card p-10">
                 <h3 class="text-2xl mb-6 flex items-center gap-4"><i class="fas fa-id-card text-gray-300"></i> Gestión Académica</h3>
                 <ul class="space-y-4 text-gray-600">
-                    <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
-                        <span>Proceso de Inscripción</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                    <li onclick="abrirModal('horario-modal')" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Horario de Clases</span> <i class="fas fa-calendar-alt text-xs mt-1"></i>
                     </li>
                     <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
-                        <span>Horarios de Clases</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                        <span>Cronograma de retiro de materias</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
                     </li>
                     <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
-                        <span>Solicitud de Constancias</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                        <span>Cronograma académico 2026</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
                     </li>
                 </ul>
             </div>
 
             <div class="minimalist-card p-10 flex flex-col justify-center items-center text-center bg-gray-50">
                 <p class="text-6xl text-gray-300 mb-2">2026</p>
-                <p class="tracking-widest uppercase text-sm text-gray-500">Ciclo Académico</p>
+                <p class="tracking-widest uppercase text-sm text-gray-500">Ciclo Académico Actual</p>
             </div>
 
         </section>
 
         <section id="contacto" class="minimalist-card p-12 text-center mt-8">
             <h3 class="text-2xl mb-4 text-gray-900">Únete a nuestra comunidad</h3>
-            <p class="text-gray-500 mb-10 max-w-xl mx-auto">Mantente informado sobre las actividades de la Escuela de Geografía, asuntos académicos y recursos a través de nuestras redes oficiales.</p>
+            <p class="text-gray-500 mb-10 max-w-xl mx-auto">Mantente informado sobre las actividades de la Escuela de Geografía, debates académicos y recursos a través de nuestras redes oficiales.</p>
             
             <div class="flex justify-center gap-10">
                 <a href="https://chat.whatsapp.com/GcpaSFEfCO2GkMioEw1uxG" target="_blank" class="text-5xl text-gray-300 hover:text-[#25D366] transition transform hover:scale-110" title="Grupo de WhatsApp">
@@ -211,9 +230,170 @@
         </div>
     </footer>
 
-    <div id="pensum-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-4">
+    <div id="horario-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-4">
+        <div class="bg-white w-full max-w-3xl h-[80vh] p-8 relative shadow-2xl flex flex-col">
+            <button onclick="cerrarModal('horario-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            
+            <div class="mb-6 border-b border-gray-200 pb-4 shrink-0">
+                <h2 class="text-3xl text-gray-900 mb-1">Horario de Clases 2026</h2>
+                <p class="text-gray-500 italic text-sm">Selecciona tu semestre para ver la distribución de asignaturas y profesores.</p>
+            </div>
+
+            <div class="flex gap-4 border-b border-gray-200 mb-6 overflow-x-auto shrink-0 pb-1">
+                <div class="tab-btn active text-sm tracking-wide" onclick="cambiarTab(event, 'sem1')">Semestre I</div>
+                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem2')">Semestre II</div>
+                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem3')">Semestre III</div>
+                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem4')">Semestre IV</div>
+                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'sem5')">Semestre V</div>
+                <div class="tab-btn text-sm tracking-wide" onclick="cambiarTab(event, 'avanzado')">Avanzados</div>
+            </div>
+
+            <div class="overflow-auto flex-1 custom-scrollbar pr-2">
+                
+                <div id="sem1" class="tab-content active">
+                    <ul class="space-y-4">
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Técnicas de Preseminario</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Matemáticas I</h4>
+                            <p class="text-sm text-gray-500">Prof. Manuel / Prof. Patricia Barrios</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Cartografía I</h4>
+                            <p class="text-sm text-gray-500">Prof. Emanuel Diaz</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Introducción a la Geografía I</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Estadística I</h4>
+                            <p class="text-sm text-gray-500">Prof. Jarmy Blanco</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="sem2" class="tab-content">
+                    <ul class="space-y-4">
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Economía I</h4>
+                            <p class="text-sm text-gray-500">Prof. Jordan</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Estadística II</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Matemáticas II</h4>
+                            <p class="text-sm text-gray-500">Prof. José Bandez</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Cartografía II</h4>
+                            <p class="text-sm text-gray-500">Prof. Gerardo Gamez</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Geografía Física</h4>
+                            <p class="text-sm text-gray-500">Prof. Daniela Fuentes</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Inglés I</h4>
+                            <p class="text-sm text-gray-500">Prof. Yemic Basti</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="sem3" class="tab-content">
+                    <ul class="space-y-4">
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Geografía Humana</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Meteorología</h4>
+                            <p class="text-sm text-gray-500">Prof. Eliza</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Matemáticas III</h4>
+                            <p class="text-sm text-gray-500">Prof. José Bandez</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Cartografía III</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Geomorfología I</h4>
+                            <p class="text-sm text-gray-500">Prof. Orlando Cabrera</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="sem4" class="tab-content">
+                    <ul class="space-y-4">
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Geografía Económica</h4>
+                            <p class="text-sm text-gray-500">Prof. Suraya Yanes</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Climatología I</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Foto Interpretación</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Edafología I</h4>
+                            <p class="text-sm text-gray-500">Prof. Margory Lavy</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Geomorfología II</h4>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="sem5" class="tab-content">
+                    <ul class="space-y-4">
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Geografía Urbana</h4>
+                            <p class="text-sm text-gray-500">Prof. Juan Carlos</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Geografía de la Población</h4>
+                            <p class="text-sm text-gray-500">Prof. Ana Cañizales</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Climatología II</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Biogeografía</h4>
+                            <p class="text-sm text-gray-500">Prof. Luzmar</p>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Edafología II</h4>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="avanzado" class="tab-content">
+                    <p class="text-sm text-gray-500 mb-4">Seminarios, Talleres y Proyectos de semestres avanzados.</p>
+                    <ul class="space-y-4">
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Seminarios (Geo. Urbana, Inv. Recursos, Metodología)</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Talleres I, II, III y IV</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Teoría Geográfica</h4>
+                        </li>
+                        <li class="border border-gray-100 p-4 shadow-sm">
+                            <h4 class="text-lg text-gray-800">Servicio Comunitario y Tesis</h4>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="pensum-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-4">
         <div class="bg-white w-full max-w-[95vw] h-[90vh] p-8 relative shadow-2xl flex flex-col">
-            <button onclick="cerrarModal()" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            <button onclick="cerrarModal('pensum-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
             <div class="mb-6 flex justify-between items-end border-b border-gray-200 pb-4 shrink-0">
                 <div>
@@ -311,14 +491,33 @@
     </div>
 
     <script>
-        function abrirModal() {
-            document.getElementById('pensum-modal').classList.add('active');
+        // Lógica de Modales
+        function abrirModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
         }
-        function cerrarModal() {
-            document.getElementById('pensum-modal').classList.remove('active');
-            limpiarSeleccion();
+        function cerrarModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            if (modalId === 'pensum-modal') {
+                limpiarSeleccion();
+            }
         }
 
+        // Lógica Pestañas del Horario
+        function cambiarTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Lógica de Prelaciones
         const prelaciones = {
             'presem': ['eco1', 'semmetodo'],
             'est1': ['est2', 'eco1'],
@@ -326,33 +525,25 @@
             'mat1': ['mat2'],
             'carto1': ['carto2'],
             'introgeo': ['geohumana', 'geofisica'],
-            
             'est2': ['meteo'],
             'mat2': ['mat3', 'meteo'],
             'carto2': ['carto3'],
             'geofisica': ['geomorfo1', 'edafo1'],
             'ing1': ['ing2'],
-
             'geohumana': ['geoeconomica', 'geopoblacion'],
             'meteo': ['clima1'],
             'mat3': ['clima1'],
             'carto3': ['foto', 'taller1', 'seminv'],
             'geomorfo1': ['geomorfo2'],
-
             'geoeconomica': ['geourbana'],
             'clima1': ['clima2', 'biogeo'],
             'edafo1': ['edafo2'],
-
             'geourbana': ['semurbana'],
             'geopoblacion': ['semregional'],
-
             'semregional': ['semagraria', 'semsub'],
             'taller1': ['taller2'],
-
             'taller2': ['taller3'],
-
             'taller3': ['taller4'],
-
             'semmetodo': ['tesis'],
             'taller4': ['tesis']
         };
@@ -389,7 +580,6 @@
             limpiarSeleccion();
             const elemento = document.getElementById(id);
             if (!elemento) return;
-
             elemento.classList.add('active');
 
             const forward = obtenerHaciaAdelante(id);
