@@ -38,56 +38,66 @@
             display: flex;
         }
 
-        /* Estilos del Mapa Mental (Árbol) */
-        ul.tree {
-            list-style-type: none;
-            padding-left: 0;
-            font-size: 1.1rem;
+        /* Estilos de la Cuadrícula del Pensum */
+        .pensum-grid {
+            display: grid;
+            grid-template-columns: repeat(10, minmax(140px, 1fr));
+            gap: 16px;
+            width: max-content;
+            padding-bottom: 20px;
         }
-        ul.tree ul {
-            display: none;
-            margin-left: 24px;
-            border-left: 1px dashed #ccc;
-            padding-left: 16px;
-            margin-top: 8px;
+        .semestre-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        ul.tree li {
-            margin: 12px 0;
-            cursor: pointer;
-            color: #4a5568;
-            transition: color 0.2s;
-        }
-        ul.tree li:hover > span {
-            color: var(--color-oro);
-        }
-        ul.tree li.has-children::before {
-            content: "▸ ";
-            color: var(--color-oro);
-            display: inline-block;
-            width: 15px;
-        }
-        ul.tree li.expanded > ul {
-            display: block;
-        }
-        ul.tree li.expanded::before {
-            content: "▾ ";
-        }
-        ul.tree li.leaf {
-            cursor: default;
-        }
-        ul.tree li.leaf::before {
-            content: "• ";
-            color: #a0aec0;
-            display: inline-block;
-            width: 15px;
-        }
-        .uc-badge {
+        .materia-box {
+            border: 1px solid #ccc;
+            padding: 10px 8px;
+            text-align: center;
             font-size: 0.75rem;
-            background: #f3f4f6;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #718096;
-            margin-left: 8px;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .materia-box:hover {
+            border-color: var(--color-oro);
+        }
+        .materia-box.active {
+            background-color: var(--color-oro);
+            color: white;
+            border-color: var(--color-oro);
+        }
+        .materia-box.pre-req {
+            background-color: #fef0c7;
+            border-color: #f59e0b;
+        }
+        .materia-box.post-req {
+            background-color: #e0f2fe;
+            border-color: #0ea5e9;
+        }
+        .materia-codigo {
+            color: #888;
+            font-size: 0.65rem;
+            margin-top: 4px;
+        }
+        .materia-box.active .materia-codigo,
+        .materia-box.pre-req .materia-codigo,
+        .materia-box.post-req .materia-codigo {
+            color: inherit;
+        }
+        /* Leyenda */
+        .leyenda span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
@@ -124,7 +134,7 @@
             <div class="minimalist-card p-10 text-center flex flex-col items-center">
                 <i class="fas fa-scroll text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-xl tracking-wide mb-3 uppercase">Malla Curricular</h3>
-                <p class="text-gray-500 mb-8 text-sm">Explora el plan de estudios mediante un mapa mental interactivo de prelaciones.</p>
+                <p class="text-gray-500 mb-8 text-sm">Explora el plan de estudios mediante el mapa interactivo de prelaciones.</p>
                 <button onclick="abrirModal()" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum</button>
             </div>
 
@@ -138,7 +148,7 @@
             <div class="minimalist-card p-10 text-center flex flex-col items-center">
                 <i class="fas fa-map text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-xl tracking-wide mb-3 uppercase">Cartoteca Digital</h3>
-                <p class="text-gray-500 mb-8 text-sm">Consulta y descarga mapas base para tus proyectos de investigación geográfica.</p>
+                <p class="text-gray-500 mb-8 text-sm">Consulta y descarga mapas base para tus proyectos de investigación.</p>
                 <button class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Explorar Mapas</button>
             </div>
 
@@ -170,25 +180,101 @@
 
     </main>
 
-    <footer class="border-t border-gray-200 py-10 mt-10">
-        <div class="max-w-6xl mx-auto px-6 text-center text-gray-400 text-sm">
-            <p>Portal Informativo Domiter © 2026</p>
-            <p class="mt-2">Diseño para la Escuela de Geografía UCV</p>
-        </div>
-    </footer>
-
-    <div id="pensum-modal" class="fixed inset-0 bg-black bg-opacity-40 z-50 items-center justify-center p-4">
-        <div class="bg-white max-w-4xl w-full p-10 relative shadow-2xl overflow-y-auto max-h-[90vh]">
-            <button onclick="cerrarModal()" class="absolute top-6 right-8 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+    <div id="pensum-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-4">
+        <div class="bg-white w-full max-w-[95vw] h-[90vh] p-8 relative shadow-2xl flex flex-col">
+            <button onclick="cerrarModal()" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
-            <div class="mb-8 border-b border-gray-200 pb-6">
-                <h2 class="text-3xl text-gray-900 mb-2">Mapa de Prelaciones</h2>
-                <p class="text-gray-500 italic">Haz clic en una asignatura para desplegar las materias que le siguen en el plan de estudios.</p>
+            <div class="mb-6 flex justify-between items-end border-b border-gray-200 pb-4 shrink-0">
+                <div>
+                    <h2 class="text-3xl text-gray-900 mb-1">Prelaciones por Asignaturas</h2>
+                    <p class="text-gray-500 italic text-sm">Haz clic en cualquier materia para ver su cadena de prelaciones. Modificación 1984.</p>
+                </div>
+                <div class="leyenda text-xs text-gray-600 flex gap-4">
+                    <div class="flex items-center"><span style="background:var(--color-oro); border-color:var(--color-oro);"></span> Seleccionada</div>
+                    <div class="flex items-center"><span style="background:#fef0c7; border-color:#f59e0b;"></span> Debes aprobar primero</div>
+                    <div class="flex items-center"><span style="background:#e0f2fe; border-color:#0ea5e9;"></span> Te permite cursar</div>
+                </div>
             </div>
 
-            <div class="px-4">
-                <ul class="tree" id="pensum-tree">
-                    </ul>
+            <div class="overflow-auto flex-1 custom-scrollbar">
+                <div class="pensum-grid" id="grid-container">
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem I (18)</div>
+                        <div class="materia-box" id="presem" onclick="seleccionar('presem')">Técnicas de Preseminario <div class="materia-codigo">4 UC | 5101</div></div>
+                        <div class="materia-box" id="est1" onclick="seleccionar('est1')">Estadística I <div class="materia-codigo">4 UC | 5307</div></div>
+                        <div class="materia-box" id="mat1" onclick="seleccionar('mat1')">Matemáticas I <div class="materia-codigo">3 UC | 5309</div></div>
+                        <div class="materia-box" id="carto1" onclick="seleccionar('carto1')">Cartografía I <div class="materia-codigo">4 UC | 4101</div></div>
+                        <div class="materia-box" id="introgeo" onclick="seleccionar('introgeo')">Int. a la Geografía I <div class="materia-codigo">3 UC | 5206</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem II (21)</div>
+                        <div class="materia-box" id="eco1" onclick="seleccionar('eco1')">Economía I <div class="materia-codigo">3 UC | 2213</div></div>
+                        <div class="materia-box" id="est2" onclick="seleccionar('est2')">Estadística II <div class="materia-codigo">4 UC | 5308</div></div>
+                        <div class="materia-box" id="mat2" onclick="seleccionar('mat2')">Matemáticas II <div class="materia-codigo">3 UC | 5310</div></div>
+                        <div class="materia-box" id="carto2" onclick="seleccionar('carto2')">Cartografía II <div class="materia-codigo">4 UC | 4102</div></div>
+                        <div class="materia-box" id="geofisica" onclick="seleccionar('geofisica')">Geografía Física <div class="materia-codigo">4 UC | 1101</div></div>
+                        <div class="materia-box" id="ing1" onclick="seleccionar('ing1')">Inglés I <div class="materia-codigo">3 UC | 5413</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem III (21)</div>
+                        <div class="materia-box" id="geohumana" onclick="seleccionar('geohumana')">Geografía Humana <div class="materia-codigo">3 UC | 2101</div></div>
+                        <div class="materia-box" id="meteo" onclick="seleccionar('meteo')">Meteorología <div class="materia-codigo">4 UC | 1206</div></div>
+                        <div class="materia-box" id="mat3" onclick="seleccionar('mat3')">Matemáticas III <div class="materia-codigo">3 UC | 5311</div></div>
+                        <div class="materia-box" id="carto3" onclick="seleccionar('carto3')">Cartografía III <div class="materia-codigo">4 UC | 4103</div></div>
+                        <div class="materia-box" id="geomorfo1" onclick="seleccionar('geomorfo1')">Geomorfología I <div class="materia-codigo">4 UC | 1102</div></div>
+                        <div class="materia-box" id="ing2" onclick="seleccionar('ing2')">Inglés II <div class="materia-codigo">3 UC | 5414</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem IV (18)</div>
+                        <div class="materia-box" id="geoeconomica" onclick="seleccionar('geoeconomica')">Geo. Económica <div class="materia-codigo">3 UC | 2207</div></div>
+                        <div class="materia-box" id="clima1" onclick="seleccionar('clima1')">Climatología I <div class="materia-codigo">4 UC | 1208</div></div>
+                        <div class="materia-box" id="foto" onclick="seleccionar('foto')">Foto Interpretación <div class="materia-codigo">3 UC | 4309</div></div>
+                        <div class="materia-box" id="edafo1" onclick="seleccionar('edafo1')">Edafología I <div class="materia-codigo">4 UC | 1312</div></div>
+                        <div class="materia-box" id="geomorfo2" onclick="seleccionar('geomorfo2')">Geomorfología II <div class="materia-codigo">4 UC | 1103</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem V (18)</div>
+                        <div class="materia-box" id="geourbana" onclick="seleccionar('geourbana')">Geografía Urbana <div class="materia-codigo">3 UC | 2315</div></div>
+                        <div class="materia-box" id="geopoblacion" onclick="seleccionar('geopoblacion')">Geo. de la Población <div class="materia-codigo">3 UC | 2102</div></div>
+                        <div class="materia-box" id="clima2" onclick="seleccionar('clima2')">Climatología II <div class="materia-codigo">4 UC | 1209</div></div>
+                        <div class="materia-box" id="biogeo" onclick="seleccionar('biogeo')">Biogeografía <div class="materia-codigo">4 UC | 1311</div></div>
+                        <div class="materia-box" id="edafo2" onclick="seleccionar('edafo2')">Edafología II <div class="materia-codigo">4 UC | 1313</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem VI (20)</div>
+                        <div class="materia-box" id="semurbana" onclick="seleccionar('semurbana')">Sem. Geo. Urbana <div class="materia-codigo">4 UC | 2316</div></div>
+                        <div class="materia-box" id="semregional" onclick="seleccionar('semregional')">Sem. Geo. Regional <div class="materia-codigo">4 UC | 3101</div></div>
+                        <div class="materia-box" id="taller1" onclick="seleccionar('taller1')">Taller I <div class="materia-codigo">6 UC | 3205</div></div>
+                        <div class="materia-box">Electiva I <div class="materia-codigo">3 UC</div></div>
+                        <div class="materia-box">Electiva II <div class="materia-codigo">3 UC</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem VII (20)</div>
+                        <div class="materia-box" id="semagraria" onclick="seleccionar('semagraria')">Sem. Geo. Agraria <div class="materia-codigo">4 UC | 2419</div></div>
+                        <div class="materia-box" id="seminv" onclick="seleccionar('seminv')">Sem. Inv. Recursos <div class="materia-codigo">4 UC | 4206</div></div>
+                        <div class="materia-box" id="taller2" onclick="seleccionar('taller2')">Taller II <div class="materia-codigo">6 UC | 3206</div></div>
+                        <div class="materia-box">Electiva III <div class="materia-codigo">3 UC</div></div>
+                        <div class="materia-box">Electiva IV <div class="materia-codigo">3 UC</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem VIII (19)</div>
+                        <div class="materia-box" id="semteoria" onclick="seleccionar('semteoria')">Sem. Teoría Geográfica <div class="materia-codigo">4 UC | 5204</div></div>
+                        <div class="materia-box" id="semsub" onclick="seleccionar('semsub')">Sem. Geo. Subdesarrollo <div class="materia-codigo">4 UC | 3103</div></div>
+                        <div class="materia-box" id="taller3" onclick="seleccionar('taller3')">Taller III <div class="materia-codigo">6 UC | 3207</div></div>
+                        <div class="materia-box">Electiva V <div class="materia-codigo">3 UC</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem IX (15)</div>
+                        <div class="materia-box" id="semmetodo" onclick="seleccionar('semmetodo')">Sem. Metodología Inv. <div class="materia-codigo">4 UC | 5102</div></div>
+                        <div class="materia-box" id="taller4" onclick="seleccionar('taller4')">Taller IV <div class="materia-codigo">6 UC | 3208</div></div>
+                        <div class="materia-box">Pasantía <div class="materia-codigo">3 UC | 5522</div></div>
+                        <div class="materia-box">Seminario de Tesis <div class="materia-codigo">2 UC | 5103</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem X (12)</div>
+                        <div class="materia-box h-full flex items-center" id="tesis" onclick="seleccionar('tesis')">Tesis <div class="materia-codigo">12 UC | 5523</div></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -199,126 +285,94 @@
         }
         function cerrarModal() {
             document.getElementById('pensum-modal').classList.remove('active');
+            limpiarSeleccion();
         }
 
-        // Estructura de datos para el mapa mental
-        const pensumData = [
-            {
-                nombre: "Técnicas de Preseminario",
-                semestre: "Sem I",
-                uc: "4",
-                hijos: [
-                    { nombre: "Seminario Metodología Investigación", semestre: "Sem IX", uc: "4", hijos: [] }
-                ]
-            },
-            {
-                nombre: "Estadística I",
-                semestre: "Sem I",
-                uc: "4",
-                hijos: [
-                    { nombre: "Estadística II", semestre: "Sem II", uc: "4", hijos: [] }
-                ]
-            },
-            {
-                nombre: "Matemáticas I",
-                semestre: "Sem I",
-                uc: "3",
-                hijos: [
-                    { 
-                        nombre: "Matemáticas II", semestre: "Sem II", uc: "3", hijos: [
-                            { nombre: "Matemáticas III", semestre: "Sem III", uc: "3", hijos: [] }
-                        ] 
+        const prelaciones = {
+            'presem': ['semmetodo'],
+            'eco1': ['geoeconomica'],
+            'est1': ['est2'],
+            'mat1': ['mat2'],
+            'carto1': ['carto2'],
+            'introgeo': ['geohumana', 'geofisica'],
+            
+            'est2': ['meteo'],
+            'mat2': ['mat3', 'meteo'],
+            'carto2': ['carto3'],
+            'geofisica': ['geomorfo1', 'edafo1'],
+            'ing1': ['ing2'],
+
+            'geohumana': ['geoeconomica', 'geopoblacion'],
+            'meteo': ['clima1'],
+            'mat3': ['clima1'],
+            'carto3': ['foto', 'taller1', 'seminv'],
+            'geomorfo1': ['geomorfo2'],
+
+            'geoeconomica': ['geourbana'],
+            'clima1': ['clima2', 'biogeo'],
+            'edafo1': ['edafo2'],
+
+            'geourbana': ['semurbana'],
+            'geopoblacion': ['semregional'],
+
+            'semregional': ['semagraria', 'semsub'],
+            'taller1': ['taller2'],
+
+            'taller2': ['taller3'],
+
+            'taller3': ['taller4'],
+
+            'semmetodo': ['tesis'],
+            'taller4': ['tesis']
+        };
+
+        function obtenerHaciaAdelante(id, lista = []) {
+            if (prelaciones[id]) {
+                prelaciones[id].forEach(req => {
+                    if (!lista.includes(req)) {
+                        lista.push(req);
+                        obtenerHaciaAdelante(req, lista);
                     }
-                ]
-            },
-            {
-                nombre: "Cartografía I",
-                semestre: "Sem I",
-                uc: "4",
-                hijos: [
-                    {
-                        nombre: "Cartografía II", semestre: "Sem II", uc: "4", hijos: [
-                            {
-                                nombre: "Cartografía III", semestre: "Sem III", uc: "4", hijos: [
-                                    { nombre: "Foto Interpretación", semestre: "Sem IV", uc: "3", hijos: [] }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                nombre: "Introducción a la Geografía I",
-                semestre: "Sem I",
-                uc: "3",
-                hijos: [
-                    {
-                        nombre: "Geografía Humana", semestre: "Sem III", uc: "3", hijos: [
-                            {
-                                nombre: "Geografía Económica", semestre: "Sem IV", uc: "3", hijos: [
-                                    { nombre: "Geografía Urbana", semestre: "Sem V", uc: "3", hijos: [] },
-                                    { nombre: "Geografía de la Población", semestre: "Sem V", uc: "3", hijos: [] }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        nombre: "Geografía Física", semestre: "Sem II", uc: "4", hijos: [
-                            {
-                                nombre: "Geomorfología I", semestre: "Sem III", uc: "4", hijos: [
-                                    { nombre: "Geomorfología II", semestre: "Sem IV", uc: "4", hijos: [] }
-                                ]
-                            },
-                            {
-                                nombre: "Meteorología", semestre: "Sem III", uc: "4", hijos: [
-                                    {
-                                        nombre: "Climatología I", semestre: "Sem IV", uc: "4", hijos: [
-                                            { nombre: "Climatología II", semestre: "Sem V", uc: "4", hijos: [] },
-                                            { nombre: "Biogeografía", semestre: "Sem V", uc: "4", hijos: [] }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                nombre: "Edafología I", semestre: "Sem IV", uc: "4", hijos: [
-                                    { nombre: "Edafología II", semestre: "Sem V", uc: "4", hijos: [] }
-                                ]
-                            }
-                        ]
-                    }
-                ]
+                });
             }
-        ];
+            return lista;
+        }
 
-        function construirArbol(nodos, contenedor) {
-            nodos.forEach(nodo => {
-                const li = document.createElement('li');
-                const span = document.createElement('span');
-                
-                span.innerHTML = nodo.nombre + ' <span class="uc-badge">' + nodo.semestre + ' | ' + nodo.uc + ' UC</span>';
-                li.appendChild(span);
-
-                if (nodo.hijos && nodo.hijos.length > 0) {
-                    li.classList.add('has-children');
-                    const ul = document.createElement('ul');
-                    construirArbol(nodo.hijos, ul);
-                    li.appendChild(ul);
-
-                    span.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        li.classList.toggle('expanded');
-                    });
-                } else {
-                    li.classList.add('leaf');
+        function obtenerHaciaAtras(id, lista = []) {
+            for (const [key, values] of Object.entries(prelaciones)) {
+                if (values.includes(id) && !lista.includes(key)) {
+                    lista.push(key);
+                    obtenerHaciaAtras(key, lista);
                 }
-                contenedor.appendChild(li);
+            }
+            return lista;
+        }
+
+        function limpiarSeleccion() {
+            document.querySelectorAll('.materia-box').forEach(box => {
+                box.classList.remove('active', 'pre-req', 'post-req');
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const treeContainer = document.getElementById('pensum-tree');
-            construirArbol(pensumData, treeContainer);
-        });
+        function seleccionar(id) {
+            limpiarSeleccion();
+            const elemento = document.getElementById(id);
+            if (!elemento) return;
+
+            elemento.classList.add('active');
+
+            const forward = obtenerHaciaAdelante(id);
+            forward.forEach(reqId => {
+                const el = document.getElementById(reqId);
+                if(el) el.classList.add('post-req');
+            });
+
+            const backward = obtenerHaciaAtras(id);
+            backward.forEach(reqId => {
+                const el = document.getElementById(reqId);
+                if(el) el.classList.add('pre-req');
+            });
+        }
     </script>
 </body>
 </html>
