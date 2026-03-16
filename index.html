@@ -9,7 +9,6 @@
     <style>
         :root {
             --color-oro: #d4af37;
-            --color-bronce: #a58c6d;
             --color-marron-oscuro: #2c241b;
             --color-fondo: #fcfcfc;
         }
@@ -30,13 +29,65 @@
             transform: translateY(-2px);
         }
         
-        /* Estilos de la ventana emergente (Modal) del Pensum */
+        /* Estilos del Modal */
         #pensum-modal {
             display: none;
             backdrop-filter: blur(3px);
         }
         #pensum-modal.active {
             display: flex;
+        }
+
+        /* Estilos del Mapa Mental (Árbol) */
+        ul.tree {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 1.1rem;
+        }
+        ul.tree ul {
+            display: none;
+            margin-left: 24px;
+            border-left: 1px dashed #ccc;
+            padding-left: 16px;
+            margin-top: 8px;
+        }
+        ul.tree li {
+            margin: 12px 0;
+            cursor: pointer;
+            color: #4a5568;
+            transition: color 0.2s;
+        }
+        ul.tree li:hover > span {
+            color: var(--color-oro);
+        }
+        ul.tree li.has-children::before {
+            content: "▸ ";
+            color: var(--color-oro);
+            display: inline-block;
+            width: 15px;
+        }
+        ul.tree li.expanded > ul {
+            display: block;
+        }
+        ul.tree li.expanded::before {
+            content: "▾ ";
+        }
+        ul.tree li.leaf {
+            cursor: default;
+        }
+        ul.tree li.leaf::before {
+            content: "• ";
+            color: #a0aec0;
+            display: inline-block;
+            width: 15px;
+        }
+        .uc-badge {
+            font-size: 0.75rem;
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #718096;
+            margin-left: 8px;
         }
     </style>
 </head>
@@ -62,9 +113,9 @@
     <main class="max-w-6xl mx-auto px-6 py-16 space-y-16">
         
         <section id="inicio" class="text-center max-w-3xl mx-auto">
-            <h2 class="text-4xl mb-6 text-gray-900">Nodo de Inteligencia Geoespacial</h2>
+            <h2 class="text-4xl mb-6 text-gray-900">Escuela de Geografía UCV</h2>
             <p class="text-xl text-gray-600 leading-relaxed">
-                Aquí convergen el conocimiento mitológico de la tierra y la tecnología cartográfica. Un espacio diseñado para estudiantes de la Escuela de Geografía, estructurado para el dominio del territorio.
+                Bienvenido, estudiante de geografía. Este es un espacio diseñado para la comunidad de la Escuela de Geografía, en el que puedes tener acceso a libros, mapas, pensum y trámites académicos en un solo lugar.
             </p>
         </section>
 
@@ -73,21 +124,21 @@
             <div class="minimalist-card p-10 text-center flex flex-col items-center">
                 <i class="fas fa-scroll text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-xl tracking-wide mb-3 uppercase">Malla Curricular</h3>
-                <p class="text-gray-500 mb-8 text-sm">Consulta el plan de estudios, prelaciones y unidades de crédito.</p>
-                <button onclick="abrirModal()" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum Interactivo</button>
+                <p class="text-gray-500 mb-8 text-sm">Explora el plan de estudios mediante un mapa mental interactivo de prelaciones.</p>
+                <button onclick="abrirModal()" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum</button>
             </div>
 
             <div class="minimalist-card p-10 text-center flex flex-col items-center">
                 <i class="fas fa-book-atlas text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-xl tracking-wide mb-3 uppercase">Biblioteca Atlas</h3>
-                <p class="text-gray-500 mb-8 text-sm">Accede al repositorio digital de libros, revistas y trabajos de grado.</p>
-                <button class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Ingresar a la Biblioteca</button>
+                <p class="text-gray-500 mb-8 text-sm">Accede al repositorio digital de libros, revistas y documentos de la escuela.</p>
+                <a href="https://drive.google.com/drive/folders/1Xdd869m_TUKG66KqiBTqDYkv3rmL-iRZ?usp=drive_link" target="_blank" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Ingresar al Drive</a>
             </div>
 
             <div class="minimalist-card p-10 text-center flex flex-col items-center">
                 <i class="fas fa-map text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-xl tracking-wide mb-3 uppercase">Cartoteca Digital</h3>
-                <p class="text-gray-500 mb-8 text-sm">Descarga mapas base y Shapefiles listos para tus proyectos geográficos.</p>
+                <p class="text-gray-500 mb-8 text-sm">Consulta y descarga mapas base para tus proyectos de investigación geográfica.</p>
                 <button class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Explorar Mapas</button>
             </div>
 
@@ -96,23 +147,23 @@
         <section id="tramites" class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
             <div class="minimalist-card p-10">
-                <h3 class="text-2xl mb-6 flex items-center gap-4"><i class="fas fa-id-card text-gray-400"></i> Gestión Académica</h3>
+                <h3 class="text-2xl mb-6 flex items-center gap-4"><i class="fas fa-id-card text-gray-300"></i> Gestión Académica</h3>
                 <ul class="space-y-4 text-gray-600">
                     <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
-                        <span>Citas de Inscripción</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                        <span>Proceso de Inscripción</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
                     </li>
                     <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
-                        <span>Consulta de Horarios</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                        <span>Horarios de Clases</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
                     </li>
                     <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
-                        <span>Constancias de Estudio</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                        <span>Solicitud de Constancias</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
                     </li>
                 </ul>
             </div>
 
             <div class="minimalist-card p-10 flex flex-col justify-center items-center text-center bg-gray-50">
                 <p class="text-6xl text-gray-300 mb-2">2026</p>
-                <p class="tracking-widest uppercase text-sm text-gray-500">Ciclo Académico Actual</p>
+                <p class="tracking-widest uppercase text-sm text-gray-500">Ciclo Académico</p>
             </div>
 
         </section>
@@ -121,79 +172,28 @@
 
     <footer class="border-t border-gray-200 py-10 mt-10">
         <div class="max-w-6xl mx-auto px-6 text-center text-gray-400 text-sm">
-            <p>DOMITER | Dominium Terrae © 2026</p>
-            <p class="mt-2">Diseño minimalista para la Escuela de Geografía UCV</p>
+            <p>Portal Informativo Domiter © 2026</p>
+            <p class="mt-2">Diseño para la Escuela de Geografía UCV</p>
         </div>
     </footer>
 
     <div id="pensum-modal" class="fixed inset-0 bg-black bg-opacity-40 z-50 items-center justify-center p-4">
-        <div class="bg-white max-w-5xl w-full p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]">
-            <button onclick="cerrarModal()" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-2xl">&times;</button>
+        <div class="bg-white max-w-4xl w-full p-10 relative shadow-2xl overflow-y-auto max-h-[90vh]">
+            <button onclick="cerrarModal()" class="absolute top-6 right-8 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
-            <div class="text-center mb-8 border-b border-gray-200 pb-6">
-                <h2 class="text-3xl text-gray-900 mb-2">Plan de Estudios 1984</h2>
-                <p class="text-gray-500 italic">Pasa el cursor sobre las materias para ver sus prelaciones (180 UC en total)</p>
+            <div class="mb-8 border-b border-gray-200 pb-6">
+                <h2 class="text-3xl text-gray-900 mb-2">Mapa de Prelaciones</h2>
+                <p class="text-gray-500 italic">Haz clic en una asignatura para desplegar las materias que le siguen en el plan de estudios.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <div>
-                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. I (18 UC)</h3>
-                    <div class="space-y-2">
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="est2">Estadística I (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="mat2">Matemáticas I (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="carto2">Cartografía I (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Intro. Geografía (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Preseminario (3)</div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. II (21 UC)</h3>
-                    <div class="space-y-2">
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="est2">Estadística II (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="mat2" data-abre="mat3">Matemáticas II (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="carto2" data-abre="carto3">Cartografía II (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="geom1">Geografía Física (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Economía I (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="ing2">Inglés I (3)</div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. III (21 UC)</h3>
-                    <div class="space-y-2">
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geografía Humana (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="clim1">Meteorología (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="mat3">Matemáticas III (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="carto3" data-abre="foto">Cartografía III (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="geom1" data-abre="geom2">Geomorfología I (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="ing2">Inglés II (3)</div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. IV (18 UC)</h3>
-                    <div class="space-y-2">
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geo. Económica (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="clim1" data-abre="clim2">Climatología I (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="foto">Foto Interpretación (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" data-abre="edaf2">Edafología I (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="geom2">Geomorfología II (4)</div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-center text-sm uppercase tracking-widest text-gray-500 mb-4">Sem. V (18 UC)</h3>
-                    <div class="space-y-2">
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geo. Urbana (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Geo. Población (3)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="clim2">Climatología II (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition">Biogeografía (4)</div>
-                        <div class="materia p-3 border border-gray-200 text-sm text-center cursor-pointer transition" id="edaf2">Edafología II (4)</div>
-                    </div>
-                </div>
+            <div class="px-4">
+                <ul class="tree" id="pensum-tree">
+                    </ul>
             </div>
         </div>
     </div>
 
     <script>
-        // Funciones para abrir y cerrar la ventana del pensum
         function abrirModal() {
             document.getElementById('pensum-modal').classList.add('active');
         }
@@ -201,41 +201,123 @@
             document.getElementById('pensum-modal').classList.remove('active');
         }
 
-        // Lógica interactiva de las materias
-        document.addEventListener('DOMContentLoaded', () => {
-            const materias = document.querySelectorAll('.materia');
-            
-            materias.forEach(materia => {
-                materia.addEventListener('mouseenter', () => {
-                    materia.style.backgroundColor = '#f3f4f6'; // Gris muy suave
-                    materia.style.borderColor = '#d4af37'; // Borde dorado
-                    
-                    const abreId = materia.getAttribute('data-abre');
-                    if (abreId) {
-                        const materiaAbierta = document.getElementById(abreId);
-                        if (materiaAbierta) {
-                            materiaAbierta.style.backgroundColor = '#d4af37'; // Fondo dorado
-                            materiaAbierta.style.color = 'white';
-                            materiaAbierta.style.borderColor = '#d4af37';
-                        }
+        // Estructura de datos para el mapa mental
+        const pensumData = [
+            {
+                nombre: "Técnicas de Preseminario",
+                semestre: "Sem I",
+                uc: "4",
+                hijos: [
+                    { nombre: "Seminario Metodología Investigación", semestre: "Sem IX", uc: "4", hijos: [] }
+                ]
+            },
+            {
+                nombre: "Estadística I",
+                semestre: "Sem I",
+                uc: "4",
+                hijos: [
+                    { nombre: "Estadística II", semestre: "Sem II", uc: "4", hijos: [] }
+                ]
+            },
+            {
+                nombre: "Matemáticas I",
+                semestre: "Sem I",
+                uc: "3",
+                hijos: [
+                    { 
+                        nombre: "Matemáticas II", semestre: "Sem II", uc: "3", hijos: [
+                            { nombre: "Matemáticas III", semestre: "Sem III", uc: "3", hijos: [] }
+                        ] 
                     }
-                });
+                ]
+            },
+            {
+                nombre: "Cartografía I",
+                semestre: "Sem I",
+                uc: "4",
+                hijos: [
+                    {
+                        nombre: "Cartografía II", semestre: "Sem II", uc: "4", hijos: [
+                            {
+                                nombre: "Cartografía III", semestre: "Sem III", uc: "4", hijos: [
+                                    { nombre: "Foto Interpretación", semestre: "Sem IV", uc: "3", hijos: [] }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                nombre: "Introducción a la Geografía I",
+                semestre: "Sem I",
+                uc: "3",
+                hijos: [
+                    {
+                        nombre: "Geografía Humana", semestre: "Sem III", uc: "3", hijos: [
+                            {
+                                nombre: "Geografía Económica", semestre: "Sem IV", uc: "3", hijos: [
+                                    { nombre: "Geografía Urbana", semestre: "Sem V", uc: "3", hijos: [] },
+                                    { nombre: "Geografía de la Población", semestre: "Sem V", uc: "3", hijos: [] }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        nombre: "Geografía Física", semestre: "Sem II", uc: "4", hijos: [
+                            {
+                                nombre: "Geomorfología I", semestre: "Sem III", uc: "4", hijos: [
+                                    { nombre: "Geomorfología II", semestre: "Sem IV", uc: "4", hijos: [] }
+                                ]
+                            },
+                            {
+                                nombre: "Meteorología", semestre: "Sem III", uc: "4", hijos: [
+                                    {
+                                        nombre: "Climatología I", semestre: "Sem IV", uc: "4", hijos: [
+                                            { nombre: "Climatología II", semestre: "Sem V", uc: "4", hijos: [] },
+                                            { nombre: "Biogeografía", semestre: "Sem V", uc: "4", hijos: [] }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                nombre: "Edafología I", semestre: "Sem IV", uc: "4", hijos: [
+                                    { nombre: "Edafología II", semestre: "Sem V", uc: "4", hijos: [] }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
 
-                materia.addEventListener('mouseleave', () => {
-                    materia.style.backgroundColor = 'white';
-                    materia.style.borderColor = '#e5e7eb'; // Borde original
-                    
-                    const abreId = materia.getAttribute('data-abre');
-                    if (abreId) {
-                        const materiaAbierta = document.getElementById(abreId);
-                        if (materiaAbierta) {
-                            materiaAbierta.style.backgroundColor = 'white';
-                            materiaAbierta.style.color = 'inherit';
-                            materiaAbierta.style.borderColor = '#e5e7eb';
-                        }
-                    }
-                });
+        function construirArbol(nodos, contenedor) {
+            nodos.forEach(nodo => {
+                const li = document.createElement('li');
+                const span = document.createElement('span');
+                
+                span.innerHTML = nodo.nombre + ' <span class="uc-badge">' + nodo.semestre + ' | ' + nodo.uc + ' UC</span>';
+                li.appendChild(span);
+
+                if (nodo.hijos && nodo.hijos.length > 0) {
+                    li.classList.add('has-children');
+                    const ul = document.createElement('ul');
+                    construirArbol(nodo.hijos, ul);
+                    li.appendChild(ul);
+
+                    span.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        li.classList.toggle('expanded');
+                    });
+                } else {
+                    li.classList.add('leaf');
+                }
+                contenedor.appendChild(li);
             });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const treeContainer = document.getElementById('pensum-tree');
+            construirArbol(pensumData, treeContainer);
         });
     </script>
 </body>
