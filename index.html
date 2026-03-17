@@ -282,7 +282,7 @@
             <div class="minimalist-card p-8 sm:p-10">
                 <h3 class="text-xl sm:text-2xl mb-6 flex items-center gap-4 text-[#a57c00]"><i class="fas fa-id-card text-yellow-600"></i> Gestión Académica</h3>
                 <ul class="space-y-4 text-[#374151]">
-                    <li onclick="abrirModal('horario-modal')" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                    <li onclick="abrirModalConFiltroLimpio()" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
                         <span>Horario de Clases</span> <i class="fas fa-calendar-alt text-xs mt-1"></i>
                     </li>
                     <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
@@ -316,19 +316,19 @@
 
             <div class="mapa-container">
                 <div class="map-grid">
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>24</div>
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>25</div>
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>26</div>
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>27</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 24')" title="Ver Horarios">Aula<br>24</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 25')" title="Ver Horarios">Aula<br>25</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 26')" title="Ver Horarios">Aula<br>26</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 27')" title="Ver Horarios">Aula<br>27</div>
                     
                     <div class="map-room" style="grid-column: span 2; background-color: #f9fafb;">Cubículos de Profesores</div>
                     
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>30</div>
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>31</div>
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>32</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 30')" title="Ver Horarios">Aula<br>30</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 31')" title="Ver Horarios">Aula<br>31</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 32')" title="Ver Horarios">Aula<br>32</div>
                     
                     <div class="map-room" style="background-color: #f9fafb;">Sala de<br>Conferencias</div>
-                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Sala de<br>Computación</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Sala de Computación')" title="Ver Horarios">Sala de<br>Computación</div>
 
                     <div class="map-hallway">
                         <span><i class="fas fa-stairs"></i> ESCALERAS PRINCIPALES</span>
@@ -830,6 +830,83 @@
         function cerrarModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
             if (modalId === 'pensum-modal') limpiarSeleccion();
+            if (modalId === 'horario-modal') limpiarFiltroHorario();
+        }
+
+        function abrirModalConFiltroLimpio() {
+            limpiarFiltroHorario();
+            abrirModal('horario-modal');
+        }
+
+        function filtrarHorario(aula) {
+            abrirModal('horario-modal');
+            
+            document.getElementById('horario-title').innerHTML = `Horario de Clases <span class="text-sm bg-[#fefce8] text-[#a57c00] border border-[#d4af37] px-2 py-1 rounded ml-2">Filtrando: ${aula}</span>`;
+            document.getElementById('btn-limpiar-filtro').style.display = 'inline-block';
+            
+            const semestres = document.querySelectorAll('.tab-content');
+            let tabActivada = false;
+
+            semestres.forEach(semestre => {
+                let tieneClasesEnAula = false;
+                
+                const secciones = semestre.querySelectorAll('.mb-8');
+                secciones.forEach(seccion => {
+                    const titulo = seccion.querySelector('h3');
+                    const tituloText = titulo ? titulo.textContent : '';
+                    
+                    if (tituloText.includes(aula)) {
+                        seccion.style.display = 'block';
+                        seccion.querySelectorAll('li').forEach(li => li.style.display = 'block');
+                        tieneClasesEnAula = true;
+                    } else {
+                        let sectionHasMatchingItems = false;
+                        const items = seccion.querySelectorAll('li');
+                        items.forEach(li => {
+                            if (li.textContent.includes(aula)) {
+                                li.style.display = 'block';
+                                sectionHasMatchingItems = true;
+                                tieneClasesEnAula = true;
+                            } else {
+                                li.style.display = 'none';
+                            }
+                        });
+                        
+                        if (sectionHasMatchingItems) {
+                            seccion.style.display = 'block';
+                        } else {
+                            seccion.style.display = 'none';
+                        }
+                    }
+                });
+                
+                const tabBtn = document.querySelector(`.tab-btn[onclick*="${semestre.id}"]`);
+                if (tabBtn) {
+                    if (tieneClasesEnAula) {
+                        tabBtn.style.display = 'inline-block';
+                        if (!tabActivada) {
+                            tabBtn.click();
+                            tabActivada = true;
+                        }
+                    } else {
+                        tabBtn.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        function limpiarFiltroHorario() {
+            const titleEl = document.getElementById('horario-title');
+            if (titleEl) titleEl.innerHTML = 'Horario de Clases 2026';
+            
+            const btnEl = document.getElementById('btn-limpiar-filtro');
+            if (btnEl) btnEl.style.display = 'none';
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.style.display = 'inline-block');
+            document.querySelectorAll('.tab-content .mb-8').forEach(seccion => {
+                seccion.style.display = 'block';
+                seccion.querySelectorAll('li').forEach(li => li.style.display = 'block');
+            });
         }
 
         function cambiarTab(evt, tabName) {
@@ -904,5 +981,3 @@
             });
         }
     </script>
-</body>
-</html>
