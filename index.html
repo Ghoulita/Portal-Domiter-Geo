@@ -265,14 +265,14 @@
                 <i class="fas fa-book-atlas text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Biblioteca Atlas</h3>
                 <p class="text-[#374151] mb-8 text-sm">Accede al repositorio digital de libros, revistas y documentos de la escuela.</p>
-                <a href="https://drive.google.com/drive/folders/1Xdd869m_TUKG66KqiBTqDYkv3rmL-iRZ?usp=drive_link" target="_blank" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Ingresar al Drive</a>
+                <a href="https://drive.google.com/drive/folders/1Xdd869m_TUKG66KqiBTqDYkv3rmL-iRZ?usp=drive_link" target="_blank" rel="noopener noreferrer" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Ingresar al Drive</a>
             </div>
 
             <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
                 <i class="fas fa-map text-4xl text-yellow-600 mb-6"></i>
                 <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Cartoteca Digital</h3>
                 <p class="text-[#374151] mb-8 text-sm">Consulta y descarga mapas base para tus proyectos de investigación.</p>
-                <a href="https://drive.google.com/drive/folders/1UmnM1_iSGk-_BeXShhS_EgH6zRzQO6M_?usp=drive_link" target="_blank" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Explorar Mapas</a>
+                <a href="https://drive.google.com/drive/folders/1UmnM1_iSGk-_BeXShhS_EgH6zRzQO6M_?usp=drive_link" target="_blank" rel="noopener noreferrer" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Explorar Mapas</a>
             </div>
 
         </section>
@@ -352,13 +352,13 @@
             <p class="text-[#374151] mb-10 max-w-xl mx-auto">Mantente informado sobre las actividades de la Escuela de Geografía, debates académicos y recursos a través de nuestras redes oficiales.</p>
             
             <div class="flex justify-center gap-8 sm:gap-10">
-                <a href="https://chat.whatsapp.com/GcpaSFEfCO2GkMioEw1uxG" target="_blank" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#25D366] transition transform hover:scale-110" title="Grupo de WhatsApp">
+                <a href="https://chat.whatsapp.com/GcpaSFEfCO2GkMioEw1uxG" target="_blank" rel="noopener noreferrer" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#25D366] transition transform hover:scale-110" title="Grupo de WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
-                <a href="https://www.instagram.com/domitergeo?igsh=MW80Y21lOTlzcDV0Yg==" target="_blank" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#E1306C] transition transform hover:scale-110" title="Instagram">
+                <a href="https://www.instagram.com/domitergeo?igsh=MW80Y21lOTlzcDV0Yg==" target="_blank" rel="noopener noreferrer" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#E1306C] transition transform hover:scale-110" title="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="https://www.tiktok.com/@domiter_geo?_r=1&_t=ZS-94jy8nGOc9i" target="_blank" class="text-4xl sm:text-5xl text-gray-300 hover:text-black transition transform hover:scale-110" title="TikTok">
+                <a href="https://www.tiktok.com/@domiter_geo?_r=1&_t=ZS-94jy8nGOc9i" target="_blank" rel="noopener noreferrer" class="text-4xl sm:text-5xl text-gray-300 hover:text-black transition transform hover:scale-110" title="TikTok">
                     <i class="fab fa-tiktok"></i>
                 </a>
             </div>
@@ -377,9 +377,18 @@
         <div class="bg-white w-full max-w-4xl h-[85vh] sm:h-[80vh] p-5 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37]">
             <button onclick="cerrarModal('horario-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
-            <div class="mb-4 sm:mb-6 border-b border-gray-200 pb-4 shrink-0">
-                <h2 class="text-xl sm:text-3xl text-[#a57c00] mb-1">Horario de Clases 2026</h2>
-                <p class="text-[#374151] italic text-xs sm:text-sm">Selecciona tu semestre para ver la distribución de asignaturas, secciones y profesores.</p>
+            <div class="mb-4 sm:mb-6 border-b border-gray-200 pb-4 shrink-0 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                <div>
+                    <h2 id="horario-title" class="text-xl sm:text-3xl text-[#a57c00] mb-1 flex items-center flex-wrap gap-2">Horario de Clases 2026</h2>
+                    <p class="text-[#374151] italic text-xs sm:text-sm">Selecciona tu semestre, o busca por materia o profesor.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto">
+                    <div class="relative w-full sm:w-64">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" id="buscador-horario" oninput="buscarEnHorario()" placeholder="Materia o profesor..." class="w-full border border-gray-300 pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-[#d4af37] transition">
+                    </div>
+                    <button id="btn-limpiar-filtro" onclick="limpiarFiltroHorario()" style="display:none;" class="border border-gray-300 px-3 py-2 text-xs sm:text-sm tracking-widest uppercase hover:bg-gray-100 transition whitespace-nowrap"><i class="fas fa-times mr-1"></i> Limpiar</button>
+                </div>
             </div>
 
             <div class="flex gap-2 sm:gap-4 border-b border-gray-200 mb-4 sm:mb-6 overflow-x-auto shrink-0 pb-1">
@@ -841,32 +850,54 @@
         function filtrarHorario(aula) {
             abrirModal('horario-modal');
             
+            document.getElementById('buscador-horario').value = '';
+            
             document.getElementById('horario-title').innerHTML = `Horario de Clases <span class="text-sm bg-[#fefce8] text-[#a57c00] border border-[#d4af37] px-2 py-1 rounded ml-2">Filtrando: ${aula}</span>`;
             document.getElementById('btn-limpiar-filtro').style.display = 'inline-block';
             
+            aplicarFiltro(aula, true);
+        }
+
+        function buscarEnHorario() {
+            const query = document.getElementById('buscador-horario').value.toLowerCase().trim();
+            
+            if (query === '') {
+                limpiarFiltroHorario();
+                return;
+            }
+
+            document.getElementById('btn-limpiar-filtro').style.display = 'inline-block';
+            document.getElementById('horario-title').innerHTML = `Horario de Clases <span class="text-sm bg-[#fcfcfc] text-gray-600 border border-gray-300 px-2 py-1 rounded ml-2">Buscando: "${query}"</span>`;
+            
+            aplicarFiltro(query, false);
+        }
+
+        function aplicarFiltro(textoBusqueda, esFiltroAula) {
             const semestres = document.querySelectorAll('.tab-content');
             let tabActivada = false;
 
             semestres.forEach(semestre => {
-                let tieneClasesEnAula = false;
+                let tieneCoincidenciasEnSemestre = false;
                 
                 const secciones = semestre.querySelectorAll('.mb-8');
                 secciones.forEach(seccion => {
                     const titulo = seccion.querySelector('h3');
-                    const tituloText = titulo ? titulo.textContent : '';
+                    const tituloText = titulo ? titulo.textContent.toLowerCase() : '';
                     
-                    if (tituloText.includes(aula)) {
+                    const queryMatcher = textoBusqueda.toLowerCase();
+                    
+                    if (esFiltroAula && tituloText.includes(queryMatcher)) {
                         seccion.style.display = 'block';
                         seccion.querySelectorAll('li').forEach(li => li.style.display = 'block');
-                        tieneClasesEnAula = true;
+                        tieneCoincidenciasEnSemestre = true;
                     } else {
                         let sectionHasMatchingItems = false;
                         const items = seccion.querySelectorAll('li');
                         items.forEach(li => {
-                            if (li.textContent.includes(aula)) {
+                            if (li.textContent.toLowerCase().includes(queryMatcher)) {
                                 li.style.display = 'block';
                                 sectionHasMatchingItems = true;
-                                tieneClasesEnAula = true;
+                                tieneCoincidenciasEnSemestre = true;
                             } else {
                                 li.style.display = 'none';
                             }
@@ -882,7 +913,7 @@
                 
                 const tabBtn = document.querySelector(`.tab-btn[onclick*="${semestre.id}"]`);
                 if (tabBtn) {
-                    if (tieneClasesEnAula) {
+                    if (tieneCoincidenciasEnSemestre) {
                         tabBtn.style.display = 'inline-block';
                         if (!tabActivada) {
                             tabBtn.click();
@@ -896,6 +927,8 @@
         }
 
         function limpiarFiltroHorario() {
+            document.getElementById('buscador-horario').value = '';
+            
             const titleEl = document.getElementById('horario-title');
             if (titleEl) titleEl.innerHTML = 'Horario de Clases 2026';
             
@@ -981,3 +1014,5 @@
             });
         }
     </script>
+</body>
+</html>
