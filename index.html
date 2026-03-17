@@ -17,6 +17,7 @@
             background-color: var(--color-fondo);
             color: var(--color-marron-oscuro);
             line-height: 1.6;
+            scroll-behavior: smooth;
         }
         .minimalist-card {
             background: white;
@@ -36,6 +37,58 @@
         }
         .modal-overlay.active {
             display: flex;
+        }
+
+        /* Estilos del Mapa Interactivo */
+        .mapa-container {
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(11, minmax(80px, 1fr));
+            gap: 6px;
+            min-width: 900px; /* Asegura que no se aplaste en celulares */
+            background-color: #fafafa;
+            padding: 15px;
+            border: 1px solid #eaeaea;
+        }
+        .map-room {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: white;
+            border: 2px solid #e5e7eb;
+            font-size: 0.75rem;
+            color: #374151;
+            height: 90px;
+            transition: all 0.3s ease;
+            padding: 4px;
+        }
+        .map-room.interactive {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .map-room.interactive:hover {
+            border-color: var(--color-oro);
+            background-color: #fefce8;
+            color: #a57c00;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transform: scale(1.02);
+        }
+        .map-hallway {
+            grid-column: span 11;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 0.7rem;
+            color: #9ca3af;
+            letter-spacing: 0.1em;
+            border-top: 2px dashed #e5e7eb;
+            border-bottom: 2px dashed #e5e7eb;
         }
 
         /* Estilos de la Cuadrícula del Pensum */
@@ -127,7 +180,7 @@
             transition: max-height 0.35s ease, padding 0.35s ease;
         }
         #mobile-menu.open {
-            max-height: 300px;
+            max-height: 350px;
         }
         .hamburger-line {
             display: block;
@@ -150,7 +203,7 @@
 </head>
 <body class="antialiased">
 
-    <header class="bg-white border-b border-gray-200 py-4 md:py-6">
+    <header class="bg-white border-b border-gray-200 py-4 md:py-6 sticky top-0 z-40 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3 sm:gap-6">
@@ -163,10 +216,11 @@
                     </div>
                 </div>
 
-                <nav class="hidden md:flex gap-8 text-sm uppercase tracking-widest text-[#a57c00]">
+                <nav class="hidden md:flex gap-6 lg:gap-8 text-sm uppercase tracking-widest text-[#a57c00]">
                     <a href="#inicio" class="hover:opacity-70 transition">Inicio</a>
                     <a href="#servicios" class="hover:opacity-70 transition">Servicios</a>
                     <a href="#tramites" class="hover:opacity-70 transition">Trámites</a>
+                    <a href="#mapa" class="hover:opacity-70 transition font-bold">Plano</a>
                     <a href="#contacto" class="hover:opacity-70 transition">Contacto</a>
                 </nav>
 
@@ -182,6 +236,7 @@
                     <a href="#inicio" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Inicio</a>
                     <a href="#servicios" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Servicios</a>
                     <a href="#tramites" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Trámites</a>
+                    <a href="#mapa" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition font-bold">Plano de la Escuela</a>
                     <a href="#contacto" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Contacto</a>
                 </nav>
             </div>
@@ -246,6 +301,52 @@
 
         </section>
 
+        <section id="mapa" class="minimalist-card p-6 sm:p-10">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-xl sm:text-2xl text-[#a57c00] flex items-center gap-3">
+                        <i class="fas fa-map-location-dot"></i> Plano de la Escuela
+                    </h3>
+                    <p class="text-[#374151] text-sm mt-2 italic">Primer Piso, Ala Norte. Toca un aula académica para ver su horario.</p>
+                </div>
+                <div class="hidden sm:block text-xs text-gray-400">
+                    <i class="fas fa-arrow-up"></i> NORTE
+                </div>
+            </div>
+
+            <div class="mapa-container">
+                <div class="map-grid">
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>24</div>
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>25</div>
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>26</div>
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>27</div>
+                    
+                    <div class="map-room" style="grid-column: span 2; background-color: #f9fafb;">Cubículos de Profesores</div>
+                    
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>30</div>
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>31</div>
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Aula<br>32</div>
+                    
+                    <div class="map-room" style="background-color: #f9fafb;">Sala de<br>Conferencias</div>
+                    <div class="map-room interactive" onclick="abrirModal('horario-modal')" title="Ver Horarios">Sala de<br>Computación</div>
+
+                    <div class="map-hallway">
+                        <span><i class="fas fa-stairs"></i> ESCALERAS PRINCIPALES</span>
+                        <span>PASILLO (CARRERA DE HUMANIDADES)</span>
+                        <span><i class="fas fa-arrow-right"></i></span>
+                    </div>
+
+                    <div class="map-room" style="background-color: #f9fafb;"><i class="fas fa-stairs mr-1"></i> Bajada</div>
+                    <div class="map-room" style="background-color: #f9fafb;">Secretaría<br>Historia</div>
+                    <div class="map-room" style="background-color: #f9fafb;">Dirección<br>Historia</div>
+                    <div class="map-room" style="background-color: #fefce8; border-color: #d4af37;">Dirección<br>Geografía</div>
+                    <div class="map-room" style="background-color: #f9fafb;"><i class="fas fa-restroom mb-1 block"></i> Baños</div>
+                    <div class="map-room" style="grid-column: span 2; background-color: #f9fafb;">Laboratorio</div>
+                    <div style="grid-column: span 4;"></div> </div>
+            </div>
+            <p class="text-[0.65rem] text-right text-gray-400 mt-2">Adaptación digital basada en el plano del Prof. Wilmer Godoy.</p>
+        </section>
+
         <section id="contacto" class="minimalist-card p-8 sm:p-12 text-center mt-8">
             <h3 class="text-xl sm:text-2xl mb-4 text-[#a57c00]">Únete a nuestra comunidad</h3>
             <p class="text-[#374151] mb-10 max-w-xl mx-auto">Mantente informado sobre las actividades de la Escuela de Geografía, debates académicos y recursos a través de nuestras redes oficiales.</p>
@@ -273,7 +374,7 @@
     </footer>
 
     <div id="horario-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4">
-        <div class="bg-white w-full max-w-4xl h-[85vh] sm:h-[80vh] p-5 sm:p-8 relative shadow-2xl flex flex-col">
+        <div class="bg-white w-full max-w-4xl h-[85vh] sm:h-[80vh] p-5 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37]">
             <button onclick="cerrarModal('horario-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
             <div class="mb-4 sm:mb-6 border-b border-gray-200 pb-4 shrink-0">
@@ -291,7 +392,6 @@
             </div>
 
             <div class="overflow-auto flex-1 pr-1 sm:pr-2">
-                
                 <div id="sem1" class="tab-content active">
                     <div class="mb-8">
                         <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección A (Aula 24)</h3>
@@ -614,7 +714,7 @@
     </div>
 
     <div id="pensum-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-2 sm:p-4">
-        <div class="bg-white w-full max-w-[95vw] h-[92vh] sm:h-[90vh] p-4 sm:p-8 relative shadow-2xl flex flex-col">
+        <div class="bg-white w-full max-w-[95vw] h-[92vh] sm:h-[90vh] p-4 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37]">
             <button onclick="cerrarModal('pensum-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
             <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 border-b border-gray-200 pb-4 shrink-0">
