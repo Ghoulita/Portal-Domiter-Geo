@@ -207,7 +207,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3 sm:gap-6">
-                    <img src="logo-domiter.png.png" alt="Logo Domiter" class="h-16 sm:h-24 md:h-32">
+                    <img src="logo-domiter.png" alt="Logo Domiter" class="h-16 sm:h-24 md:h-32">
                     <div>
                         <h1 class="text-xl sm:text-3xl md:text-4xl tracking-wide text-[#a57c00] leading-tight">
                             PORTAL INFORMATIVO DOMITER
@@ -391,7 +391,7 @@
                 </div>
             </div>
 
-            <div class="flex gap-2 sm:gap-4 border-b border-gray-200 mb-4 sm:mb-6 overflow-x-auto shrink-0 pb-1">
+            <div class="flex gap-2 sm:gap-4 border-b border-gray-200 mb-4 sm:mb-6 overflow-x-auto shrink-0 pb-1 custom-scrollbar">
                 <div class="tab-btn active text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem1')">Sem. I</div>
                 <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem2')">Sem. II</div>
                 <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem3')">Sem. III</div>
@@ -402,6 +402,7 @@
                 <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem8')">Sem. VIII</div>
                 <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem9')">Sem. IX</div>
                 <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem10')">Sem. X</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold text-[#a57c00]" onclick="cambiarTab(event, 'electivas')">Electivas</div>
             </div>
 
             <div class="overflow-auto flex-1 pr-1 sm:pr-2">
@@ -721,33 +722,34 @@
                         <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única</h3>
                         <ul class="space-y-3">
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Seminario de Geografía Urbana</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. Juan Carlos Ruiz</p>
+                                <h4 class="text-md text-gray-800 font-semibold">Servicio Comunitario Fase I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Coordinación de Servicio Comunitario</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 9:30 am - 11:15 am</span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Seminario de Geografía Regional</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir)</p>
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario de Geografía Urbana</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Juan Carlos Ruiz</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 11:15 am - 12:44 pm <span class="italic text-gray-400">(Aula 32)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 9:30 am - 11:15 am <span class="italic text-gray-400">(Aula 33)</span></span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
                                 <h4 class="text-md text-gray-800 font-semibold">Taller I</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. Eglee Estaba</p>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Exyeleth Echarry / Helga Davalillo</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 9:30 am - 12:45 pm <span class="italic text-gray-400">(Aula 33)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 9:30 am - 12:45 pm <span class="italic text-gray-400">(Aula 33)</span></span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Electiva I</h4>
-                                <p class="text-sm text-[#374151] mb-2">Materia Electiva</p>
-                            </li>
-                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Electiva II</h4>
-                                <p class="text-sm text-[#374151] mb-2">Materia Electiva</p>
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Geografía Regional</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Patricia López</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 33)</span></span>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -758,33 +760,33 @@
                         <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única</h3>
                         <ul class="space-y-3">
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Seminario Geografía Agraria</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir)</p>
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Inventario y Evaluación de Recursos</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Coromoto Sanabria</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 9:30 am - 12:45 pm <span class="italic text-gray-400">(Aula 30)</span></span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Seminario Inventario y Evaluación de Recursos</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir)</p>
+                                <h4 class="text-md text-gray-800 font-semibold">Servicio Comunitario II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Coordinación de Servicio Comunitario</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am</span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
                                 <h4 class="text-md text-gray-800 font-semibold">Taller II</h4>
-                                <p class="text-sm text-[#374151] mb-2">Profs. Flora Castro / Carlos Mata</p>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Fernando Corvo / Carlo Narváez</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 30)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:45 am - 11:15 am <span class="italic text-gray-400">(Aula 31)</span></span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Electiva III</h4>
-                                <p class="text-sm text-[#374151] mb-2">Materia Electiva</p>
-                            </li>
-                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Electiva IV</h4>
-                                <p class="text-sm text-[#374151] mb-2">Materia Electiva</p>
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Geografía Agraria</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Romero Mena</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 30 - PCI)</span></span>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -796,28 +798,29 @@
                         <ul class="space-y-3">
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
                                 <h4 class="text-md text-gray-800 font-semibold">Seminario Geografía del Subdesarrollo</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir)</p>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Simón González / Abigail Castillo</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 33)</span></span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Seminario de Teoría Geográfica</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir) <span class="text-xs text-gray-400 italic">(Aula 201)</span></p>
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Teoría Geográfica</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Iveluz Nuñez</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 9:30 am <span class="italic text-gray-400">(Sala de Computación)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 8:45 am - 9:30 am <span class="italic text-gray-400">(Aula 30)</span></span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geopolítica del Petróleo <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Lennin Rodríguez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:45 am - 11:15 am <span class="italic text-gray-400">(Aula 30 - PCI)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition opacity-70">
                                 <h4 class="text-md text-gray-800 font-semibold">Taller III</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir)</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
-                                </div>
-                            </li>
-                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Electiva V</h4>
-                                <p class="text-sm text-[#374151] mb-2">Materia Electiva</p>
+                                <p class="text-sm text-[#374151] mb-2">Profesor / Horario por definir</p>
                             </li>
                         </ul>
                     </div>
@@ -828,29 +831,34 @@
                         <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única</h3>
                         <ul class="space-y-3">
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Seminario Metodología de Investigación</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir) <span class="text-xs text-gray-400 italic">(Aula 201)</span></p>
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Metodología de la Investigación</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Danny Rojas</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
-                                </div>
-                            </li>
-                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
-                                <h4 class="text-md text-gray-800 font-semibold">Taller IV</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. (Por definir)</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am <span class="italic text-gray-400">(Aula 30)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:00 am - 8:30 am <span class="italic text-gray-400">(Aula 30)</span></span>
                                 </div>
                             </li>
                             <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
                                 <h4 class="text-md text-gray-800 font-semibold">Seminario de Tesis</h4>
-                                <p class="text-sm text-[#374151] mb-2">Prof. Nancy Rojas</p>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Danny Rojas</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> (Por definir)</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 11:15 am <span class="italic text-gray-400">(Aula 31)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Inglés III <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Yeimic Bastidas</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 1:00 pm - 4:15 pm <span class="italic text-gray-400">(Virtual)</span></span>
                                 </div>
                             </li>
                             <li class="border border-blue-200 bg-blue-50 p-3 shadow-sm rounded hover:border-blue-400 transition">
                                 <h4 class="text-md text-blue-800 font-semibold">Pasantías</h4>
                                 <p class="text-sm text-blue-600 mb-2"><i class="fas fa-info-circle mr-1"></i> Requisito: 150 créditos aprobados</p>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition opacity-70">
+                                <h4 class="text-md text-gray-800 font-semibold">Taller IV</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profesor / Horario por definir</p>
                             </li>
                         </ul>
                     </div>
@@ -860,9 +868,90 @@
                     <div class="mb-8">
                         <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Proyectos (X)</h3>
                         <ul class="space-y-3">
-                            <li class="border border-green-200 bg-green-50 p-3 shadow-sm rounded hover:border-green-400 transition">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Frontera de Venezuela <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Rafael Ruano</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 1:45 pm - 5:15 pm <span class="italic text-gray-400">(Aula 30 - PCI)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Análisis Espacial <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jorge Uzcátegui</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 1:00 pm - 4:15 pm <span class="italic text-gray-400">(IGDR)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-green-200 bg-green-50 p-3 shadow-sm rounded hover:border-green-400 transition mt-6">
                                 <h4 class="text-md text-green-800 font-semibold">Tesis de Grado</h4>
                                 <p class="text-sm text-green-600 mb-2"><i class="fas fa-graduation-cap mr-1"></i> Trabajo Final (12 Créditos)</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="electivas" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Materias Electivas</h3>
+                        <p class="text-sm text-gray-500 mb-4 italic">Todas las electivas de esta lista se imparten en la <span class="font-semibold">Sala de Computación</span>.</p>
+                        
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Sistemas de Información Geográfica</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Mylene Gutierrez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 1:00 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Lectura e Interpretación de Mapa</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Kenny Characo</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 1:00 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Análisis Multivariante Aplicado en Geografía</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Luis Salazar</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:00 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Introducción a la Teledetección Espacial</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Rafael Batista</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 1:00 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Intro. Análisis Estadístico Aplicado a Datos Geográficos</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Victor Navarro</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Minería y Ambiente</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Lucia Barboza</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 8:45 am - 12:00 pm <span class="italic text-gray-400">(PCI)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Catastro</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jose Garcia</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 1:45 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Nuevas Tecnologías en Agroclimatología</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Roberto Andrade</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 12:00 pm</span>
+                                </div>
                             </li>
                         </ul>
                     </div>
