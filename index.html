@@ -95,8 +95,8 @@
                     <li onclick="abrirModal('retiro-modal')" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
                         <span>Cronograma de retiro de materias</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
                     </li>
-                    <li class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
-                        <span>Cronograma académico 2026</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                    <li onclick="abrirModal('cronograma-modal')" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Cronograma académico 2026</span> <i class="fas fa-calendar text-xs mt-1"></i>
                     </li>
                 </ul>
             </div>
@@ -872,7 +872,14 @@
             <button onclick="cerrarModal('retiro-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
             
             <div class="mb-6 border-b border-gray-200 pb-4 shrink-0">
-                <h2 class="text-xl sm:text-3xl text-[#a57c00] mb-2 flex items-center gap-2"><i class="fas fa-file-alt"></i> Guía Paso a Paso: Retiro de Asignaturas</h2>
+                <h2 class="text-xl sm:text-3xl text-[#a57c00] mb-3 flex items-center gap-2"><i class="fas fa-file-alt"></i> Guía Paso a Paso: Retiro de Asignaturas</h2>
+                <div class="bg-yellow-50 text-[#a57c00] p-3 rounded mb-3 text-sm flex items-start gap-3 border border-yellow-200 shadow-sm w-fit max-w-full">
+                    <i class="fas fa-calendar-check mt-1 text-lg"></i>
+                    <div>
+                        <strong class="block text-[#8a6800] uppercase tracking-wide text-xs mb-1">Fechas del Proceso (2026-01S):</strong>
+                        <span>Del <strong>13 de Abril</strong> al <strong>05 de Junio</strong> (Semanas 2 a la 9).</span>
+                    </div>
+                </div>
                 <p class="text-[#374151] italic text-xs sm:text-sm">Si necesitas retirar una o más materias, debes completar un proceso administrativo y académico. Sigue estos tres pasos detallados a continuación:</p>
             </div>
 
@@ -924,6 +931,230 @@
                             </div>
                         </li>
                     </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <div id="cronograma-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4">
+        <div class="bg-white w-full max-w-5xl max-h-[90vh] p-5 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37] overflow-y-auto custom-scrollbar">
+            <button onclick="cerrarModal('cronograma-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            
+            <div class="mb-8 border-b border-gray-200 pb-4 shrink-0">
+                <h2 class="text-xl sm:text-3xl text-[#a57c00] mb-2 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Cronograma Académico 2026</h2>
+                <p class="text-[#374151] italic text-xs sm:text-sm">Fechas estipuladas para el periodo 2026-01S y proyección del 2026-02S.</p>
+            </div>
+
+            <div class="space-y-0 text-[#374151] text-sm sm:text-base pr-2 pb-2 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+                
+                <!-- Event 1 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-green-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-play text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-green-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-green-600 text-sm">06 de Abril</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 1</span>
+                        </div>
+                        <p class="text-gray-700">Inicio de clases escuelas semestrales 2026-01S.</p>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-yellow-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-sign-out-alt text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-yellow-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-yellow-600 text-sm">13 de Abril al 05 de Junio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semanas 2 a 9</span>
+                        </div>
+                        <p class="text-gray-700">Proceso de retiro de asignaturas.</p>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-red-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-calendar-day text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-50 p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-red-500 text-sm">01 de Mayo</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 4</span>
+                        </div>
+                        <p class="text-gray-700">Día del trabajador <span class="text-red-400 italic text-xs">(Feriado)</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Event 4 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-blue-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-folder-open text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-blue-400 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-blue-600 text-sm">04 de Mayo al 14 de Mayo</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semanas 5 a 6</span>
+                        </div>
+                        <p class="text-gray-700 bg-blue-50 px-2 py-1 rounded text-sm inline-block"><i class="fas fa-check-circle text-blue-400 mr-1"></i> Recepción solicitudes TERES.</p>
+                        
+                        <div class="mt-3 space-y-2 border-t border-gray-100 pt-3">
+                            <div class="flex items-start gap-2">
+                                <i class="fas fa-arrow-right text-[10px] text-gray-400 mt-1"></i>
+                                <p class="text-xs text-gray-600"><strong class="text-gray-700">22 de Mayo (Semana 8):</strong> Enviar TERES a Escuelas.</p>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <i class="fas fa-arrow-right text-[10px] text-gray-400 mt-1"></i>
+                                <p class="text-xs text-gray-600"><strong class="text-gray-700">15 al 19 de Junio (Semana 11):</strong> Escuelas envían TERES a Consejo de Facultad y se publican.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 5 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-purple-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-language text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-purple-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-purple-600 text-sm">22 al 26 de Junio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 12</span>
+                        </div>
+                        <p class="text-gray-700">Presentación del Examen de Suficiencia del Idioma.</p>
+                    </div>
+                </div>
+
+                <!-- Event 6 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-red-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-flag text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-50 p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-red-500 text-sm">24 de Junio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 12</span>
+                        </div>
+                        <p class="text-gray-700">Batalla de Carabobo <span class="text-red-400 italic text-xs">(Feriado)</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Event 7 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#d4af37] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-graduation-cap text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-[#a57c00] transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-[#a57c00] text-sm">09 y 10 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semanas 13 y 14</span>
+                        </div>
+                        <p class="text-gray-700">Actos de Grado FHE 1-2026.</p>
+                    </div>
+                </div>
+
+                <!-- Event 8 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-gray-600 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-stop text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-gray-800 text-sm">10 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 14</span>
+                        </div>
+                        <p class="text-gray-700">Fin de clases regulares.</p>
+                    </div>
+                </div>
+
+                <!-- Event 9 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-orange-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-pen-alt text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-orange-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-orange-600 text-sm">13 al 17 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 15</span>
+                        </div>
+                        <p class="text-gray-700">Exámenes finales.</p>
+                    </div>
+                </div>
+
+                <!-- Event 10 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-orange-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-file-contract text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-orange-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-orange-500 text-sm">20 al 23 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 16</span>
+                        </div>
+                        <p class="text-gray-700">Exámenes diferidos.</p>
+                    </div>
+                </div>
+
+                <!-- Event 11 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-red-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-calendar-day text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-50 p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-red-500 text-sm">24 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 16</span>
+                        </div>
+                        <p class="text-gray-700">Natalicio del Libertador <span class="text-red-400 italic text-xs">(Feriado)</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Event 12 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-indigo-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-sync-alt text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-indigo-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-indigo-600 text-sm">27 al 30 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 17</span>
+                        </div>
+                        <p class="text-gray-700">Exámenes de reparación y fecha tope de defensa para actos de grado.</p>
+                        
+                        <div class="mt-3 border-t border-gray-100 pt-3">
+                            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded inline-block mb-1">31 de Julio</span>
+                            <p class="text-xs text-gray-600 ml-1">Fecha tope de entrega de notas definitivas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Semester -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-2">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-green-600 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-forward text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-green-50 p-4 rounded border border-green-200 shadow-sm hover:border-green-400 transition">
+                        <div class="flex items-center justify-between mb-3 border-b border-green-200 pb-2">
+                            <span class="font-bold text-green-700 text-sm">Próximo Ciclo</span>
+                            <span class="text-xs text-green-600 font-bold bg-green-100 px-2 py-1 shadow-sm rounded border border-green-200">2026-02S</span>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-gray-700 text-sm"><strong class="text-green-800">15 de Sept. al 02 de Oct.:</strong> Inscripciones nuevo periodo.</p>
+                            <p class="text-gray-700 text-sm"><strong class="text-green-800">05 de Octubre:</strong> Inicio de clases 2026-02S.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <div class="inline-block bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 text-[0.7rem] sm:text-xs text-gray-500 leading-relaxed mx-auto italic shadow-sm">
+                    <i class="fas fa-check-double text-green-600 mr-1"></i> Elaborado por el <strong>Departamento de Control de Estudios</strong>, <br class="hidden sm:block">
+                    revisado por el <strong>Lic. Pedro Coronado</strong> y aprobada por el <strong>Consejo de la Facultad</strong> en fecha <span class="text-gray-700 font-semibold">10.03.2026</span>.
                 </div>
             </div>
         </div>
