@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import javascriptObfuscator from 'vite-plugin-javascript-obfuscator';
 
 export default defineConfig({
+  base: './',
   build: {
     target: 'esnext',
     outDir: 'dist',
