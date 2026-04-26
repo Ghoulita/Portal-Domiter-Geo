@@ -1,0 +1,174 @@
+<header class="bg-white border-b border-gray-200 py-4 md:py-6 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3 sm:gap-6">
+                    <img src="logo-domiter.png.png" alt="Logo Domiter" class="h-16 sm:h-24 md:h-32">
+                    <div>
+                        <h1 class="text-xl sm:text-3xl md:text-4xl tracking-wide text-[#a57c00] leading-tight">
+                            PORTAL INFORMATIVO DOMITER
+                        </h1>
+                        <p class="text-xs sm:text-sm text-[#997a00] italic mt-1">Dominium Terrae</p>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex gap-6 lg:gap-8 text-sm uppercase tracking-widest text-[#a57c00]">
+                    <a href="#inicio" class="hover:opacity-70 transition">Inicio</a>
+                    <a href="#servicios" class="hover:opacity-70 transition">Servicios</a>
+                    <a href="#tramites" class="hover:opacity-70 transition">Trámites</a>
+                    <a href="#mapa" class="hover:opacity-70 transition font-bold">Plano</a>
+                    <a href="#contacto" class="hover:opacity-70 transition">Contacto</a>
+                </nav>
+
+                <button id="hamburger-btn" onclick="toggleMenu()" class="md:hidden flex flex-col gap-[6px] p-2 focus:outline-none" aria-label="Abrir menú">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+
+            <div id="mobile-menu">
+                <nav class="flex flex-col gap-1 pt-4 pb-2 border-t border-gray-100 mt-4 text-sm uppercase tracking-widest text-[#a57c00]">
+                    <a href="#inicio" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Inicio</a>
+                    <a href="#servicios" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Servicios</a>
+                    <a href="#tramites" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Trámites</a>
+                    <a href="#mapa" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition font-bold">Plano de la Escuela</a>
+                    <a href="#contacto" onclick="closeMenu()" class="py-2 px-1 hover:bg-yellow-50 transition">Contacto</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-12 sm:space-y-16">
+        
+        <section id="inicio" class="text-center max-w-3xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6 text-[#a57c00]">Escuela de Geografía UCV</h2>
+            <p class="text-base sm:text-lg md:text-xl text-[#374151] leading-relaxed">
+                Bienvenido, estudiante de geografía. Este es un espacio diseñado para la comunidad de la Escuela de Geografía, en el que puedes tener acceso a libros, mapas, pensum y trámites académicos en un solo lugar.
+            </p>
+        </section>
+
+        <section id="servicios" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            
+            <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
+                <i class="fas fa-scroll text-4xl text-yellow-600 mb-6"></i>
+                <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Malla Curricular</h3>
+                <p class="text-[#374151] mb-8 text-sm">Explora el plan de estudios mediante el mapa interactivo de prelaciones.</p>
+                <button onclick="abrirModal('pensum-modal')" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Pensum</button>
+            </div>
+
+            <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
+                <i class="fas fa-book-atlas text-4xl text-yellow-600 mb-6"></i>
+                <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Biblioteca Atlas</h3>
+                <p class="text-[#374151] mb-8 text-sm">Accede al repositorio digital de libros, revistas y documentos de la escuela.</p>
+                <a href="https://drive.google.com/drive/folders/1Xdd869m_TUKG66KqiBTqDYkv3rmL-iRZ?usp=drive_link" target="_blank" rel="noopener noreferrer" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Ingresar al Drive</a>
+            </div>
+
+            <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
+                <i class="fas fa-map text-4xl text-yellow-600 mb-6"></i>
+                <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Cartoteca Digital</h3>
+                <p class="text-[#374151] mb-8 text-sm">Consulta y descarga mapas base para tus proyectos de investigación.</p>
+                <a href="https://drive.google.com/drive/folders/1UmnM1_iSGk-_BeXShhS_EgH6zRzQO6M_?usp=drive_link" target="_blank" rel="noopener noreferrer" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full block text-center">Explorar Mapas</a>
+            </div>
+
+            <div class="minimalist-card p-8 sm:p-10 text-center flex flex-col items-center">
+                <i class="fas fa-magic text-4xl text-yellow-600 mb-6"></i>
+                <h3 class="text-[#a57c00] tracking-wide mb-3 uppercase">Crea Tu Horario</h3>
+                <p class="text-[#374151] mb-8 text-sm">Arma tu horario ideal interactivamente, evita choques y descárgalo en PDF.</p>
+                <button onclick="abrirModal('crea-horario-modal')" class="mt-auto border border-gray-300 px-6 py-2 uppercase text-xs tracking-widest hover:bg-yellow-600 hover:text-white hover:border-yellow-600 transition w-full">Abrir Creador</button>
+            </div>
+
+        </section>
+
+        <section id="tramites" class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            
+            <div class="minimalist-card p-8 sm:p-10">
+                <h3 class="text-xl sm:text-2xl mb-6 flex items-center gap-4 text-[#a57c00]"><i class="fas fa-id-card text-yellow-600"></i> Gestión Académica</h3>
+                <ul class="space-y-4 text-[#374151]">
+                    <li onclick="abrirModalConFiltroLimpio()" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Horario de Clases</span> <i class="fas fa-calendar-alt text-xs mt-1"></i>
+                    </li>
+                    <li onclick="abrirModal('retiro-modal')" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Cronograma de retiro de materias</span> <i class="fas fa-chevron-right text-xs mt-1"></i>
+                    </li>
+                    <li onclick="abrirModal('cronograma-modal')" class="flex justify-between border-b border-gray-100 pb-2 cursor-pointer hover:text-yellow-600">
+                        <span>Cronograma académico 2026</span> <i class="fas fa-calendar text-xs mt-1"></i>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="minimalist-card p-8 sm:p-10 flex flex-col justify-center items-center text-center bg-gray-50">
+                <p class="text-5xl sm:text-6xl text-gray-300 mb-2">2026</p>
+                <p class="tracking-widest uppercase text-sm text-[#374151]">Ciclo Académico Actual</p>
+            </div>
+
+        </section>
+
+        <section id="mapa" class="minimalist-card p-6 sm:p-10">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-xl sm:text-2xl text-[#a57c00] flex items-center gap-3">
+                        <i class="fas fa-map-location-dot"></i> Plano de la Escuela
+                    </h3>
+                    <p class="text-[#374151] text-sm mt-2 italic">Segundo Piso de la FHyE, Ala Norte. Toca un aula académica para ver su horario.</p>
+                </div>
+                <div class="hidden sm:block text-xs text-gray-400">
+                    <i class="fas fa-arrow-up"></i> NORTE
+                </div>
+            </div>
+
+            <div class="mapa-container">
+                <div class="map-grid">
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 24')" title="Ver Horarios">Aula<br>24</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 25')" title="Ver Horarios">Aula<br>25</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 26')" title="Ver Horarios">Aula<br>26</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 27')" title="Ver Horarios">Aula<br>27</div>
+                    
+                    <div class="map-room" style="grid-column: span 2; background-color: #f9fafb;">Cubículos de Profesores</div>
+                    
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 30')" title="Ver Horarios">Aula<br>30</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 31')" title="Ver Horarios">Aula<br>31</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Aula 32')" title="Ver Horarios">Aula<br>32</div>
+                    
+                    <div class="map-room" style="background-color: #f9fafb;">Sala de<br>Conferencias</div>
+                    <div class="map-room interactive" onclick="filtrarHorario('Sala de Computación')" title="Ver Horarios">Sala de<br>Computación</div>
+
+                    <div class="map-hallway">
+                        <span><i class="fas fa-stairs"></i> ESCALERAS PRINCIPALES</span>
+                        <span>PASILLO </span>
+                        <span><i class="fas fa-arrow-right"></i></span>
+                    </div>
+
+                    <div class="map-room" style="background-color: #f9fafb;"><i class="fas fa-stairs mr-1"></i> Bajada</div>
+                    <div class="map-room" style="background-color: #f9fafb;">Secretaría<br>Historia</div>
+                    <div class="map-room" style="background-color: #f9fafb;">Dirección<br>Historia</div>
+                    <div class="map-room" style="background-color: #fefce8; border-color: #d4af37;">Dirección<br>Geografía</div>
+                    <div class="map-room" style="background-color: #f9fafb;"><i class="fas fa-restroom mb-1 block"></i> Baños de profesores</div>
+                    <div class="map-room" style="grid-column: span 2; background-color: #f9fafb;">Laboratorio</div>
+                    <div style="grid-column: span 4;"></div> </div>
+            </div>
+            <p class="text-[0.65rem] text-right text-gray-400 mt-2">Adaptación digital basada en el plano del Prof. Nilko Codallo.</p>
+        </section>
+
+        <section id="contacto" class="minimalist-card p-8 sm:p-12 text-center mt-8">
+            <h3 class="text-xl sm:text-2xl mb-4 text-[#a57c00]">Únete a nuestra comunidad</h3>
+            <p class="text-[#374151] mb-10 max-w-xl mx-auto">Mantente informado sobre las actividades de la Escuela de Geografía, asuntos académicos y recursos a través de nuestras redes oficiales.</p>
+            
+            <div class="flex justify-center gap-8 sm:gap-10">
+                <a href="https://chat.whatsapp.com/GcpaSFEfCO2GkMioEw1uxG" target="_blank" rel="noopener noreferrer" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#25D366] transition transform hover:scale-110" title="Grupo de WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.instagram.com/domitergeo?igsh=MW80Y21lOTlzcDV0Yg==" target="_blank" rel="noopener noreferrer" class="text-4xl sm:text-5xl text-gray-300 hover:text-[#E1306C] transition transform hover:scale-110" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/@domiter_geo?_r=1&_t=ZS-94jy8nGOc9i" target="_blank" rel="noopener noreferrer" class="text-4xl sm:text-5xl text-gray-300 hover:text-black transition transform hover:scale-110" title="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+        </section>
+
+    </main>
+<footer class="border-t border-gray-200 py-10 mt-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center text-[#374151] text-sm">
+            <p>Portal Informativo Domiter © 2026</p>
+            <p class="mt-2">Diseño para la Escuela de Geografía UCV</p>
+        </div>
+    </footer>

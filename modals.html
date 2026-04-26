@@ -1,0 +1,1101 @@
+<div id="horario-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4">
+        <div class="bg-white w-full max-w-4xl h-[85vh] sm:h-[80vh] p-5 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37]">
+            <button onclick="cerrarModal('horario-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            
+            <div class="mb-4 sm:mb-6 border-b border-gray-200 pb-4 shrink-0 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                <div>
+                    <h2 id="horario-title" class="text-xl sm:text-3xl text-[#a57c00] mb-1 flex items-center flex-wrap gap-2">Horario de Clases 2026</h2>
+                    <p class="text-[#374151] italic text-xs sm:text-sm">Selecciona tu semestre, o busca por materia o profesor.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto">
+                    <div class="relative w-full sm:w-64">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" id="buscador-horario" oninput="buscarEnHorario()" placeholder="Materia o profesor..." class="w-full border border-gray-300 pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-[#d4af37] transition">
+                    </div>
+                    <button id="btn-limpiar-filtro" onclick="limpiarFiltroHorario()" style="display:none;" class="border border-gray-300 px-3 py-2 text-xs sm:text-sm tracking-widest uppercase hover:bg-gray-100 transition whitespace-nowrap"><i class="fas fa-times mr-1"></i> Limpiar</button>
+                </div>
+            </div>
+
+            <div class="flex gap-2 sm:gap-4 border-b border-gray-200 mb-4 sm:mb-6 overflow-x-auto shrink-0 pb-1 custom-scrollbar">
+                <div class="tab-btn active text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem1')">Sem. I</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem2')">Sem. II</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem3')">Sem. III</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem4')">Sem. IV</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem5')">Sem. V</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem6')">Sem. VI</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem7')">Sem. VII</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem8')">Sem. VIII</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem9')">Sem. IX</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold" onclick="cambiarTab(event, 'sem10')">Sem. X</div>
+                <div class="tab-btn text-xs sm:text-sm tracking-wide font-bold text-[#a57c00]" onclick="cambiarTab(event, 'electivas')">Electivas</div>
+            </div>
+
+            <div class="overflow-auto flex-1 pr-1 sm:pr-2">
+                <div id="sem1" class="tab-content active">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección A (Aula 24)</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Técnicas de Preseminario</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Castellanos</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Matemáticas I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Manuel Jiménez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 8:45 am - 10:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 8:45 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Introducción a la Geografía</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Miriam Sucre</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Cartografía I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Nilko Codallo</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 11:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 8:45 am - 11:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Estadística I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jermy Blanco</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección B (Aula 25)</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Técnicas de Preseminario</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Castellanos</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 8:45 am - 10:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Matemáticas I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Manuel Jiménez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Introducción a la Geografía</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Ivelise Núñez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Cartografía I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Gerardo Gonnella</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 11:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 8:45 am - 11:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Estadística I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. José Bandez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 8:45 am - 10:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 10:15 am</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección C</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Matemáticas I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Pedro Barrios</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 10:30 am - 12:45 pm</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem2" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección A (Aula 26)</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Matemáticas II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. José Bandez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 10:30 am - 12:00 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Cartografía II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Emmanuel Díaz</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 10:30 am - 12:45 pm</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 9:30 am - 12:00 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geografía Física</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Daniela Fuentes</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Economía</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jordán</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 11:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Estadística II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jermy Blanco</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 8:45 am - 10:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Inglés I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Yelmic Bastidas</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:00 am - 9:30 am</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem3" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única (Aula 27)</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Cartografía III</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Niyuray Suárez <span class="text-xs text-gray-400 italic">(Sala de Computación)</span></p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 7:00 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geografía Humana</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Rafael Ruano</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 10:30 am - 12:00 pm</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 11:45 am - 12:45 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geomorfología I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Leandro Montes y Reinaldo Landaeta</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 9:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 11:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Meteorología</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Elías D'Angelo</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 9:30 am - 12:45 pm</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 9:30 am - 11:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Matemáticas III</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. José Bandez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Inglés II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Yelmic Bastidas</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 9:30 am - 12:00 pm</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem4" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única (Aula 31)</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Edafología I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Maryory Levy</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 7:45 am - 10:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:45 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geomorfología II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Patricia Tardaguila / Orlando Cabrera</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 11:15 am - 12:45 pm</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:00 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geografía Económica</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Soraya Yanez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 11:15 am - 12:45 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Climatología I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Rosed Mata</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 10:15 am - 12:45 pm</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 10:15 am - 12:45 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Fotointerpretación</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Miguel Pineda / Anjose González <span class="text-xs text-gray-400 italic">(Aula 30)</span></p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 1:00 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem5" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única (Aula 32)</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Edafología II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jairo Mejía</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 7:45 am - 9:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:45 am - 9:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 11:15 am - 12:45 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geografía Urbana</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Juan Carlos Ruiz</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 9:30 am - 11:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 11:15 am - 12:45 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Biogeografía</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Luzmar González / Victor Aguilar</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 11:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:45 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geografía de la Población</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Ana Cañizales / Niurka Cabrera</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 10:30 am - 12:45 pm</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:45 am - 9:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Climatología II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Eva Colotti</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 9:30 am - 11:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 9:30 am - 11:15 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 10:15 am - 12:45 pm</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem6" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Servicio Comunitario Fase I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Coordinación de Servicio Comunitario</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 9:30 am - 11:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario de Geografía Urbana</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Juan Carlos Ruiz</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 11:15 am - 12:44 pm <span class="italic text-gray-400">(Aula 32)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 9:30 am - 11:15 am <span class="italic text-gray-400">(Aula 33)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Taller I</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Exyeleth Echarry / Helga Davalillo</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 9:30 am - 12:45 pm <span class="italic text-gray-400">(Aula 33)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 9:30 am - 12:45 pm <span class="italic text-gray-400">(Aula 33)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Geografía Regional</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Patricia López</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 33)</span></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem7" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Inventario y Evaluación de Recursos</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Coromoto Sanabria</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 9:30 am - 12:45 pm <span class="italic text-gray-400">(Aula 30)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Servicio Comunitario II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Coordinación de Servicio Comunitario</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Taller II</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Fernando Corvo / Carlo Narváez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 30)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:45 am - 11:15 am <span class="italic text-gray-400">(Aula 31)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Geografía Agraria</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Romero Mena</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 30 - PCI)</span></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem8" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Geografía del Subdesarrollo</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profs. Simón González / Abigail Castillo</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 8:45 am - 12:00 pm <span class="italic text-gray-400">(Aula 33)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Teoría Geográfica</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Iveluz Nuñez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 9:30 am <span class="italic text-gray-400">(Sala de Computación)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 8:45 am - 9:30 am <span class="italic text-gray-400">(Aula 30)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Geopolítica del Petróleo <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Lennin Rodríguez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:45 am - 11:15 am <span class="italic text-gray-400">(Aula 30 - PCI)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition opacity-70">
+                                <h4 class="text-md text-gray-800 font-semibold">Taller III</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profesor / Horario por definir</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem9" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Sección Única</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario Metodología de la Investigación</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Danny Rojas</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 7:00 am - 8:30 am <span class="italic text-gray-400">(Aula 30)</span></span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:00 am - 8:30 am <span class="italic text-gray-400">(Aula 30)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Seminario de Tesis</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Danny Rojas</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 8:45 am - 11:15 am <span class="italic text-gray-400">(Aula 31)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Inglés III <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Yeimic Bastidas</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 1:00 pm - 4:15 pm <span class="italic text-gray-400">(Virtual)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-blue-200 bg-blue-50 p-3 shadow-sm rounded hover:border-blue-400 transition">
+                                <h4 class="text-md text-blue-800 font-semibold">Pasantías</h4>
+                                <p class="text-sm text-blue-600 mb-2"><i class="fas fa-info-circle mr-1"></i> Requisito: 150 créditos aprobados</p>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition opacity-70">
+                                <h4 class="text-md text-gray-800 font-semibold">Taller IV</h4>
+                                <p class="text-sm text-[#374151] mb-2">Profesor / Horario por definir</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="sem10" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Proyectos (X)</h3>
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Frontera de Venezuela <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Rafael Ruano</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 1:45 pm - 5:15 pm <span class="italic text-gray-400">(Aula 30 - PCI)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition">
+                                <h4 class="text-md text-gray-800 font-semibold">Análisis Espacial <span class="text-xs font-normal text-white bg-[#a57c00] px-2 py-1 rounded ml-2">Electiva</span></h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jorge Uzcátegui</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 1:00 pm - 4:15 pm <span class="italic text-gray-400">(IGDR)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-green-200 bg-green-50 p-3 shadow-sm rounded hover:border-green-400 transition mt-6">
+                                <h4 class="text-md text-green-800 font-semibold">Tesis de Grado</h4>
+                                <p class="text-sm text-green-600 mb-2"><i class="fas fa-graduation-cap mr-1"></i> Trabajo Final (12 Créditos)</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="electivas" class="tab-content">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-[#a57c00] mb-3 uppercase tracking-widest border-b pb-1">Materias Electivas</h3>
+                        <p class="text-sm text-gray-500 mb-4 italic">Todas las electivas de esta lista se imparten en la <span class="font-semibold">Sala de Computación</span>.</p>
+                        
+                        <ul class="space-y-3">
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Sistemas de Información Geográfica</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Mylene Gutierrez</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Lunes 1:00 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Lectura e Interpretación de Mapa</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Kenny Characo</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Martes 1:00 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Análisis Multivariante Aplicado en Geografía</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Luis Salazar</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 7:00 am - 10:15 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Introducción a la Teledetección Espacial</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Rafael Batista</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Miércoles 1:00 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Intro. Análisis Estadístico Aplicado a Datos Geográficos</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Victor Navarro</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 7:00 am - 8:30 am</span>
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 7:00 am - 8:30 am</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Minería y Ambiente</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Lucia Barboza</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 8:45 am - 12:00 pm <span class="italic text-gray-400">(PCI)</span></span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Catastro</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Jose Garcia</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Jueves 1:45 pm - 4:15 pm</span>
+                                </div>
+                            </li>
+                            <li class="border border-gray-100 p-3 shadow-sm rounded hover:border-[#a57c00] transition bg-gray-50">
+                                <h4 class="text-md text-gray-800 font-semibold">Nuevas Tecnologías en Agroclimatología</h4>
+                                <p class="text-sm text-[#374151] mb-2">Prof. Roberto Andrade</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-yellow-50 text-[#a57c00] text-xs px-2 py-1 rounded border border-yellow-100"><i class="far fa-clock mr-1"></i> Viernes 8:45 am - 12:00 pm</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="pensum-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-2 sm:p-4">
+        <div class="bg-white w-full max-w-[95vw] h-[92vh] sm:h-[90vh] p-4 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37]">
+            <button onclick="cerrarModal('pensum-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            
+            <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 border-b border-gray-200 pb-4 shrink-0">
+                <div>
+                    <h2 class="text-xl sm:text-3xl text-gray-900 mb-1">Prelaciones por Asignaturas</h2>
+                    <p class="text-gray-500 italic text-xs sm:text-sm">Haz clic en cualquier materia para ver su cadena de prelaciones. Modificación 1984.</p>
+                </div>
+                <div class="leyenda text-xs text-gray-600 flex flex-wrap gap-3 sm:gap-4">
+                    <div class="flex items-center"><span style="background:var(--color-oro); border-color:var(--color-oro);"></span> Seleccionada</div>
+                    <div class="flex items-center"><span style="background:#fef0c7; border-color:#f59e0b;"></span> Debes aprobar</div>
+                    <div class="flex items-center"><span style="background:#e0f2fe; border-color:#0ea5e9;"></span> Te permite cursar</div>
+                </div>
+            </div>
+
+            <div class="overflow-auto flex-1">
+                <div class="pensum-grid" id="grid-container">
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem I (18)</div>
+                        <div class="materia-box" id="presem" onclick="seleccionar('presem')">Técnicas de Preseminario <div class="materia-codigo">4 UC | 5101</div></div>
+                        <div class="materia-box" id="est1" onclick="seleccionar('est1')">Estadística I <div class="materia-codigo">4 UC | 5307</div></div>
+                        <div class="materia-box" id="mat1" onclick="seleccionar('mat1')">Matemáticas I <div class="materia-codigo">3 UC | 5309</div></div>
+                        <div class="materia-box" id="carto1" onclick="seleccionar('carto1')">Cartografía I <div class="materia-codigo">4 UC | 4101</div></div>
+                        <div class="materia-box" id="introgeo" onclick="seleccionar('introgeo')">Int. a la Geografía I <div class="materia-codigo">3 UC | 5206</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem II (21)</div>
+                        <div class="materia-box" id="eco1" onclick="seleccionar('eco1')">Economía I <div class="materia-codigo">3 UC | 2213</div></div>
+                        <div class="materia-box" id="est2" onclick="seleccionar('est2')">Estadística II <div class="materia-codigo">4 UC | 5308</div></div>
+                        <div class="materia-box" id="mat2" onclick="seleccionar('mat2')">Matemáticas II <div class="materia-codigo">3 UC | 5310</div></div>
+                        <div class="materia-box" id="carto2" onclick="seleccionar('carto2')">Cartografía II <div class="materia-codigo">4 UC | 4102</div></div>
+                        <div class="materia-box" id="geofisica" onclick="seleccionar('geofisica')">Geografía Física <div class="materia-codigo">4 UC | 1101</div></div>
+                        <div class="materia-box" id="ing1" onclick="seleccionar('ing1')">Inglés I <div class="materia-codigo">3 UC | 5413</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem III (21)</div>
+                        <div class="materia-box" id="geohumana" onclick="seleccionar('geohumana')">Geografía Humana <div class="materia-codigo">3 UC | 2101</div></div>
+                        <div class="materia-box" id="meteo" onclick="seleccionar('meteo')">Meteorología <div class="materia-codigo">4 UC | 1206</div></div>
+                        <div class="materia-box" id="mat3" onclick="seleccionar('mat3')">Matemáticas III <div class="materia-codigo">3 UC | 5311</div></div>
+                        <div class="materia-box" id="carto3" onclick="seleccionar('carto3')">Cartografía III <div class="materia-codigo">4 UC | 4103</div></div>
+                        <div class="materia-box" id="geomorfo1" onclick="seleccionar('geomorfo1')">Geomorfología I <div class="materia-codigo">4 UC | 1102</div></div>
+                        <div class="materia-box" id="ing2" onclick="seleccionar('ing2')">Inglés II <div class="materia-codigo">3 UC | 5414</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem IV (18)</div>
+                        <div class="materia-box" id="geoeconomica" onclick="seleccionar('geoeconomica')">Geo. Económica <div class="materia-codigo">3 UC | 2207</div></div>
+                        <div class="materia-box" id="clima1" onclick="seleccionar('clima1')">Climatología I <div class="materia-codigo">4 UC | 1208</div></div>
+                        <div class="materia-box" id="foto" onclick="seleccionar('foto')">Foto Interpretación <div class="materia-codigo">3 UC | 4309</div></div>
+                        <div class="materia-box" id="edafo1" onclick="seleccionar('edafo1')">Edafología I <div class="materia-codigo">4 UC | 1312</div></div>
+                        <div class="materia-box" id="geomorfo2" onclick="seleccionar('geomorfo2')">Geomorfología II <div class="materia-codigo">4 UC | 1103</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem V (18)</div>
+                        <div class="materia-box" id="geourbana" onclick="seleccionar('geourbana')">Geografía Urbana <div class="materia-codigo">3 UC | 2315</div></div>
+                        <div class="materia-box" id="geopoblacion" onclick="seleccionar('geopoblacion')">Geo. de la Población <div class="materia-codigo">3 UC | 2102</div></div>
+                        <div class="materia-box" id="clima2" onclick="seleccionar('clima2')">Climatología II <div class="materia-codigo">4 UC | 1209</div></div>
+                        <div class="materia-box" id="biogeo" onclick="seleccionar('biogeo')">Biogeografía <div class="materia-codigo">4 UC | 1311</div></div>
+                        <div class="materia-box" id="edafo2" onclick="seleccionar('edafo2')">Edafología II <div class="materia-codigo">4 UC | 1313</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem VI (20)</div>
+                        <div class="materia-box" id="semurbana" onclick="seleccionar('semurbana')">Sem. Geo. Urbana <div class="materia-codigo">4 UC | 2316</div></div>
+                        <div class="materia-box" id="semregional" onclick="seleccionar('semregional')">Sem. Geo. Regional <div class="materia-codigo">4 UC | 3101</div></div>
+                        <div class="materia-box" id="taller1" onclick="seleccionar('taller1')">Taller I <div class="materia-codigo">6 UC | 3205</div></div>
+                        <div class="materia-box">Electiva I <div class="materia-codigo">3 UC</div></div>
+                        <div class="materia-box">Electiva II <div class="materia-codigo">3 UC</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem VII (20)</div>
+                        <div class="materia-box" id="semagraria" onclick="seleccionar('semagraria')">Sem. Geo. Agraria <div class="materia-codigo">4 UC | 2419</div></div>
+                        <div class="materia-box" id="seminv" onclick="seleccionar('seminv')">Sem. Inv. Recursos <div class="materia-codigo">4 UC | 4206</div></div>
+                        <div class="materia-box" id="taller2" onclick="seleccionar('taller2')">Taller II <div class="materia-codigo">6 UC | 3206</div></div>
+                        <div class="materia-box">Electiva III <div class="materia-codigo">3 UC</div></div>
+                        <div class="materia-box">Electiva IV <div class="materia-codigo">3 UC</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem VIII (19)</div>
+                        <div class="materia-box" id="semteoria" onclick="seleccionar('semteoria')">Sem. Teoría Geográfica <div class="materia-codigo">4 UC | 5204</div></div>
+                        <div class="materia-box" id="semsub" onclick="seleccionar('semsub')">Sem. Geo. Subdesarrollo <div class="materia-codigo">4 UC | 3103</div></div>
+                        <div class="materia-box" id="taller3" onclick="seleccionar('taller3')">Taller III <div class="materia-codigo">6 UC | 3207</div></div>
+                        <div class="materia-box">Electiva V <div class="materia-codigo">3 UC</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem IX (15)</div>
+                        <div class="materia-box" id="semmetodo" onclick="seleccionar('semmetodo')">Sem. Metodología Inv. <div class="materia-codigo">4 UC | 5102</div></div>
+                        <div class="materia-box" id="taller4" onclick="seleccionar('taller4')">Taller IV <div class="materia-codigo">6 UC | 3208</div></div>
+                        <div class="materia-box">Pasantía <div class="materia-codigo">3 UC | 5522</div></div>
+                        <div class="materia-box">Seminario de Tesis <div class="materia-codigo">2 UC | 5103</div></div>
+                    </div>
+                    <div class="semestre-col">
+                        <div class="text-center text-xs uppercase tracking-widest text-gray-400 mb-2">Sem X (12)</div>
+                        <div class="materia-box h-full flex items-center" id="tesis" onclick="seleccionar('tesis')">Tesis <div class="materia-codigo">12 UC | 5523</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="retiro-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4">
+        <div class="bg-white w-full max-w-4xl max-h-[90vh] p-5 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37] overflow-y-auto custom-scrollbar">
+            <button onclick="cerrarModal('retiro-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            
+            <div class="mb-6 border-b border-gray-200 pb-4 shrink-0">
+                <h2 class="text-xl sm:text-3xl text-[#a57c00] mb-3 flex items-center gap-2"><i class="fas fa-file-alt"></i> Guía Paso a Paso: Retiro de Asignaturas</h2>
+                <div class="bg-yellow-50 text-[#a57c00] p-3 rounded mb-3 text-sm flex items-start gap-3 border border-yellow-200 shadow-sm w-fit max-w-full">
+                    <i class="fas fa-calendar-check mt-1 text-lg"></i>
+                    <div>
+                        <strong class="block text-[#8a6800] uppercase tracking-wide text-xs mb-1">Fechas del Proceso (2026-01S):</strong>
+                        <span>Del <strong>13 de Abril</strong> al <strong>05 de Junio</strong> (Semanas 2 a la 9).</span>
+                    </div>
+                </div>
+                <p class="text-[#374151] italic text-xs sm:text-sm">Si necesitas retirar una o más materias, debes completar un proceso administrativo y académico. Sigue estos tres pasos detallados a continuación:</p>
+            </div>
+
+            <div class="space-y-6 text-[#374151] text-sm sm:text-base pr-2 pb-2">
+                <div class="border border-gray-100 p-5 sm:p-6 rounded shadow-sm hover:border-[#a57c00] transition">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><div class="bg-[#a57c00] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">1</div> Pago del arancel</h3>
+                    <p class="mb-4">Debes cancelar el arancel correspondiente por <strong class="text-[#a57c00]">cada asignatura</strong> que desees retirar. Puedes hacerlo de dos maneras:</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                            <h4 class="font-bold text-[#a57c00] border-b border-gray-200 pb-2 mb-3"><i class="fas fa-university mr-2"></i>Opción A: Transferencia Bancaria</h4>
+                            <p class="text-[0.7rem] leading-tight text-gray-500 italic mb-3">(Importante: Solo se aceptan transferencias desde los bancos Venezuela, Provincial, Banesco, Mercantil, Tesoro o Venezolano de Crédito).</p>
+                            <ul class="space-y-2 text-sm">
+                                <li><strong class="text-gray-800">Banco:</strong> Banco de Venezuela (Cuenta Corriente)</li>
+                                <li><strong class="text-gray-800">N° de Cuenta:</strong> 0102-0491-71000-938567-4</li>
+                                <li><strong class="text-gray-800">Titular:</strong> INGRESOS PROPIOS-FACULTAD HUMANIDADES Y EDUCACIÓN</li>
+                                <li><strong class="text-gray-800">RIF:</strong> G-20000062-7</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                            <h4 class="font-bold text-[#a57c00] border-b border-gray-200 pb-2 mb-3"><i class="fas fa-cash-register mr-2"></i>Opción B: Pago Presencial</h4>
+                            <p class="text-sm">Puedes pagar directamente con <span class="font-semibold px-1 rounded bg-yellow-100 text-[#a57c00]">punto de venta</span> o en <span class="font-semibold px-1 rounded bg-yellow-100 text-[#a57c00]">efectivo</span> en la caja de la Facultad.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-100 p-5 sm:p-6 rounded shadow-sm hover:border-[#a57c00] transition">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><div class="bg-[#a57c00] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">2</div> Obtención del Ticket de Caja</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-800">
+                        <li><strong class="text-[#a57c00]">Si pagaste por transferencia:</strong> Debes imprimir la copia de tu comprobante y dirigirte a la caja de la Facultad. Entrega tu comprobante y solicita que te emitan el <strong>ticket por retiro de materia</strong>.</li>
+                    </ul>
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mt-4 text-xs sm:text-sm text-blue-800">
+                        <i class="fas fa-info-circle mr-1"></i> <strong class="font-semibold">Nota:</strong> Si pagaste por punto o efectivo en la caja, ya te habrán entregado este ticket en el Paso 1.
+                    </div>
+                </div>
+
+                <div class="border border-gray-100 p-5 sm:p-6 rounded shadow-sm hover:border-[#a57c00] transition mb-4">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><div class="bg-[#a57c00] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">3</div> Trámite en Control de Estudios</h3>
+                    <p class="mb-4">Una vez tengas tu ticket de caja, debes formalizar el retiro siguiendo estos pasos:</p>
+                    <ol class="list-decimal list-inside space-y-3 ml-2 text-gray-800">
+                        <li>Dirígete a la taquilla de Control de Estudios y pide la <strong class="text-[#a57c00]">Planilla de Solicitud de Retiro de Asignaturas</strong>.</li>
+                        <li>Llena la planilla con cuidado, especificando las materias exactas que vas a retirar.</li>
+                        <li>Sácale una <strong class="text-[#a57c00]">copia</strong> a la planilla ya completada.</li>
+                        <li class="align-top">Entrega al personal de Control de Estudios los siguientes documentos juntos: 
+                            <div class="inline-flex flex-wrap gap-2 mt-2 pl-6">
+                                <span class="bg-gray-100 border border-gray-200 px-2 py-1 rounded text-xs select-none"><i class="fas fa-file-alt mr-1 text-gray-500"></i> Planilla original</span>
+                                <span class="bg-gray-100 border border-gray-200 px-2 py-1 rounded text-xs select-none"><i class="fas fa-copy mr-1 text-gray-500"></i> Copia de la planilla</span>
+                                <span class="bg-gray-100 border border-gray-200 px-2 py-1 rounded text-xs select-none"><i class="fas fa-ticket-alt mr-1 text-gray-500"></i> Ticket de caja</span>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <div id="cronograma-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4">
+        <div class="bg-white w-full max-w-5xl max-h-[90vh] p-5 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37] overflow-y-auto custom-scrollbar">
+            <button onclick="cerrarModal('cronograma-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            
+            <div class="mb-8 border-b border-gray-200 pb-4 shrink-0">
+                <h2 class="text-xl sm:text-3xl text-[#a57c00] mb-2 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Cronograma Académico 2026</h2>
+                <p class="text-[#374151] italic text-xs sm:text-sm">Fechas estipuladas para el periodo 2026-01S y proyección del 2026-02S.</p>
+            </div>
+
+            <div class="space-y-0 text-[#374151] text-sm sm:text-base pr-2 pb-2 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+                
+                <!-- Event 1 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-green-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-play text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-green-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-green-600 text-sm">06 de Abril</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 1</span>
+                        </div>
+                        <p class="text-gray-700">Inicio de clases escuelas semestrales 2026-01S.</p>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-yellow-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-sign-out-alt text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-yellow-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-yellow-600 text-sm">13 de Abril al 05 de Junio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semanas 2 a 9</span>
+                        </div>
+                        <p class="text-gray-700">Proceso de retiro de asignaturas.</p>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-red-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-calendar-day text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-50 p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-red-500 text-sm">01 de Mayo</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 4</span>
+                        </div>
+                        <p class="text-gray-700">Día del trabajador <span class="text-red-400 italic text-xs">(Feriado)</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Event 4 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-blue-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-folder-open text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-blue-400 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-blue-600 text-sm">04 de Mayo al 14 de Mayo</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semanas 5 a 6</span>
+                        </div>
+                        <p class="text-gray-700 bg-blue-50 px-2 py-1 rounded text-sm inline-block"><i class="fas fa-check-circle text-blue-400 mr-1"></i> Recepción solicitudes TERES.</p>
+                        
+                        <div class="mt-3 space-y-2 border-t border-gray-100 pt-3">
+                            <div class="flex items-start gap-2">
+                                <i class="fas fa-arrow-right text-[10px] text-gray-400 mt-1"></i>
+                                <p class="text-xs text-gray-600"><strong class="text-gray-700">22 de Mayo (Semana 8):</strong> Enviar TERES a Escuelas.</p>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <i class="fas fa-arrow-right text-[10px] text-gray-400 mt-1"></i>
+                                <p class="text-xs text-gray-600"><strong class="text-gray-700">15 al 19 de Junio (Semana 11):</strong> Escuelas envían TERES a Consejo de Facultad y se publican.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 5 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-purple-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-language text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-purple-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-purple-600 text-sm">22 al 26 de Junio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 12</span>
+                        </div>
+                        <p class="text-gray-700">Presentación del Examen de Suficiencia del Idioma.</p>
+                    </div>
+                </div>
+
+                <!-- Event 6 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-red-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-flag text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-50 p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-red-500 text-sm">24 de Junio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 12</span>
+                        </div>
+                        <p class="text-gray-700">Batalla de Carabobo <span class="text-red-400 italic text-xs">(Feriado)</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Event 7 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#d4af37] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-graduation-cap text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-[#a57c00] transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-[#a57c00] text-sm">09 y 10 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semanas 13 y 14</span>
+                        </div>
+                        <p class="text-gray-700">Actos de Grado FHE 1-2026.</p>
+                    </div>
+                </div>
+
+                <!-- Event 8 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-gray-600 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-stop text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-gray-800 text-sm">10 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 14</span>
+                        </div>
+                        <p class="text-gray-700">Fin de clases regulares.</p>
+                    </div>
+                </div>
+
+                <!-- Event 9 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-orange-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-pen-alt text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-orange-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-orange-600 text-sm">13 al 17 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 15</span>
+                        </div>
+                        <p class="text-gray-700">Exámenes finales.</p>
+                    </div>
+                </div>
+
+                <!-- Event 10 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-orange-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-file-contract text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-orange-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-orange-500 text-sm">20 al 23 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 16</span>
+                        </div>
+                        <p class="text-gray-700">Exámenes diferidos.</p>
+                    </div>
+                </div>
+
+                <!-- Event 11 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-red-400 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-calendar-day text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-50 p-4 rounded border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-red-500 text-sm">24 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 16</span>
+                        </div>
+                        <p class="text-gray-700">Natalicio del Libertador <span class="text-red-400 italic text-xs">(Feriado)</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Event 12 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-6">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-indigo-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-sync-alt text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded border border-gray-200 shadow-sm hover:border-indigo-400 transition">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-indigo-600 text-sm">27 al 30 de Julio</span>
+                            <span class="text-xs text-gray-400 font-semibold bg-gray-100 px-2 rounded">Semana 17</span>
+                        </div>
+                        <p class="text-gray-700">Exámenes de reparación y fecha tope de defensa para actos de grado.</p>
+                        
+                        <div class="mt-3 border-t border-gray-100 pt-3">
+                            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded inline-block mb-1">31 de Julio</span>
+                            <p class="text-xs text-gray-600 ml-1">Fecha tope de entrega de notas definitivas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Semester -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group mb-2">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-green-600 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-forward text-xs"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-green-50 p-4 rounded border border-green-200 shadow-sm hover:border-green-400 transition">
+                        <div class="flex items-center justify-between mb-3 border-b border-green-200 pb-2">
+                            <span class="font-bold text-green-700 text-sm">Próximo Ciclo</span>
+                            <span class="text-xs text-green-600 font-bold bg-green-100 px-2 py-1 shadow-sm rounded border border-green-200">2026-02S</span>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-gray-700 text-sm"><strong class="text-green-800">15 de Sept. al 02 de Oct.:</strong> Inscripciones nuevo periodo.</p>
+                            <p class="text-gray-700 text-sm"><strong class="text-green-800">05 de Octubre:</strong> Inicio de clases 2026-02S.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <div class="inline-block bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 text-[0.7rem] sm:text-xs text-gray-500 leading-relaxed mx-auto italic shadow-sm">
+                    <i class="fas fa-check-double text-green-600 mr-1"></i> Elaborado por el <strong>Departamento de Control de Estudios</strong>, <br class="hidden sm:block">
+                    revisado por el <strong>Lic. Pedro Coronado</strong> y aprobada por el <strong>Consejo de la Facultad</strong> en fecha <span class="text-gray-700 font-semibold">10.03.2026</span>.
+                </div>
+            </div>
+    </div>
+    
+    <!-- Creador de Horario Modal -->
+    <div id="crea-horario-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4">
+        <div class="bg-white w-full max-w-6xl max-h-[95vh] p-5 sm:p-8 relative shadow-2xl flex flex-col border-t-4 border-[#d4af37] overflow-y-auto">
+            <button onclick="cerrarModal('crea-horario-modal')" class="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
+            
+            <div class="mb-4 border-b border-gray-200 pb-4 shrink-0 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
+                <div>
+                    <h2 class="text-xl sm:text-3xl text-[#a57c00] mb-2 flex items-center gap-2"><i class="fas fa-magic"></i> Crea tu Horario</h2>
+                    <p class="text-[#374151] italic text-xs sm:text-sm">Agrega materias a tu horario, detecta choques de horas y descarga el PDF.</p>
+                </div>
+                <button onclick="exportarHorarioPDF()" class="bg-[#a57c00] text-white px-4 py-2 rounded shadow hover:bg-yellow-700 transition flex items-center gap-2 text-sm font-bold">
+                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                </button>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Selector Area -->
+                <div class="w-full lg:w-1/3 flex flex-col gap-4">
+                    <div class="bg-gray-50 border border-gray-200 rounded p-4 shadow-sm">
+                        <h3 class="font-bold text-[#a57c00] mb-3 text-sm uppercase"><i class="fas fa-search"></i> Buscar Materia</h3>
+                        <div class="relative w-full mb-3">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" id="buscador-materias-creador" autocomplete="off" oninput="buscarMateriaCreador()" placeholder="Escribe el nombre..." class="w-full border border-gray-300 pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-[#d4af37] transition rounded shadow-inner">
+                        </div>
+                        <div id="lista-materias-buscador" class="max-h-60 overflow-y-auto border border-gray-200 bg-white rounded shadow-inner hidden">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 border border-gray-200 rounded p-4 flex-1 shadow-sm flex flex-col">
+                        <h3 class="font-bold text-[#a57c00] mb-3 text-sm uppercase flex justify-between items-center">
+                            <span><i class="fas fa-list-check"></i> Materias (<span id="contador-materias">0</span>)</span>
+                            <button onclick="limpiarHorarioCreado()" class="text-xs text-gray-500 hover:text-red-500 underline font-normal"><i class="fas fa-trash-alt"></i> Limpiar</button>
+                        </h3>
+                        <div id="alerta-solapamiento" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded shadow-sm mb-3 text-xs" role="alert">
+                            <div class="flex">
+                                <div class="py-1"><i class="fas fa-exclamation-circle mr-2 text-red-500"></i></div>
+                                <div>
+                                    <p class="font-bold">¡Choque de horario!</p>
+                                    <p class="text-[0.7rem] mt-1" id="alerta-solapamiento-texto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <ul id="lista-materias-seleccionadas" class="space-y-2 flex-1 overflow-y-auto pr-1">
+                            <li id="empty-state-materias" class="text-xs text-gray-500 italic text-center py-6 bg-white border border-dashed border-gray-300 rounded">
+                                <i class="fas fa-inbox text-2xl text-gray-300 mb-2 block"></i>
+                                Busca y agrega materias<br>para empezar a armar tu horario.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Preview Area (PDF Target) -->
+                <div class="w-full lg:w-2/3 overflow-x-auto shadow-sm border border-gray-200 rounded relative">
+                    <!-- Overlay while empty -->
+                    <div id="horario-empty-overlay" class="absolute inset-0 bg-gray-50/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300">
+                        <i class="fas fa-calendar-plus text-5xl text-gray-300 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-600">Tu horario está vacío</h3>
+                        <p class="text-sm text-gray-500 mt-2 max-w-sm">A medida que agregues materias en el panel izquierdo, aparecerán estructuradas aquí.</p>
+                    </div>
+
+                    <div id="horario-pdf-container" class="bg-white p-6 min-w-[700px]" style="font-family: 'Inter', sans-serif;">
+                        <!-- Header for PDF -->
+                        <div class="flex justify-between items-end mb-6 border-b-2 border-[#d4af37] pb-3">
+                            <div>
+                                <h2 class="text-2xl font-black text-gray-800 uppercase tracking-tight">Horario Académico <span class="text-[#a57c00]">2026</span></h2>
+                                <p class="text-sm font-semibold text-gray-600 mt-1">Escuela de Geografía UCV</p>
+                            </div>
+                            <div class="text-right flex items-center gap-3">
+                                <div class="text-xs text-gray-400 text-right">
+                                    <p class="font-bold uppercase tracking-wider text-[#a57c00]">DOMITER</p>
+                                    <p>Generado automáticamente</p>
+                                </div>
+                                <img src="logo-domiter.png.png" alt="Logo" class="h-10 opacity-80" onerror="this.style.display='none'">
+                            </div>
+                        </div>
+
+                        <!-- Schedule Table -->
+                        <table class="w-full border-collapse text-xs table-fixed mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="border border-gray-300 bg-gray-100 p-2 w-[12%] text-gray-700 uppercase tracking-widest text-[10px]">Hora</th>
+                                    <th class="border border-gray-300 bg-gray-100 p-2 w-[17.6%] text-[#a57c00] font-bold uppercase">Lunes</th>
+                                    <th class="border border-gray-300 bg-gray-100 p-2 w-[17.6%] text-[#a57c00] font-bold uppercase">Martes</th>
+                                    <th class="border border-gray-300 bg-gray-100 p-2 w-[17.6%] text-[#a57c00] font-bold uppercase">Miércoles</th>
+                                    <th class="border border-gray-300 bg-gray-100 p-2 w-[17.6%] text-[#a57c00] font-bold uppercase">Jueves</th>
+                                    <th class="border border-gray-300 bg-gray-100 p-2 w-[17.6%] text-[#a57c00] font-bold uppercase">Viernes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="horario-tabla-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                        
+                        <div class="text-[9px] text-gray-400 text-center mt-6 pt-4 border-t border-gray-100">
+                            Documento informativo sin validez oficial. Para procesos administrativos, consulte Control de Estudios.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Seleccion de Seccion -->
+            <div id="seccion-selector-modal" class="fixed inset-0 bg-black/40 z-[60] hidden items-center justify-center p-4 backdrop-blur-sm">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden transform scale-100 transition-all">
+                    <div class="bg-[#a57c00] text-white p-4">
+                        <h3 class="font-bold text-lg">Seleccionar Sección</h3>
+                        <p class="text-xs text-yellow-100 opacity-80 mt-1" id="seccion-selector-materia">Materia</p>
+                    </div>
+                    <div class="p-4 bg-gray-50">
+                        <p class="text-sm text-gray-600 mb-3">Esta materia tiene varias secciones disponibles. Elige una para agregar a tu horario:</p>
+                        <div id="seccion-selector-opciones" class="space-y-2 max-h-64 overflow-y-auto">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 text-right bg-white">
+                        <button onclick="cerrarSelectorSeccion()" class="text-gray-500 hover:text-gray-700 text-sm font-semibold px-4 py-2">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
