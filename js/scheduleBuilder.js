@@ -1,7 +1,7 @@
 /**
- * Schedule Builder v5 - Portal Domiter
- * Auto-inyecta su propio HTML en el BODY (crea el modal desde cero)
- * y gestiona su propia apertura y cierre, sin depender de main.js o el bundle.
+ * Schedule Builder v6 - Portal Domiter
+ * Auto-inyecta su propio HTML con estilos INLINE (sin depender de Tailwind)
+ * y gestiona su propia apertura y cierre.
  */
 
 /* ── CONSTANTES ── */
@@ -60,34 +60,29 @@ function sbToast(html, tipo) {
 
 /* ── MODAL CONTROL ── */
 window.sbAbrirModal = function() {
-  const m = $('crea-horario-modal');
-  if (m) {
-    m.classList.add('active');
-    m.style.display = 'flex';
-  }
+  const m = $('crea-horario-modal-v6');
+  if (m) m.style.display = 'flex';
 };
 
 window.sbCerrarModal = function() {
-  const m = $('crea-horario-modal');
-  if (m) {
-    m.classList.remove('active');
-    m.style.display = 'none';
-  }
+  const m = $('crea-horario-modal-v6');
+  if (m) m.style.display = 'none';
 };
 
 /* ── INYECTAR HTML DEL MODAL DESDE CERO ── */
 function sbInyectarUI() {
-  let modal = $('crea-horario-modal');
+  // Ignoramos el del bundle viejo que está roto y creamos uno nuevo con ID diferente
+  let modal = $('crea-horario-modal-v6');
   if (!modal) { 
     modal = document.createElement('div');
-    modal.id = 'crea-horario-modal';
-    modal.className = 'modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4';
-    modal.style.display = 'none';
+    modal.id = 'crea-horario-modal-v6';
+    // Estilos inline forzados para garantizar que cubra la pantalla independiente de Tailwind
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);z-index:99999;display:none;align-items:center;justify-content:center;padding:1rem;box-sizing:border-box;';
     document.body.appendChild(modal);
   }
 
   modal.innerHTML = `
-  <div style="background:#fff;width:100%;max-width:1100px;max-height:95vh;padding:1.5rem;position:relative;box-shadow:0 25px 60px rgba(0,0,0,.25);border-top:4px solid #d4af37;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;">
+  <div style="background:#fff;width:100%;max-width:1100px;max-height:95vh;padding:1.5rem;position:relative;box-shadow:0 25px 60px rgba(0,0,0,.25);border-top:4px solid #d4af37;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;border-radius:8px;">
     <!-- Header -->
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.75rem;border-bottom:1px solid #e5e7eb;padding-bottom:1rem;">
       <div>
@@ -402,42 +397,50 @@ function sbExportarPDF(){
   } else run();
 }
 
-/* ── COMPATIBILIDAD CON LLAMADAS ANTIGUAS ── */
-window.buscarMateriaCreador = sbBuscar;
-window.exportarHorarioPDF  = sbExportarPDF;
-window.limpiarHorarioCreado= sbLimpiar;
-window.removerMateria      = sbRemover;
-window.seleccionarSeccion  = sbElegirSec;
-window.cerrarSelectorSeccion=sbCerrarSec;
-
 /* ── INIT ── */
+function sbHookBotones() {
+  const botones = document.querySelectorAll('button');
+  let hooked = false;
+  botones.forEach(btn => {
+      const txt = btn.textContent.trim().toUpperCase();
+      if (txt === 'ABRIR CREADOR' || btn.getAttribute('onclick')?.includes('crea-horario-modal')) {
+          // Remover el onclick viejo para que no dispare el modal original que está roto
+          btn.removeAttribute('onclick');
+          // Forzar la apertura del NUEVO modal (v6)
+          btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              sbAbrirModal();
+          });
+          hooked = true;
+      }
+  });
+  return hooked;
+}
+
 function sbInit() {
-  // Asegurar que el catálogo esté listo extraíble desde el DOM (depende de que render.js inyecte todo el HTML base)
   const catalogoListo = sbExtraerCatalogo();
   if (!catalogoListo) {
       setTimeout(sbInit, 300); 
       return;
   }
   
-  // Inyectar el modal HTML en document.body (ya no espera a que render.js lo ponga vacío)
   sbInyectarUI();
+  
+  // Buscar botones repetidamente por si el DOM los inyecta después
+  const hookInt = setInterval(() => {
+    if (sbHookBotones()) {
+      clearInterval(hookInt);
+      console.log('[SB] v6 botones enlazados correctamente');
+    }
+  }, 500);
 
-  // Interceptar todos los botones "Abrir Creador" o que apunten al modal
-  const botones = document.querySelectorAll('button');
-  botones.forEach(btn => {
-      if (btn.textContent.includes('ABRIR CREADOR') || btn.getAttribute('onclick')?.includes('crea-horario-modal')) {
-          btn.onclick = (e) => {
-              e.preventDefault();
-              sbAbrirModal();
-          };
-      }
-  });
-
-  console.log('[SB] v5 listo y eventos enlazados');
+  console.log('[SB] v6 inicializado');
 }
 
-document.addEventListener('DOMContentLoaded', sbInit);
-// Si ya cargó:
+// Ejecutar init al cargar
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   setTimeout(sbInit, 100);
+} else {
+  document.addEventListener('DOMContentLoaded', sbInit);
 }
