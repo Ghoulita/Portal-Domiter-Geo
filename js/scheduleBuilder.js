@@ -1,7 +1,6 @@
 /**
- * Schedule Builder v6 - Portal Domiter
- * Auto-inyecta su propio HTML con estilos INLINE (sin depender de Tailwind)
- * y gestiona su propia apertura y cierre.
+ * Schedule Builder v7 - Portal Domiter
+ * Corrige el bug del nombre 'null' al seleccionar sección y agrega soporte de búsqueda sin acentos.
  */
 
 /* ── CONSTANTES ── */
@@ -29,6 +28,10 @@ window.sbPendiente  = null;
 /* ── HELPERS ── */
 const $  = id => document.getElementById(id);
 const gc = i  => SB_PALETA[i % SB_PALETA.length];
+
+function sbNorm(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
 
 function sbMin(s) {
   s = s.trim().toLowerCase();
@@ -71,12 +74,10 @@ window.sbCerrarModal = function() {
 
 /* ── INYECTAR HTML DEL MODAL DESDE CERO ── */
 function sbInyectarUI() {
-  // Ignoramos el del bundle viejo que está roto y creamos uno nuevo con ID diferente
   let modal = $('crea-horario-modal-v6');
   if (!modal) { 
     modal = document.createElement('div');
     modal.id = 'crea-horario-modal-v6';
-    // Estilos inline forzados para garantizar que cubra la pantalla independiente de Tailwind
     modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);z-index:99999;display:none;align-items:center;justify-content:center;padding:1rem;box-sizing:border-box;';
     document.body.appendChild(modal);
   }
@@ -209,11 +210,11 @@ function sbBuscar() {
   const inp = $('sb-input');
   const box = $('sb-dropdown');
   if (!inp||!box) return;
-  const q = inp.value.toLowerCase().trim();
+  const q = sbNorm(inp.value.trim());
   if (q.length < 2) { box.style.display='none'; return; }
   let html='';
   Object.keys(window.sbCatalogo).forEach(n => {
-    if (!n.toLowerCase().includes(q)) return;
+    if (!sbNorm(n).includes(q)) return;
     const ya = window.sbHorario.find(m=>m.nombre===n);
     html+=`<div onclick="sbIntentar('${n.replace(/'/g,"\\'")}') "
       style="padding:8px 12px;cursor:pointer;border-bottom:1px solid #f3f4f6;font-size:.8rem;
@@ -265,9 +266,12 @@ function sbCerrarSec() { const m=$('sb-sec-modal'); if(m) m.style.display='none'
 
 function sbElegirSec(i) {
   if(!window.sbPendiente) return;
-  const sec=window.sbCatalogo[window.sbPendiente][i];
+  const nombre = window.sbPendiente;
+  const sec = window.sbCatalogo[nombre][i];
+  // Cerramos la modal interna, PERO OJO sbCerrarSec() limpia sbPendiente!
   sbCerrarSec();
-  sbValidar(window.sbPendiente,sec);
+  // Llamamos a validar con la constante de bloque que guardamos
+  sbValidar(nombre, sec);
 }
 
 /* ── SOLAPAMIENTO ── */
@@ -431,11 +435,11 @@ function sbInit() {
   const hookInt = setInterval(() => {
     if (sbHookBotones()) {
       clearInterval(hookInt);
-      console.log('[SB] v6 botones enlazados correctamente');
+      console.log('[SB] v7 botones enlazados correctamente');
     }
   }, 500);
 
-  console.log('[SB] v6 inicializado');
+  console.log('[SB] v7 inicializado');
 }
 
 // Ejecutar init al cargar
