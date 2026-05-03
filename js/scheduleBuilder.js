@@ -1,18 +1,20 @@
 /**
  * ============================================================
- * SCHEDULE BUILDER - Portal Domiter Geo (Reescritura completa)
- * Diseño fiel a Horariopitis: bloques por día/sección/aula
- * Choques: advertencia con confirm(), borde rojo si acepta
- * PDF: html2pdf con colores exactos
+ * SCHEDULE BUILDER v3 - Portal Domiter Geo
+ * IDs del DOM real: horario-tabla-body, horario-pdf-container,
+ *   buscador-materias-creador, lista-materias-buscador,
+ *   lista-materias-seleccionadas, contador-materias,
+ *   seccion-selector-modal, seccion-selector-materia,
+ *   seccion-selector-opciones, horario-empty-overlay
  * ============================================================
  */
 
 /* ─── ESTADO GLOBAL ─── */
-window.catalogoMaterias   = {};
+window.catalogoMaterias    = {};
 window.horarioSeleccionado = [];
-window.materiaPendiente   = null;
+window.materiaPendiente    = null;
 
-/* ─── BLOQUES HORARIOS (45 min c/u, descanso en 8:30 y 10:15) ─── */
+/* ─── BLOQUES HORARIOS ─── */
 const BLOQUES = [
   { label: '7:00–7:45',   inicio: 420,  fin: 465  },
   { label: '7:45–8:30',   inicio: 465,  fin: 510  },
@@ -30,64 +32,35 @@ const BLOQUES = [
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
-/* paleta institucional */
-const COLORES_MATERIA = [
-  { bg: '#dbeafe', border: '#3b82f6', text: '#1e3a5f' },
-  { bg: '#d1fae5', border: '#10b981', text: '#064e3b' },
-  { bg: '#ede9fe', border: '#8b5cf6', text: '#3b0764' },
-  { bg: '#fce7f3', border: '#ec4899', text: '#831843' },
-  { bg: '#ffedd5', border: '#f97316', text: '#7c2d12' },
-  { bg: '#e0f2fe', border: '#0ea5e9', text: '#0c4a6e' },
-  { bg: '#dcfce7', border: '#22c55e', text: '#14532d' },
-  { bg: '#fef9c3', border: '#eab308', text: '#713f12' },
+const PALETA = [
+  { bg: '#dbeafe', borde: '#3b82f6', texto: '#1e3a5f' },
+  { bg: '#d1fae5', borde: '#10b981', texto: '#064e3b' },
+  { bg: '#ede9fe', borde: '#8b5cf6', texto: '#3b0764' },
+  { bg: '#fce7f3', borde: '#ec4899', texto: '#831843' },
+  { bg: '#ffedd5', borde: '#f97316', texto: '#7c2d12' },
+  { bg: '#e0f2fe', borde: '#0ea5e9', texto: '#0c4a6e' },
+  { bg: '#dcfce7', borde: '#22c55e', texto: '#14532d' },
+  { bg: '#fef9c3', borde: '#eab308', texto: '#713f12' },
 ];
+const getColor = i => PALETA[i % PALETA.length];
 
-function getColor(i) { return COLORES_MATERIA[i % COLORES_MATERIA.length]; }
-
-/* ─── 1. INIT ─── */
-function initScheduleBuilder() {
-  extraerCatalogo();
-  renderTabla();
-  renderLista();
-  console.log('[ScheduleBuilder] materias en catálogo:', Object.keys(window.catalogoMaterias).length);
-}
-
-/* ─── 2. EXTRACCIÓN DEL CATÁLOGO ─── */
-function extraerCatalogo() {
-  const catalogo = {};
-  // Buscar en todas las tabs del modal de horario
-  const tabs = document.querySelectorAll('#horario-modal .tab-content');
-  tabs.forEach(tab => {
-    const bloques = tab.querySelectorAll('.mb-8');
-    bloques.forEach(bloque => {
-      const h3 = bloque.querySelector('h3');
-      if (!h3) return;
-      const seccionTexto = h3.textContent.trim();
-      bloque.querySelectorAll('li').forEach(li => {
-        const h4 = li.querySelector('h4');
-        const p  = li.querySelector('p');
-        if (!h4) return;
-        let nombre = h4.textContent.replace(/electiva/i, '').trim();
-        let profe  = p ? p.textContent.trim() : '';
-        let tiempos = [];
-        li.querySelectorAll('span.bg-yellow-50, span[class*="bg-yellow"]').forEach(span => {
-          const t = parsearHora(span.textContent.trim());
-          if (t) tiempos.push(t);
-        });
-        if (!catalogo[nombre]) catalogo[nombre] = [];
-        if (!catalogo[nombre].find(s => s.seccion === seccionTexto)) {
-          catalogo[nombre].push({ seccion: seccionTexto, profe, tiempos });
-        }
-      });
-    });
-  });
-  window.catalogoMaterias = catalogo;
+/* ─── HELPERS ─── */
+function toMin(s) {
+  s = s.trim().toLowerCase();
+  const colon = s.indexOf(':');
+  const hr  = parseInt(s.slice(0, colon));
+  const min = parseInt(s.slice(colon + 1, colon + 3));
+  const pm  = s.includes('pm');
+  let h = hr;
+  if (pm && h !== 12) h += 12;
+  if (!pm && h === 12) h = 0;
+  return h * 60 + min;
 }
 
 function parsearHora(texto) {
   const DIAS_MAP = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
   let dia = null;
-  for (let d of DIAS_MAP) { if (texto.includes(d)) { dia = d; break; } }
+  for (const d of DIAS_MAP) { if (texto.includes(d)) { dia = d; break; } }
   if (!dia) return null;
   const rx = /(\d{1,2}:\d{2}\s*(?:am|pm))\s*-\s*(\d{1,2}:\d{2}\s*(?:am|pm))/i;
   const m = texto.match(rx);
@@ -95,88 +68,124 @@ function parsearHora(texto) {
   return { dia, inicio: toMin(m[1]), fin: toMin(m[2]), texto: m[0] };
 }
 
-function toMin(s) {
-  s = s.trim().toLowerCase();
-  const [h, rest] = s.split(':');
-  const min = parseInt(rest);
-  let hr = parseInt(h);
-  const pm = s.includes('pm');
-  if (pm && hr !== 12) hr += 12;
-  if (!pm && hr === 12) hr = 0;
-  return hr * 60 + min;
+function $id(id) { return document.getElementById(id); }
+
+/* ─── INIT ─── */
+function initScheduleBuilder() {
+  extraerCatalogo();
+  renderTabla();
+  renderLista();
+  inyectarEstilos();
+  console.log('[SB] Inicializado. Materias:', Object.keys(window.catalogoMaterias).length);
 }
 
-/* ─── 3. BUSCADOR ─── */
+/* ─── EXTRAER CATÁLOGO DEL DOM REAL ─── */
+function extraerCatalogo() {
+  const catalogo = {};
+  /* El modal de horario tiene tabs con clase tab-content,
+     dentro bloques .mb-8 con h3 (seccion) y li (materia) */
+  const modal = $id('horario-modal');
+  if (!modal) { console.warn('[SB] horario-modal no encontrado'); return; }
+
+  modal.querySelectorAll('.tab-content').forEach(tab => {
+    tab.querySelectorAll('.mb-8').forEach(bloque => {
+      const h3 = bloque.querySelector('h3');
+      if (!h3) return;
+      const seccion = h3.textContent.trim();
+      bloque.querySelectorAll('li').forEach(li => {
+        const h4 = li.querySelector('h4');
+        if (!h4) return;
+        const nombre = h4.textContent.replace(/electiva/i, '').trim();
+        const profe  = li.querySelector('p')?.textContent.trim() || '';
+        const tiempos = [];
+        li.querySelectorAll('span').forEach(span => {
+          if (span.textContent.match(/\d:\d{2}\s*(?:am|pm)/i)) {
+            const t = parsearHora(span.textContent.trim());
+            if (t) tiempos.push(t);
+          }
+        });
+        if (!catalogo[nombre]) catalogo[nombre] = [];
+        if (!catalogo[nombre].find(s => s.seccion === seccion)) {
+          catalogo[nombre].push({ seccion, profe, tiempos });
+        }
+      });
+    });
+  });
+
+  window.catalogoMaterias = catalogo;
+  console.log('[SB] Catálogo:', catalogo);
+}
+
+/* ─── BUSCADOR ─── */
 function buscarMateriaCreador() {
-  const q   = (document.getElementById('buscador-materias-creador')?.value || '').toLowerCase().trim();
-  const box = document.getElementById('lista-materias-buscador');
-  if (!box) return;
+  const input = $id('buscador-materias-creador');
+  const box   = $id('lista-materias-buscador');
+  if (!input || !box) return;
+  const q = input.value.toLowerCase().trim();
   if (q.length < 2) { box.classList.add('hidden'); return; }
 
   let html = '';
   Object.keys(window.catalogoMaterias).forEach(nombre => {
     if (!nombre.toLowerCase().includes(q)) return;
-    const yaAgregada = window.horarioSeleccionado.find(m => m.nombre === nombre);
-    html += `<div class="sb-search-item${yaAgregada ? ' sb-added' : ''}"
-      onclick="intentarAgregarMateria('${nombre.replace(/'/g,"\\'")}')">
+    const ya = window.horarioSeleccionado.find(m => m.nombre === nombre);
+    html += `<div class="sb-item${ya ? ' sb-item--ya' : ''}" onclick="intentarAgregarMateria('${nombre.replace(/'/g, "\\'")}')">
       <span>${nombre}</span>
-      <i class="fas ${yaAgregada ? 'fa-check' : 'fa-plus-circle'}"></i>
+      <i class="fas ${ya ? 'fa-check' : 'fa-plus-circle'}"></i>
     </div>`;
   });
-  if (!html) html = `<div class="sb-search-empty">No se encontraron materias.</div>`;
+  if (!html) html = `<div class="sb-empty">No se encontraron materias.</div>`;
   box.innerHTML = html;
   box.classList.remove('hidden');
 }
 
 document.addEventListener('click', e => {
-  const box   = document.getElementById('lista-materias-buscador');
-  const input = document.getElementById('buscador-materias-creador');
+  const box   = $id('lista-materias-buscador');
+  const input = $id('buscador-materias-creador');
   if (box && !box.contains(e.target) && e.target !== input) box.classList.add('hidden');
 });
 
-/* ─── 4. AGREGAR / SELECCIONAR SECCIÓN ─── */
+/* ─── AGREGAR / SELECCIONAR ─── */
 function intentarAgregarMateria(nombre) {
-  document.getElementById('lista-materias-buscador')?.classList.add('hidden');
-  if (document.getElementById('buscador-materias-creador'))
-    document.getElementById('buscador-materias-creador').value = '';
+  $id('lista-materias-buscador')?.classList.add('hidden');
+  const inp = $id('buscador-materias-creador');
+  if (inp) inp.value = '';
 
   if (window.horarioSeleccionado.find(m => m.nombre === nombre)) {
-    mostrarToast(`<strong>${nombre}</strong> ya está en tu horario.`, 'warn');
-    return;
+    sbToast(`<b>${nombre}</b> ya está en tu horario.`, 'info'); return;
   }
-  const secciones = window.catalogoMaterias[nombre];
-  if (!secciones?.length) return;
-  if (secciones.length === 1) {
-    procesarAgregarMateria(nombre, secciones[0]);
+  const secs = window.catalogoMaterias[nombre];
+  if (!secs?.length) return;
+  if (secs.length === 1) {
+    procesarAgregar(nombre, secs[0]);
   } else {
     window.materiaPendiente = nombre;
-    abrirSelectorSeccion(nombre, secciones);
+    abrirSelectorSeccion(nombre, secs);
   }
 }
 
-function abrirSelectorSeccion(nombre, secciones) {
-  const titleEl = document.getElementById('seccion-selector-materia');
-  const optsEl  = document.getElementById('seccion-selector-opciones');
+function abrirSelectorSeccion(nombre, secs) {
+  const titleEl = $id('seccion-selector-materia');
+  const optsEl  = $id('seccion-selector-opciones');
   if (!titleEl || !optsEl) return;
   titleEl.textContent = nombre;
-  optsEl.innerHTML = secciones.map((s, i) => {
-    const horas = s.tiempos.map(t => `<span class="sb-tag">${t.dia} ${t.texto}</span>`).join('');
-    return `<div class="sb-seccion-card" onclick="seleccionarSeccion(${i})">
+  optsEl.innerHTML = secs.map((s, i) => {
+    const tags = s.tiempos.map(t => `<span class="sb-tag">${t.dia} ${t.texto}</span>`).join('');
+    return `<div class="sb-sec-card" onclick="seleccionarSeccion(${i})">
       <div>
-        <div class="sb-seccion-nombre">${s.seccion}</div>
-        <div class="sb-seccion-profe">${s.profe}</div>
-        <div>${horas}</div>
+        <div class="sb-sec-nombre">${s.seccion}</div>
+        <div class="sb-sec-profe">${s.profe}</div>
+        <div>${tags}</div>
       </div>
-      <i class="fas fa-chevron-right sb-seccion-arrow"></i>
+      <i class="fas fa-chevron-right" style="color:#d1d5db"></i>
     </div>`;
   }).join('');
-  const modal = document.getElementById('seccion-selector-modal');
-  if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+  const m = $id('seccion-selector-modal');
+  if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
 }
 
 function cerrarSelectorSeccion() {
-  const modal = document.getElementById('seccion-selector-modal');
-  if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+  const m = $id('seccion-selector-modal');
+  if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
   window.materiaPendiente = null;
 }
 
@@ -185,19 +194,31 @@ function seleccionarSeccion(index) {
   const nombre = window.materiaPendiente;
   const sec    = window.catalogoMaterias[nombre][index];
   cerrarSelectorSeccion();
-  procesarAgregarMateria(nombre, sec);
+  procesarAgregar(nombre, sec);
 }
 
-/* ─── 5. LÓGICA DE SOLAPAMIENTO ─── */
-function procesarAgregarMateria(nombre, seccionObj) {
-  const choques = detectarChoques(seccionObj);
+/* ─── VALIDACIÓN DE SOLAPAMIENTOS ─── */
+function procesarAgregar(nombre, seccionObj) {
+  const choques = [];
+  seccionObj.tiempos.forEach(tN => {
+    window.horarioSeleccionado.forEach(ex => {
+      ex.seccionObj.tiempos.forEach(tE => {
+        if (tN.dia === tE.dia &&
+            Math.max(tN.inicio, tE.inicio) < Math.min(tN.fin, tE.fin)) {
+          if (!choques.find(c => c.m === ex.nombre && c.d === tN.dia)) {
+            choques.push({ m: ex.nombre, d: tN.dia });
+          }
+        }
+      });
+    });
+  });
 
   if (choques.length > 0) {
-    const detalle = choques.map(c => `• ${c.materia} (${c.dia})`).join('\n');
+    const detalle = choques.map(c => `• ${c.m} (${c.d})`).join('\n');
     const ok = confirm(
-      `⚠️ CHOQUE DE HORARIO DETECTADO\n\n` +
-      `"${nombre}" coincide con:\n${detalle}\n\n` +
-      `¿Deseas agregarlo de todas formas? El bloque se marcará en rojo.`
+      `⚠️ CHOQUE DE HORARIO\n\n` +
+      `"${nombre}" colisiona con:\n${detalle}\n\n` +
+      `¿Deseas agregarlo igual? El bloque se marcará en rojo.`
     );
     if (!ok) return;
     agregarMateria(nombre, seccionObj, true);
@@ -206,34 +227,19 @@ function procesarAgregarMateria(nombre, seccionObj) {
   }
 }
 
-function detectarChoques(seccionNueva) {
-  const choques = [];
-  for (const tNuevo of seccionNueva.tiempos) {
-    for (const existing of window.horarioSeleccionado) {
-      for (const tEx of existing.seccionObj.tiempos) {
-        if (tNuevo.dia !== tEx.dia) continue;
-        if (Math.max(tNuevo.inicio, tEx.inicio) < Math.min(tNuevo.fin, tEx.fin)) {
-          if (!choques.find(c => c.materia === existing.nombre && c.dia === tNuevo.dia)) {
-            choques.push({ materia: existing.nombre, dia: tNuevo.dia });
-          }
-        }
-      }
-    }
-  }
-  return choques;
-}
-
 function agregarMateria(nombre, seccionObj, conChoque) {
-  const color = getColor(window.horarioSeleccionado.length);
-  window.horarioSeleccionado.push({ nombre, seccionObj, color, conChoque });
+  window.horarioSeleccionado.push({
+    nombre, seccionObj,
+    color: getColor(window.horarioSeleccionado.length),
+    conChoque
+  });
   renderTabla();
   renderLista();
-  mostrarToast(`<strong>${nombre}</strong> agregada.${conChoque ? ' ⚠️ Choque marcado en rojo.' : ''}`, conChoque ? 'warn' : 'ok');
+  sbToast(`<b>${nombre}</b> agregada.${conChoque ? ' ⚠️ Choque marcado.' : ''}`, conChoque ? 'warn' : 'ok');
 }
 
 function removerMateria(index) {
   window.horarioSeleccionado.splice(index, 1);
-  // Re-asignar colores en orden
   window.horarioSeleccionado.forEach((m, i) => { m.color = getColor(i); });
   renderTabla();
   renderLista();
@@ -245,216 +251,225 @@ function limpiarHorarioCreado() {
   renderLista();
 }
 
-/* ─── 6. RENDER TABLA ESTILO PITIS ─── */
+/* ─── RENDER TABLA (usa horario-tabla-body que SÍ existe) ─── */
 function renderTabla() {
-  const wrap = document.getElementById('horario-tabla-wrap');
-  if (!wrap) return;
+  const tbody   = $id('horario-tabla-body');
+  const overlay = $id('horario-empty-overlay');
 
-  // Construir HTML de tabla
-  let html = `
-  <table id="horario-pdf-table" style="
-    width:100%; border-collapse:collapse;
-    font-family:'Segoe UI',sans-serif; font-size:11px;
-    -webkit-print-color-adjust:exact; print-color-adjust:exact;">
-    <thead>
-      <tr>
-        <th style="${thBase} width:70px; background:#1a3c5e; color:#fff;">Hora</th>
-        ${DIAS.map(d => `<th style="${thBase} background:#1a3c5e; color:#fff;">${d}</th>`).join('')}
-      </tr>
-    </thead>
-    <tbody>`;
+  if (!tbody) { console.warn('[SB] horario-tabla-body no encontrado'); return; }
 
-  BLOQUES.forEach(bloque => {
-    html += `<tr>
-      <td style="${tdHora}">${bloque.label}</td>
-      ${DIAS.map(dia => {
-        // Buscar materia que ocupe este bloque en este día
-        const match = window.horarioSeleccionado.find(m =>
-          m.seccionObj.tiempos.some(t =>
-            t.dia === dia && t.inicio <= bloque.inicio && t.fin >= bloque.fin
-          )
-        );
-        if (!match) return `<td style="${tdVacioStyle}"></td>`;
+  /* Limpiar filas previas */
+  tbody.innerHTML = '';
 
-        const t = match.seccionObj.tiempos.find(t => t.dia === dia && t.inicio <= bloque.inicio && t.fin >= bloque.fin);
-        // Solo pintar en el primer bloque de la materia en este día
-        const esPrimerBloque = bloque.inicio === window.horarioSeleccionado
-          .filter(m => m.nombre === match.nombre)
-          .flatMap(m => m.seccionObj.tiempos)
-          .filter(t2 => t2.dia === dia)
-          .map(t2 => t2.inicio)[0];
-
-        const borde = match.conChoque ? '2px solid red' : `2px solid ${match.color.border}`;
-        const bg    = match.conChoque ? '#fff0f0' : match.color.bg;
-        const col   = match.conChoque ? '#c0392b' : match.color.text;
-
-        return `<td style="
-          border:1px solid #d1d5db; padding:2px; vertical-align:middle; text-align:center;
-          background:${bg}; color:${col}; border-left:${borde};
-          -webkit-print-color-adjust:exact; print-color-adjust:exact;">
-          <div style="font-weight:700; font-size:10px; line-height:1.2;">${match.nombre}</div>
-          <div style="font-size:9px; opacity:.8;">${match.seccionObj.seccion}</div>
-          ${match.conChoque ? '<div style="font-size:8px;color:red;font-weight:bold;">⚠ CHOQUE</div>' : ''}
-        </td>`;
-      }).join('')}
-    </tr>`;
+  /* Construir mapa: dia+bloque → materia */
+  const mapa = {}; // key: "dia|inicioBloque"
+  window.horarioSeleccionado.forEach(m => {
+    m.seccionObj.tiempos.forEach(t => {
+      BLOQUES.forEach(b => {
+        if (t.dia === b.label.split('–')[0] || /* match por dia/hora */
+            (t.inicio <= b.inicio && t.fin >= b.fin)) {
+          if (t.dia) {
+            const key = `${t.dia}|${b.inicio}`;
+            if (!mapa[key]) mapa[key] = [];
+            mapa[key].push(m);
+          }
+        }
+      });
+    });
   });
 
-  html += `</tbody></table>`;
+  /* Reconstruir mapa correctamente */
+  const mapaFinal = {};
+  window.horarioSeleccionado.forEach(m => {
+    m.seccionObj.tiempos.forEach(t => {
+      BLOQUES.forEach(b => {
+        if (t.dia && t.inicio <= b.inicio && t.fin >= b.fin) {
+          const key = `${t.dia}|${b.inicio}`;
+          if (!mapaFinal[key]) mapaFinal[key] = m;
+        }
+      });
+    });
+  });
 
-  // Encabezado PDF institucional (oculto en pantalla pero visible al imprimir)
-  const header = `<div id="pdf-header-ucv" style="
-    display:none; padding:10px 16px; background:#1a3c5e; color:#fff;
-    border-radius:6px 6px 0 0; margin-bottom:4px; -webkit-print-color-adjust:exact;">
-    <div style="font-size:13px; font-weight:700;">Universidad Central de Venezuela</div>
-    <div style="font-size:11px; opacity:.85;">Escuela de Geografía · Portal DOMITER · Horario 2026</div>
-  </div>`;
+  /* Construir filas */
+  BLOQUES.forEach(b => {
+    const tr = document.createElement('tr');
 
-  const overlay = window.horarioSeleccionado.length === 0
-    ? `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
-        justify-content:center;background:rgba(255,255,255,.7);border-radius:8px;pointer-events:none;">
-        <i class="fas fa-calendar-alt" style="font-size:2rem;color:#d1d5db;margin-bottom:.5rem;"></i>
-        <span style="color:#9ca3af;font-size:.85rem;">Agrega materias para ver tu horario aquí</span>
-      </div>` : '';
+    /* Celda de hora */
+    const tdHora = document.createElement('td');
+    tdHora.style.cssText = 'border:1px solid #e5e7eb;padding:3px 6px;text-align:center;font-size:10px;font-weight:600;color:#6b7280;background:#f9fafb;white-space:nowrap;';
+    tdHora.textContent = b.label;
+    tr.appendChild(tdHora);
 
-  wrap.innerHTML = `<div id="horario-pdf-container" style="position:relative;">
-    ${header}${html}${overlay}
-  </div>`;
+    /* Celdas por día */
+    DIAS.forEach(dia => {
+      const td = document.createElement('td');
+      td.style.cssText = 'border:1px solid #e5e7eb;padding:2px;vertical-align:middle;text-align:center;min-height:28px;';
 
-  // Actualizar contador
-  const ctr = document.getElementById('contador-materias');
+      const m = mapaFinal[`${dia}|${b.inicio}`];
+      if (m) {
+        const bg    = m.conChoque ? '#fff0f0' : m.color.bg;
+        const borde = m.conChoque ? '3px solid #ef4444' : `3px solid ${m.color.borde}`;
+        const col   = m.conChoque ? '#b91c1c' : m.color.texto;
+
+        td.style.background   = bg;
+        td.style.borderLeft   = borde;
+        td.style.color        = col;
+        td.style.webkitPrintColorAdjust = 'exact';
+        td.style.printColorAdjust       = 'exact';
+
+        td.innerHTML = `<div style="font-weight:700;font-size:10px;line-height:1.3;padding:1px 2px;">${m.nombre}</div>
+          <div style="font-size:8px;opacity:.75;">${m.seccionObj.seccion.split('(')[0].trim()}</div>
+          ${m.conChoque ? '<div style="font-size:8px;color:#dc2626;font-weight:bold;">⚠ CHOQUE</div>' : ''}`;
+      }
+
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  /* Overlay vacío */
+  if (overlay) {
+    overlay.style.opacity = window.horarioSeleccionado.length === 0 ? '1' : '0';
+    overlay.style.pointerEvents = window.horarioSeleccionado.length === 0 ? 'auto' : 'none';
+  }
+
+  /* Contador */
+  const ctr = $id('contador-materias');
   if (ctr) ctr.textContent = window.horarioSeleccionado.length;
 }
 
-/* ─── Estilos inline reutilizables ─── */
-const thBase = `border:1px solid #0f2945; padding:6px 4px; text-align:center;
-  font-weight:700; font-size:11px; -webkit-print-color-adjust:exact;`;
-const tdHora = `border:1px solid #d1d5db; padding:4px 6px; text-align:center;
-  font-size:10px; font-weight:600; color:#4b5563; background:#f8fafc; white-space:nowrap;`;
-const tdVacioStyle = `border:1px solid #e5e7eb; padding:2px; min-height:28px;`;
-
-/* ─── 7. RENDER LISTA DE MATERIAS ─── */
+/* ─── RENDER LISTA ─── */
 function renderLista() {
-  const lista = document.getElementById('lista-materias-seleccionadas');
+  const lista = $id('lista-materias-seleccionadas');
   if (!lista) return;
 
   if (window.horarioSeleccionado.length === 0) {
-    lista.innerHTML = `<li style="text-align:center;padding:1.5rem .5rem;color:#9ca3af;font-size:.8rem;
-      border:2px dashed #e5e7eb;border-radius:8px;list-style:none;">
+    lista.innerHTML = `<li id="empty-state-materias" style="
+      text-align:center;padding:1.5rem .5rem;color:#9ca3af;
+      border:2px dashed #e5e7eb;border-radius:8px;list-style:none;font-size:.8rem;">
       <i class="fas fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:.4rem;"></i>
-      Busca y agrega materias para empezar.
+      Busca y agrega materias<br>para empezar a armar tu horario.
     </li>`;
     return;
   }
 
   lista.innerHTML = window.horarioSeleccionado.map((m, i) => `
     <li style="display:flex;justify-content:space-between;align-items:flex-start;
-      padding:.6rem .75rem;border-radius:8px;margin-bottom:.4rem;list-style:none;
+      padding:.55rem .75rem;border-radius:8px;margin-bottom:.35rem;list-style:none;
       background:${m.conChoque ? '#fff0f0' : m.color.bg};
-      border-left:4px solid ${m.conChoque ? '#ef4444' : m.color.border};">
+      border-left:4px solid ${m.conChoque ? '#ef4444' : m.color.borde};">
       <div>
-        <div style="font-weight:700;font-size:.8rem;color:${m.conChoque ? '#b91c1c' : m.color.text};">
+        <div style="font-weight:700;font-size:.8rem;color:${m.conChoque ? '#b91c1c' : m.color.texto};">
           ${m.conChoque ? '⚠️ ' : ''}${m.nombre}
         </div>
-        <div style="font-size:.7rem;opacity:.75;margin-top:2px;">${m.seccionObj.seccion}</div>
+        <div style="font-size:.7rem;opacity:.7;margin-top:1px;">${m.seccionObj.seccion}</div>
       </div>
       <button onclick="removerMateria(${i})"
-        style="background:none;border:none;cursor:pointer;color:#9ca3af;padding:2px 6px;
-          font-size:.9rem;line-height:1;" title="Quitar materia">✕</button>
-    </li>
-  `).join('');
+        style="background:none;border:none;cursor:pointer;color:#9ca3af;
+          padding:0 6px;font-size:.9rem;line-height:1;flex-shrink:0;">✕</button>
+    </li>`).join('');
 }
 
-/* ─── 8. EXPORTAR PDF ─── */
+/* ─── EXPORTAR PDF ─── */
 function exportarHorarioPDF() {
   if (window.horarioSeleccionado.length === 0) {
-    mostrarToast('Agrega al menos una materia antes de exportar.', 'warn');
-    return;
+    sbToast('Agrega al menos una materia antes de exportar.', 'warn'); return;
   }
 
-  // Mostrar encabezado institucional para el PDF
-  const header = document.getElementById('pdf-header-ucv');
-  if (header) header.style.display = 'block';
+  /* Encabezado institucional */
+  const pdfContainer = $id('horario-pdf-container');
+  if (!pdfContainer) { alert('No se encontró el contenedor del horario.'); return; }
 
-  const el = document.getElementById('horario-pdf-container');
-  if (!el) { alert('No se encontró el contenedor del horario.'); return; }
+  /* Crear encabezado temporal */
+  const hdr = document.createElement('div');
+  hdr.style.cssText = 'background:#1a3c5e;color:#fff;padding:8px 14px;margin-bottom:6px;border-radius:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact;';
+  hdr.innerHTML = `<div style="font-size:13px;font-weight:700;">Universidad Central de Venezuela</div>
+    <div style="font-size:11px;opacity:.85;">Escuela de Geografía · Portal DOMITER · Horario 2026</div>`;
+  pdfContainer.prepend(hdr);
 
   const opt = {
-    margin:      [8, 8, 8, 8],
+    margin:      [8, 6, 8, 6],
     filename:    'Horario_Geo_UCV_2026.pdf',
     image:       { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+    html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#fff' },
     jsPDF:       { unit: 'mm', format: 'a4', orientation: 'landscape' }
   };
 
+  const doExport = () => {
+    html2pdf().set(opt).from(pdfContainer).save()
+      .then(() => { hdr.remove(); })
+      .catch(err => { console.error(err); hdr.remove(); });
+  };
+
   if (typeof html2pdf === 'undefined') {
-    // Inyectar librería si no está
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-    s.onload = () => { html2pdf().set(opt).from(el).save().finally(() => { if(header) header.style.display='none'; }); };
+    s.onload = doExport;
     document.head.appendChild(s);
   } else {
-    html2pdf().set(opt).from(el).save().finally(() => { if(header) header.style.display='none'; });
+    doExport();
   }
 }
 
-/* ─── 9. TOAST (reemplaza alert genérico) ─── */
-function mostrarToast(htmlMsg, tipo = 'ok') {
-  let toast = document.getElementById('sb-toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'sb-toast';
-    toast.style.cssText = `
-      position:fixed; bottom:24px; right:24px; z-index:99999;
-      padding:12px 18px; border-radius:10px; font-size:.85rem;
-      max-width:320px; box-shadow:0 4px 20px rgba(0,0,0,.15);
-      transition:opacity .3s; font-family:'Segoe UI',sans-serif;`;
-    document.body.appendChild(toast);
+/* ─── TOAST ─── */
+function sbToast(htmlMsg, tipo) {
+  let el = $id('sb-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'sb-toast';
+    el.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;padding:12px 18px;border-radius:10px;font-size:.83rem;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.15);transition:opacity .4s;font-family:system-ui,sans-serif;pointer-events:none;';
+    document.body.appendChild(el);
   }
-  toast.style.background = tipo === 'ok' ? '#1a3c5e' : '#7f1d1d';
-  toast.style.color = '#fff';
-  toast.innerHTML = htmlMsg;
-  toast.style.opacity = '1';
-  clearTimeout(toast._timer);
-  toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 3500);
+  el.style.background = tipo === 'ok' ? '#1a3c5e' : tipo === 'warn' ? '#7f1d1d' : '#374151';
+  el.style.color = '#fff';
+  el.innerHTML = htmlMsg;
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 3500);
 }
 
-/* ─── INYECCIÓN DE ESTILOS BUSCADOR ─── */
-(function injectStyles() {
-  if (document.getElementById('sb-styles')) return;
-  const style = document.createElement('style');
-  style.id = 'sb-styles';
-  style.textContent = `
-    #lista-materias-buscador { position:absolute; z-index:999; width:100%;
-      background:#fff; border:1px solid #d1d5db; border-radius:8px;
-      box-shadow:0 8px 24px rgba(0,0,0,.12); max-height:240px; overflow-y:auto; }
-    .sb-search-item { display:flex; justify-content:space-between; align-items:center;
-      padding:10px 14px; cursor:pointer; border-bottom:1px solid #f3f4f6;
-      font-size:.82rem; color:#1f2937; transition:background .15s; }
-    .sb-search-item:hover { background:#eff6ff; }
-    .sb-search-item.sb-added { color:#6b7280; }
-    .sb-search-empty { padding:12px; text-align:center; font-size:.8rem; color:#9ca3af; font-style:italic; }
-    .sb-seccion-card { display:flex; justify-content:space-between; align-items:center;
-      border:1px solid #e5e7eb; padding:12px; border-radius:8px; cursor:pointer;
-      background:#fff; transition:border-color .2s; margin-bottom:8px; }
-    .sb-seccion-card:hover { border-color:#1a3c5e; }
-    .sb-seccion-nombre { font-weight:700; color:#1a3c5e; font-size:.85rem; }
-    .sb-seccion-profe { font-size:.75rem; color:#6b7280; margin:2px 0; }
-    .sb-seccion-arrow { color:#d1d5db; }
-    .sb-tag { display:inline-block; background:#e6f2ff; color:#1a3c5e;
-      font-size:.7rem; padding:2px 6px; border-radius:4px; margin:2px; border:1px solid #bfdbfe; }
+/* ─── ESTILOS DEL BUSCADOR ─── */
+function inyectarEstilos() {
+  if ($id('sb-css')) return;
+  const s = document.createElement('style');
+  s.id = 'sb-css';
+  s.textContent = `
+    #lista-materias-buscador{position:absolute;z-index:999;width:100%;
+      background:#fff;border:1px solid #d1d5db;border-radius:8px;
+      box-shadow:0 8px 24px rgba(0,0,0,.12);max-height:220px;overflow-y:auto;}
+    .sb-item{display:flex;justify-content:space-between;align-items:center;
+      padding:9px 14px;cursor:pointer;border-bottom:1px solid #f3f4f6;
+      font-size:.82rem;color:#1f2937;transition:background .15s;}
+    .sb-item:hover{background:#eff6ff;}
+    .sb-item--ya{color:#9ca3af;}
+    .sb-empty{padding:12px;text-align:center;font-size:.8rem;color:#9ca3af;font-style:italic;}
+    .sb-sec-card{display:flex;justify-content:space-between;align-items:center;
+      border:1px solid #e5e7eb;padding:10px 12px;border-radius:8px;
+      cursor:pointer;background:#fff;transition:border-color .2s;margin-bottom:6px;}
+    .sb-sec-card:hover{border-color:#1a3c5e;}
+    .sb-sec-nombre{font-weight:700;color:#1a3c5e;font-size:.85rem;}
+    .sb-sec-profe{font-size:.73rem;color:#6b7280;margin:2px 0;}
+    .sb-tag{display:inline-block;background:#e6f2ff;color:#1a3c5e;
+      font-size:.68rem;padding:1px 5px;border-radius:3px;margin:2px;border:1px solid #bfdbfe;}
   `;
-  document.head.appendChild(style);
-})();
+  document.head.appendChild(s);
+}
 
-/* ─── INIT CON POLLING ─── */
-function verificarEInicializar() {
-  const modal = document.getElementById('horario-modal');
-  if (modal && modal.innerHTML.length > 200) {
+/* ─── COMPATIBILIDAD: función que antes existía ─── */
+function mostrarAlerta(html) { sbToast(html, 'warn'); }
+function ocultarAlerta() {}
+
+/* ─── INIT CON POLLING (espera a que render.js inyecte el DOM) ─── */
+function sbVerificarEInit() {
+  const modal = $id('crea-horario-modal');
+  const tbody = $id('horario-tabla-body');
+  if (modal && tbody) {
     initScheduleBuilder();
   } else {
-    setTimeout(verificarEInicializar, 300);
+    setTimeout(sbVerificarEInit, 300);
   }
 }
 
-document.addEventListener('DOMContentLoaded', verificarEInicializar);
+document.addEventListener('DOMContentLoaded', sbVerificarEInit);
