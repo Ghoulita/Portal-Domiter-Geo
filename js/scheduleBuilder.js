@@ -1,6 +1,6 @@
 /**
- * Schedule Builder v8 - Portal Domiter
- * Soluciona la exportación de PDF cortada y fusiona bloques contiguos (rowspan).
+ * Schedule Builder v9 - Portal Domiter
+ * Soluciona la exportación de PDF cortada usando un clon del DOM para evadir los estilos del padre.
  */
 
 /* ── CONSTANTES ── */
@@ -418,34 +418,42 @@ function sbRenderLista(){
 /* ── PDF ── */
 function sbExportarPDF(){
   if(!window.sbHorario.length){ sbToast('Agrega al menos una materia.','warn'); return; }
-  const el=$('sb-pdf-container');
-  if(!el){ alert('Contenedor no encontrado'); return; }
+  const original=$('sb-pdf-container');
+  if(!original){ alert('Contenedor no encontrado'); return; }
 
-  // FIX PARA PDF CORTADO: forzar el contenedor a tener un tamaño absoluto y sin recortes temporales
-  const originalWidth = el.style.width;
-  const originalOverflow = el.style.overflow;
-  const originalMaxWidth = el.style.maxWidth;
-  el.style.width = el.scrollWidth + 'px';
-  el.style.overflow = 'visible';
-  el.style.maxWidth = 'none';
+  // FIX DEFINITIVO PARA PDF CORTADO: Clonar el contenedor para evadir los estilos CSS del padre (overflow, flex, anchos).
+  const el = original.cloneNode(true);
+  
+  // Lo ponemos absolute y gigante para que no herede limitaciones
+  el.style.position = 'absolute';
+  el.style.top = '-9999px';
+  el.style.left = '0';
+  el.style.width = '1000px'; 
+  el.style.backgroundColor = '#ffffff';
+  el.style.padding = '20px';
+  document.body.appendChild(el);
 
   const hdr=document.createElement('div');
-  hdr.style.cssText='background:#1a3c5e;color:#fff;padding:7px 12px;border-radius:4px;margin-bottom:5px;-webkit-print-color-adjust:exact;print-color-adjust:exact;';
-  hdr.innerHTML='<div style="font-size:12px;font-weight:700;">Universidad Central de Venezuela</div><div style="font-size:10px;opacity:.85;">Escuela de Geografía · Portal DOMITER · Horario 2026</div>';
+  hdr.style.cssText='background:#1a3c5e;color:#fff;padding:12px 16px;border-radius:6px;margin-bottom:15px;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-family:sans-serif;';
+  hdr.innerHTML='<div style="font-size:16px;font-weight:700;">Universidad Central de Venezuela</div><div style="font-size:12px;opacity:.9;">Escuela de Geografía · Portal DOMITER · Horario 2026</div>';
   el.prepend(hdr);
 
-  const opt={margin:[8,6],filename:'Horario_UCV_2026.pdf',
+  const opt={
+    margin:[10,10],
+    filename:'Horario_UCV_2026.pdf',
     image:{type:'jpeg',quality:.98},
-    html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff', windowWidth: el.scrollWidth},
-    jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}};
+    html2canvas:{
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      windowWidth: 1050
+    },
+    jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}
+  };
 
   const run = () => {
     html2pdf().set(opt).from(el).save().finally(() => {
-      hdr.remove();
-      // Restaurar el DOM
-      el.style.width = originalWidth;
-      el.style.overflow = originalOverflow;
-      el.style.maxWidth = originalMaxWidth;
+      document.body.removeChild(el);
     });
   };
 
@@ -487,11 +495,11 @@ function sbInit() {
   const hookInt = setInterval(() => {
     if (sbHookBotones()) {
       clearInterval(hookInt);
-      console.log('[SB] v8 botones enlazados correctamente');
+      console.log('[SB] v9 botones enlazados correctamente');
     }
   }, 500);
 
-  console.log('[SB] v8 inicializado');
+  console.log('[SB] v9 inicializado');
 }
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
