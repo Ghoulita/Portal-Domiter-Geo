@@ -421,27 +421,32 @@ function sbExportarPDF(){
   const original=$('sb-pdf-container');
   if(!original){ alert('Contenedor no encontrado'); return; }
 
-  // FIX DEFINITIVO PARA PDF CORTADO O EN BLANCO: Mover el contenedor original al body para evadir los estilos CSS del padre
-  // (overflow, flex, anchos) sin usar clonación oculta que html2canvas ignora.
+  // FIX A PRUEBA DE BALAS: Extraer el contenedor, ponerlo en pantalla completa visible (encima de todo)
+  // para que html2canvas lo renderice perfectamente sin recortes de overflow ni culling por z-index negativo.
   const parentOriginal = original.parentNode;
   const nextSibling = original.nextSibling;
   const originalCssText = original.style.cssText;
   
+  // Contenedor temporal absoluto en pantalla
+  const tempWrapper = document.createElement('div');
+  tempWrapper.style.cssText = 'position:absolute; top:0; left:0; width:1000px; background:#ffffff; z-index:999999; padding:20px;';
+  
+  // Mensaje de carga para mejorar la UX durante el "flicker"
+  const loadingMsg = document.createElement('div');
+  loadingMsg.innerHTML = '<h3 style="color:#a57c00; font-family:sans-serif; text-align:center; margin-bottom: 20px;">Generando PDF, por favor no cierres la página...</h3>';
+  tempWrapper.appendChild(loadingMsg);
+
   // Agregar encabezado institucional
   const hdr=document.createElement('div');
   hdr.style.cssText='background:#1a3c5e;color:#fff;padding:12px 16px;border-radius:6px;margin-bottom:15px;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-family:sans-serif;';
   hdr.innerHTML='<div style="font-size:16px;font-weight:700;">Universidad Central de Venezuela</div><div style="font-size:12px;opacity:.9;">Escuela de Geografía · Portal DOMITER · Horario 2026</div>';
-  original.prepend(hdr);
+  
+  tempWrapper.appendChild(hdr);
+  tempWrapper.appendChild(original);
+  document.body.appendChild(tempWrapper);
 
-  // Mover al body
-  document.body.appendChild(original);
-  original.style.position = 'absolute';
-  original.style.top = '0';
-  original.style.left = '0';
-  original.style.zIndex = '-9999';
-  original.style.width = '1000px'; 
-  original.style.backgroundColor = '#ffffff';
-  original.style.padding = '20px';
+  // Asegurar que partimos desde el tope
+  window.scrollTo(0,0);
 
   const opt={
     margin:[10,10],
@@ -451,22 +456,26 @@ function sbExportarPDF(){
       scale: 2,
       useCORS: true,
       backgroundColor: '#ffffff',
+      scrollY: 0,
       windowWidth: 1050
     },
     jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}
   };
 
   const run = () => {
-    html2pdf().set(opt).from(original).save().finally(() => {
-      // Remover encabezado y restaurar DOM
-      hdr.remove();
-      original.style.cssText = originalCssText;
-      if (nextSibling) {
-          parentOriginal.insertBefore(original, nextSibling);
-      } else {
-          parentOriginal.appendChild(original);
-      }
-    });
+    // Le damos un pequeño timeout para que el navegador renderice el tempWrapper
+    setTimeout(() => {
+      html2pdf().set(opt).from(tempWrapper).save().finally(() => {
+        // Restaurar todo a su normalidad
+        original.style.cssText = originalCssText;
+        if (nextSibling) {
+            parentOriginal.insertBefore(original, nextSibling);
+        } else {
+            parentOriginal.appendChild(original);
+        }
+        document.body.removeChild(tempWrapper);
+      });
+    }, 150);
   };
 
   if(typeof html2pdf==='undefined'){
