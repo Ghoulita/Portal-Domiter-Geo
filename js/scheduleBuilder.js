@@ -1,7 +1,7 @@
 /**
- * Schedule Builder v4 - Portal Domiter
- * Auto-inyecta su propio HTML dentro de crea-horario-modal
- * y gestiona todo el ciclo: catálogo → tabla → PDF
+ * Schedule Builder v5 - Portal Domiter
+ * Auto-inyecta su propio HTML en el BODY (crea el modal desde cero)
+ * y gestiona su propia apertura y cierre, sin depender de main.js o el bundle.
  */
 
 /* ── CONSTANTES ── */
@@ -50,7 +50,7 @@ function sbToast(html, tipo) {
   let el = $('sb-toast');
   if (!el) {
     el = document.createElement('div'); el.id='sb-toast';
-    el.style.cssText='position:fixed;bottom:22px;right:22px;z-index:99999;padding:11px 16px;border-radius:9px;font-size:.82rem;max-width:290px;box-shadow:0 4px 18px rgba(0,0,0,.15);transition:opacity .4s;font-family:system-ui,sans-serif;pointer-events:none;';
+    el.style.cssText='position:fixed;bottom:22px;right:22px;z-index:999999;padding:11px 16px;border-radius:9px;font-size:.82rem;max-width:290px;box-shadow:0 4px 18px rgba(0,0,0,.15);transition:opacity .4s;font-family:system-ui,sans-serif;pointer-events:none;';
     document.body.appendChild(el);
   }
   el.style.background = tipo==='ok'?'#1a3c5e':tipo==='warn'?'#7f1d1d':'#374151';
@@ -58,10 +58,33 @@ function sbToast(html, tipo) {
   clearTimeout(el._t); el._t=setTimeout(()=>el.style.opacity='0', 3500);
 }
 
-/* ── INYECTAR HTML DEL MODAL ── */
+/* ── MODAL CONTROL ── */
+window.sbAbrirModal = function() {
+  const m = $('crea-horario-modal');
+  if (m) {
+    m.classList.add('active');
+    m.style.display = 'flex';
+  }
+};
+
+window.sbCerrarModal = function() {
+  const m = $('crea-horario-modal');
+  if (m) {
+    m.classList.remove('active');
+    m.style.display = 'none';
+  }
+};
+
+/* ── INYECTAR HTML DEL MODAL DESDE CERO ── */
 function sbInyectarUI() {
-  const modal = $('crea-horario-modal');
-  if (!modal) { console.warn('[SB] crea-horario-modal no encontrado'); return false; }
+  let modal = $('crea-horario-modal');
+  if (!modal) { 
+    modal = document.createElement('div');
+    modal.id = 'crea-horario-modal';
+    modal.className = 'modal-overlay fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-3 sm:p-4';
+    modal.style.display = 'none';
+    document.body.appendChild(modal);
+  }
 
   modal.innerHTML = `
   <div style="background:#fff;width:100%;max-width:1100px;max-height:95vh;padding:1.5rem;position:relative;box-shadow:0 25px 60px rgba(0,0,0,.25);border-top:4px solid #d4af37;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;">
@@ -77,7 +100,7 @@ function sbInyectarUI() {
         <button onclick="sbExportarPDF()" style="background:#a57c00;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;cursor:pointer;font-weight:700;font-size:.82rem;display:flex;align-items:center;gap:.4rem;">
           <i class="fas fa-file-pdf"></i> Exportar PDF
         </button>
-        <button onclick="cerrarModal('crea-horario-modal')" style="background:none;border:none;font-size:1.8rem;cursor:pointer;color:#9ca3af;line-height:1;padding:0 4px;">&times;</button>
+        <button onclick="sbCerrarModal()" style="background:none;border:none;font-size:1.8rem;cursor:pointer;color:#9ca3af;line-height:1;padding:0 4px;">&times;</button>
       </div>
     </div>
 
@@ -152,34 +175,38 @@ function sbInyectarUI() {
 
 /* ── CATÁLOGO ── */
 function sbExtraerCatalogo() {
-  const horarioModal = $('horario-modal');
-  if (!horarioModal) { console.warn('[SB] horario-modal no encontrado'); return; }
   const cat = {};
-  horarioModal.querySelectorAll('.tab-content').forEach(tab => {
-    tab.querySelectorAll('.mb-8').forEach(bloque => {
-      const h3  = bloque.querySelector('h3');
-      if (!h3) return;
-      const sec = h3.textContent.trim();
-      bloque.querySelectorAll('li').forEach(li => {
-        const h4 = li.querySelector('h4');
-        if (!h4) return;
-        const nombre = h4.textContent.replace(/electiva/i,'').trim();
-        const profe  = li.querySelector('p')?.textContent.trim()||'';
-        const tiempos = [];
-        li.querySelectorAll('span').forEach(sp => {
-          if (/\d:\d{2}\s*(?:am|pm)/i.test(sp.textContent)) {
-            const t = sbParseHora(sp.textContent.trim());
-            if (t) tiempos.push(t);
-          }
-        });
-        if (!cat[nombre]) cat[nombre]=[];
-        if (!cat[nombre].find(s=>s.sec===sec))
-          cat[nombre].push({sec, profe, tiempos});
+  const bloques = document.querySelectorAll('.mb-8');
+  
+  if (bloques.length === 0) {
+      console.warn('[SB] No se encontraron bloques de materias en el DOM (aún)');
+      return false;
+  }
+
+  bloques.forEach(bloque => {
+    const h3  = bloque.querySelector('h3');
+    if (!h3) return;
+    const sec = h3.textContent.trim();
+    bloque.querySelectorAll('li').forEach(li => {
+      const h4 = li.querySelector('h4');
+      if (!h4) return;
+      const nombre = h4.textContent.replace(/electiva/i,'').trim();
+      const profe  = li.querySelector('p')?.textContent.trim()||'';
+      const tiempos = [];
+      li.querySelectorAll('span').forEach(sp => {
+        if (/\d:\d{2}\s*(?:am|pm)/i.test(sp.textContent)) {
+          const t = sbParseHora(sp.textContent.trim());
+          if (t) tiempos.push(t);
+        }
       });
+      if (!cat[nombre]) cat[nombre]=[];
+      if (!cat[nombre].find(s=>s.sec===sec))
+        cat[nombre].push({sec, profe, tiempos});
     });
   });
   window.sbCatalogo = cat;
   console.log('[SB] Catálogo:', Object.keys(cat).length, 'materias');
+  return Object.keys(cat).length > 0;
 }
 
 /* ── BUSCADOR ── */
@@ -384,13 +411,33 @@ window.seleccionarSeccion  = sbElegirSec;
 window.cerrarSelectorSeccion=sbCerrarSec;
 
 /* ── INIT ── */
-function sbInit(){
-  if(!$('crea-horario-modal') || !$('horario-modal')){
-    setTimeout(sbInit,300); return;
+function sbInit() {
+  // Asegurar que el catálogo esté listo extraíble desde el DOM (depende de que render.js inyecte todo el HTML base)
+  const catalogoListo = sbExtraerCatalogo();
+  if (!catalogoListo) {
+      setTimeout(sbInit, 300); 
+      return;
   }
+  
+  // Inyectar el modal HTML en document.body (ya no espera a que render.js lo ponga vacío)
   sbInyectarUI();
-  sbExtraerCatalogo();
-  console.log('[SB] v4 listo');
+
+  // Interceptar todos los botones "Abrir Creador" o que apunten al modal
+  const botones = document.querySelectorAll('button');
+  botones.forEach(btn => {
+      if (btn.textContent.includes('ABRIR CREADOR') || btn.getAttribute('onclick')?.includes('crea-horario-modal')) {
+          btn.onclick = (e) => {
+              e.preventDefault();
+              sbAbrirModal();
+          };
+      }
+  });
+
+  console.log('[SB] v5 listo y eventos enlazados');
 }
 
 document.addEventListener('DOMContentLoaded', sbInit);
+// Si ya cargó:
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  setTimeout(sbInit, 100);
+}
