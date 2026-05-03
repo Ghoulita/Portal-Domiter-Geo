@@ -1,6 +1,6 @@
 /**
- * Schedule Builder v7 - Portal Domiter
- * Corrige el bug del nombre 'null' al seleccionar sección y agrega soporte de búsqueda sin acentos.
+ * Schedule Builder v8 - Portal Domiter
+ * Soluciona la exportación de PDF cortada y fusiona bloques contiguos (rowspan).
  */
 
 /* ── CONSTANTES ── */
@@ -268,9 +268,7 @@ function sbElegirSec(i) {
   if(!window.sbPendiente) return;
   const nombre = window.sbPendiente;
   const sec = window.sbCatalogo[nombre][i];
-  // Cerramos la modal interna, PERO OJO sbCerrarSec() limpia sbPendiente!
   sbCerrarSec();
-  // Llamamos a validar con la constante de bloque que guardamos
   sbValidar(nombre, sec);
 }
 
@@ -309,43 +307,83 @@ function sbRemover(i){
 
 function sbLimpiar(){ window.sbHorario=[]; sbRenderTabla(); sbRenderLista(); }
 
-/* ── RENDER TABLA ── */
+/* ── RENDER TABLA (FUSIONANDO BLOQUES MEDIANTE ROWSPAN) ── */
 function sbRenderTabla(){
   const tbody=$('sb-tbody');
   if(!tbody) return;
 
-  // mapa dia+bloque → materia
-  const mapa={};
-  window.sbHorario.forEach(m=>{
-    m.secObj.tiempos.forEach(t=>{
-      SB_BLOQUES.forEach(b=>{
-        if(t.dia&&t.s<=b.s&&t.e>=b.e) mapa[`${t.dia}|${b.s}`]=m;
-      });
+  // grid[dIdx][bIdx] = materia
+  const grid = [];
+  SB_DIAS.forEach((dia, dIdx) => {
+    grid[dIdx] = [];
+    SB_BLOQUES.forEach((b, bIdx) => grid[dIdx][bIdx] = null);
+  });
+
+  // Asignar materias a la grilla
+  window.sbHorario.forEach(m => {
+    m.secObj.tiempos.forEach(t => {
+      const dIdx = SB_DIAS.indexOf(t.dia);
+      if (dIdx !== -1) {
+        SB_BLOQUES.forEach((b, bIdx) => {
+          // Si el horario de la clase solapa al menos 25 minutos con el bloque, lo pintamos
+          const overlap = Math.max(0, Math.min(t.e, b.e) - Math.max(t.s, b.s));
+          if (overlap >= 25) {
+            grid[dIdx][bIdx] = m;
+          }
+        });
+      }
     });
   });
 
   tbody.innerHTML='';
-  SB_BLOQUES.forEach(b=>{
-    const tr=document.createElement('tr');
-    // hora
-    const th=document.createElement('td');
-    th.style.cssText='border:1px solid #e5e7eb;padding:3px 5px;text-align:center;font-size:9px;font-weight:600;color:#6b7280;background:#f8fafc;white-space:nowrap;';
-    th.textContent=b.l; tr.appendChild(th);
-    // días
-    SB_DIAS.forEach(dia=>{
-      const td=document.createElement('td');
-      td.style.cssText='border:1px solid #e5e7eb;padding:2px;min-height:26px;vertical-align:middle;text-align:center;';
-      const m=mapa[`${dia}|${b.s}`];
-      if(m){
-        const [bg,borde,col]=m.choque?['#fff0f0','#ef4444','#b91c1c']:m.color;
-        td.style.background=bg;
-        td.style.borderLeft=`3px solid ${borde}`;
-        td.style.color=col;
-        td.style.webkitPrintColorAdjust='exact';
-        td.style.printColorAdjust='exact';
-        td.innerHTML=`<div style="font-weight:700;font-size:9px;line-height:1.25;">${m.nombre}</div>
+  
+  // skipRows[dIdx] lleva la cuenta de cuántas filas hay que saltar por rowspan
+  const skipRows = {};
+  SB_DIAS.forEach((d, i) => skipRows[i] = 0);
+
+  SB_BLOQUES.forEach((b, bIdx) => {
+    const tr = document.createElement('tr');
+    
+    // Celda de la hora
+    const th = document.createElement('td');
+    th.style.cssText = 'border:1px solid #e5e7eb;padding:3px 5px;text-align:center;font-size:9px;font-weight:600;color:#6b7280;background:#f8fafc;white-space:nowrap;';
+    th.textContent = b.l; 
+    tr.appendChild(th);
+    
+    // Celdas de días
+    SB_DIAS.forEach((dia, dIdx) => {
+      // Si estamos en medio de un rowspan anterior, ignoramos esta celda
+      if (skipRows[dIdx] > 0) {
+        skipRows[dIdx]--;
+        return;
+      }
+
+      const m = grid[dIdx][bIdx];
+      const td = document.createElement('td');
+      td.style.cssText = 'border:1px solid #e5e7eb;padding:2px;min-height:26px;vertical-align:middle;text-align:center;';
+      
+      if (m) {
+        // Calcular rowspan contando cuántos bloques consecutivos tienen la misma materia
+        let rs = 1;
+        while (bIdx + rs < SB_BLOQUES.length && grid[dIdx][bIdx + rs] === m) {
+          rs++;
+        }
+        if (rs > 1) {
+          td.rowSpan = rs;
+          skipRows[dIdx] = rs - 1;
+        }
+
+        const [bg, borde, col] = m.choque ? ['#fff0f0','#ef4444','#b91c1c'] : m.color;
+        td.style.background = bg;
+        td.style.borderLeft = `3px solid ${borde}`;
+        td.style.color = col;
+        td.style.webkitPrintColorAdjust = 'exact';
+        td.style.printColorAdjust = 'exact';
+        td.innerHTML = `
+          <div style="font-weight:700;font-size:9px;line-height:1.25;">${m.nombre}</div>
           <div style="font-size:8px;opacity:.75;">${m.secObj.sec.split('(')[0].trim()}</div>
-          ${m.choque?'<div style="font-size:7px;color:#dc2626;font-weight:bold;">⚠ CHOQUE</div>':''}`;
+          ${m.choque ? '<div style="font-size:7px;color:#dc2626;font-weight:bold;">⚠ CHOQUE</div>' : ''}
+        `;
       }
       tr.appendChild(td);
     });
@@ -383,6 +421,14 @@ function sbExportarPDF(){
   const el=$('sb-pdf-container');
   if(!el){ alert('Contenedor no encontrado'); return; }
 
+  // FIX PARA PDF CORTADO: forzar el contenedor a tener un tamaño absoluto y sin recortes temporales
+  const originalWidth = el.style.width;
+  const originalOverflow = el.style.overflow;
+  const originalMaxWidth = el.style.maxWidth;
+  el.style.width = el.scrollWidth + 'px';
+  el.style.overflow = 'visible';
+  el.style.maxWidth = 'none';
+
   const hdr=document.createElement('div');
   hdr.style.cssText='background:#1a3c5e;color:#fff;padding:7px 12px;border-radius:4px;margin-bottom:5px;-webkit-print-color-adjust:exact;print-color-adjust:exact;';
   hdr.innerHTML='<div style="font-size:12px;font-weight:700;">Universidad Central de Venezuela</div><div style="font-size:10px;opacity:.85;">Escuela de Geografía · Portal DOMITER · Horario 2026</div>';
@@ -390,10 +436,19 @@ function sbExportarPDF(){
 
   const opt={margin:[8,6],filename:'Horario_UCV_2026.pdf',
     image:{type:'jpeg',quality:.98},
-    html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff', windowWidth: el.scrollWidth},
     jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}};
 
-  const run=()=>html2pdf().set(opt).from(el).save().finally(()=>hdr.remove());
+  const run = () => {
+    html2pdf().set(opt).from(el).save().finally(() => {
+      hdr.remove();
+      // Restaurar el DOM
+      el.style.width = originalWidth;
+      el.style.overflow = originalOverflow;
+      el.style.maxWidth = originalMaxWidth;
+    });
+  };
+
   if(typeof html2pdf==='undefined'){
     const s=document.createElement('script');
     s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
@@ -408,9 +463,7 @@ function sbHookBotones() {
   botones.forEach(btn => {
       const txt = btn.textContent.trim().toUpperCase();
       if (txt === 'ABRIR CREADOR' || btn.getAttribute('onclick')?.includes('crea-horario-modal')) {
-          // Remover el onclick viejo para que no dispare el modal original que está roto
           btn.removeAttribute('onclick');
-          // Forzar la apertura del NUEVO modal (v6)
           btn.addEventListener('click', (e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -431,18 +484,16 @@ function sbInit() {
   
   sbInyectarUI();
   
-  // Buscar botones repetidamente por si el DOM los inyecta después
   const hookInt = setInterval(() => {
     if (sbHookBotones()) {
       clearInterval(hookInt);
-      console.log('[SB] v7 botones enlazados correctamente');
+      console.log('[SB] v8 botones enlazados correctamente');
     }
   }, 500);
 
-  console.log('[SB] v7 inicializado');
+  console.log('[SB] v8 inicializado');
 }
 
-// Ejecutar init al cargar
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   setTimeout(sbInit, 100);
 } else {
