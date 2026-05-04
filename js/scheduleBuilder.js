@@ -418,104 +418,90 @@ function sbRenderLista(){
 /* ── PDF ── */
 function sbExportarPDF(){
   if(!window.sbHorario.length){ sbToast('Agrega al menos una materia.','warn'); return; }
-  const original=$('sb-pdf-container');
-  if(!original){ alert('Contenedor no encontrado'); return; }
 
-  // FIX DEFINITIVO: Usar impresión nativa del navegador (Cero librerías, Cero fallos de Canvas)
-  const printWindow = window.open('', '_blank');
-  if(!printWindow) {
-      alert('Por favor permite las ventanas emergentes (pop-ups) para generar el PDF.');
-      return;
-  }
+  sbToast('Generando PDF, un momento...', 'success');
 
-  // Extraer el HTML de la tabla
-  const tablaHtml = original.innerHTML;
+  const run = () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
 
-  // Estilos específicos para asegurar que la tabla se vea perfecta en impresión
-  const printCss = `
-    <style>
-      @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        padding: 20px;
-        color: #000;
-        background: #fff;
-        margin: 0;
-      }
-      .header {
-        background-color: #1a3c5e !important;
-        color: #ffffff !important;
-        padding: 12px 16px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      .header-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-      .header-sub { font-size: 12px; opacity: 0.9; }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 11px;
-      }
-      th {
-        background-color: #1a3c5e !important;
-        color: #ffffff !important;
-        border: 1px solid #0f2945 !important;
-        padding: 8px 4px;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      td {
-        border: 1px solid #e5e7eb !important;
-        padding: 4px;
-      }
-      /* Asegurar colores de fondo en los bloques */
-      * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      @media print {
-        @page {
-          size: landscape;
-          margin: 10mm;
+    // Banner institucional
+    doc.setFillColor(26, 60, 94); // #1a3c5e
+    doc.rect(14, 10, 269, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Universidad Central de Venezuela", 18, 17);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Escuela de Geografía · Portal DOMITER · Horario 2026", 18, 23);
+
+    // AutoTable parser
+    doc.autoTable({
+      html: '#sb-tabla',
+      startY: 29,
+      theme: 'grid',
+      styles: { 
+        fontSize: 8, 
+        cellPadding: 3, 
+        textColor: [40, 40, 40],
+        lineColor: [200, 200, 200],
+        lineWidth: 0.1,
+        halign: 'center',
+        valign: 'middle'
+      },
+      headStyles: {
+        fillColor: [26, 60, 94], // #1a3c5e
+        textColor: 255,
+        fontStyle: 'bold',
+        halign: 'center',
+        valign: 'middle'
+      },
+      didParseCell: function(data) {
+        if (data.section === 'body' && data.cell.raw) {
+          const el = data.cell.raw;
+          
+          // Extraer color de fondo
+          if (el.style && el.style.backgroundColor) {
+            const bg = el.style.backgroundColor;
+            const rgb = bg.match(/\\d+/g);
+            if (rgb && rgb.length >= 3) {
+                data.cell.styles.fillColor = [parseInt(rgb[0]), parseInt(rgb[1]), parseInt(rgb[2])];
+            }
+          }
+          
+          // Extraer saltos de línea correctamente usando los divs internos
+          const divs = el.querySelectorAll('div');
+          if (divs && divs.length > 0) {
+             const lines = Array.from(divs).map(d => d.textContent.trim()).filter(Boolean);
+             data.cell.text = lines; // jsPDF autoTable renders arrays as multiline text
+          }
         }
-        body { padding: 0; }
       }
-    </style>
-  `;
+    });
 
-  // Construir el documento
-  const contentHtml = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Horario UCV 2026</title>
-        ${printCss}
-      </head>
-      <body>
-        <div class="header">
-          <div class="header-title">Universidad Central de Venezuela</div>
-          <div class="header-sub">Escuela de Geografía · Portal DOMITER · Horario 2026</div>
-        </div>
-        ${tablaHtml}
-        <script>
-          window.onload = () => {
-            setTimeout(() => {
-              window.print();
-            }, 300);
-          };
-        </script>
-      </body>
-    </html>
-  `;
+    doc.save('Horario_UCV_2026.pdf');
+  };
 
-  printWindow.document.open();
-  printWindow.document.write(contentHtml);
-  printWindow.document.close();
-
-  // Avisar al usuario en la ventana original
-  sbToast('Ventana de impresión abierta. Selecciona "Guardar como PDF" como destino.', 'success');
+  // Cargar jspdf y autotable dinámicamente si no existen
+  if(typeof window.jspdf === 'undefined'){
+    const s1 = document.createElement('script');
+    s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload = () => {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+      s2.onload = run;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  } else if (typeof window.jspdf.jsPDF.API.autoTable === 'undefined') {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+      s2.onload = run;
+      document.head.appendChild(s2);
+  } else {
+      run();
+  }
 }
 
 /* ── INIT ── */
