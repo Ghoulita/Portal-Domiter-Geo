@@ -421,68 +421,101 @@ function sbExportarPDF(){
   const original=$('sb-pdf-container');
   if(!original){ alert('Contenedor no encontrado'); return; }
 
-  // FIX A PRUEBA DE BALAS: Extraer el contenedor, ponerlo en pantalla completa visible (encima de todo)
-  // para que html2canvas lo renderice perfectamente sin recortes de overflow ni culling por z-index negativo.
-  const parentOriginal = original.parentNode;
-  const nextSibling = original.nextSibling;
-  const originalCssText = original.style.cssText;
-  
-  // Contenedor temporal absoluto en pantalla
-  const tempWrapper = document.createElement('div');
-  tempWrapper.style.cssText = 'position:absolute; top:0; left:0; width:1000px; background:#ffffff; z-index:999999; padding:20px;';
-  
-  // Mensaje de carga para mejorar la UX durante el "flicker"
-  const loadingMsg = document.createElement('div');
-  loadingMsg.innerHTML = '<h3 style="color:#a57c00; font-family:sans-serif; text-align:center; margin-bottom: 20px;">Generando PDF, por favor no cierres la página...</h3>';
-  tempWrapper.appendChild(loadingMsg);
+  // FIX DEFINITIVO: Usar impresión nativa del navegador (Cero librerías, Cero fallos de Canvas)
+  const printWindow = window.open('', '_blank');
+  if(!printWindow) {
+      alert('Por favor permite las ventanas emergentes (pop-ups) para generar el PDF.');
+      return;
+  }
 
-  // Agregar encabezado institucional
-  const hdr=document.createElement('div');
-  hdr.style.cssText='background:#1a3c5e;color:#fff;padding:12px 16px;border-radius:6px;margin-bottom:15px;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-family:sans-serif;';
-  hdr.innerHTML='<div style="font-size:16px;font-weight:700;">Universidad Central de Venezuela</div><div style="font-size:12px;opacity:.9;">Escuela de Geografía · Portal DOMITER · Horario 2026</div>';
-  
-  tempWrapper.appendChild(hdr);
-  tempWrapper.appendChild(original);
-  document.body.appendChild(tempWrapper);
+  // Extraer el HTML de la tabla
+  const tablaHtml = original.innerHTML;
 
-  // Asegurar que partimos desde el tope
-  window.scrollTo(0,0);
-
-  const opt={
-    margin:[10,10],
-    filename:'Horario_UCV_2026.pdf',
-    image:{type:'jpeg',quality:.98},
-    html2canvas:{
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      scrollY: 0,
-      windowWidth: 1050
-    },
-    jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}
-  };
-
-  const run = () => {
-    // Le damos un pequeño timeout para que el navegador renderice el tempWrapper
-    setTimeout(() => {
-      html2pdf().set(opt).from(tempWrapper).save().finally(() => {
-        // Restaurar todo a su normalidad
-        original.style.cssText = originalCssText;
-        if (nextSibling) {
-            parentOriginal.insertBefore(original, nextSibling);
-        } else {
-            parentOriginal.appendChild(original);
+  // Estilos específicos para asegurar que la tabla se vea perfecta en impresión
+  const printCss = `
+    <style>
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 20px;
+        color: #000;
+        background: #fff;
+        margin: 0;
+      }
+      .header {
+        background-color: #1a3c5e !important;
+        color: #ffffff !important;
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .header-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+      .header-sub { font-size: 12px; opacity: 0.9; }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+      th {
+        background-color: #1a3c5e !important;
+        color: #ffffff !important;
+        border: 1px solid #0f2945 !important;
+        padding: 8px 4px;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      td {
+        border: 1px solid #e5e7eb !important;
+        padding: 4px;
+      }
+      /* Asegurar colores de fondo en los bloques */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      @media print {
+        @page {
+          size: landscape;
+          margin: 10mm;
         }
-        document.body.removeChild(tempWrapper);
-      });
-    }, 150);
-  };
+        body { padding: 0; }
+      }
+    </style>
+  `;
 
-  if(typeof html2pdf==='undefined'){
-    const s=document.createElement('script');
-    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-    s.onload=run; document.head.appendChild(s);
-  } else run();
+  // Construir el documento
+  const contentHtml = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Horario UCV 2026</title>
+        ${printCss}
+      </head>
+      <body>
+        <div class="header">
+          <div class="header-title">Universidad Central de Venezuela</div>
+          <div class="header-sub">Escuela de Geografía · Portal DOMITER · Horario 2026</div>
+        </div>
+        ${tablaHtml}
+        <script>
+          window.onload = () => {
+            setTimeout(() => {
+              window.print();
+            }, 300);
+          };
+        </script>
+      </body>
+    </html>
+  `;
+
+  printWindow.document.open();
+  printWindow.document.write(contentHtml);
+  printWindow.document.close();
+
+  // Avisar al usuario en la ventana original
+  sbToast('Ventana de impresión abierta. Selecciona "Guardar como PDF" como destino.', 'success');
 }
 
 /* ── INIT ── */
